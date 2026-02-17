@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <left>
+        <VBox prefWidth="220.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #e9ecef; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets left="15.0" right="15.0" top="20.0" />
+            </padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <VBox alignment="CENTER" minHeight="32" minWidth="32" style="-fx-background-color: #3b71fe; -fx-background-radius: 5;">
+                            <Label text="🎫" textFill="WHITE" />
+                        </VBox>
+                        <VBox>
+                            <Label style="-fx-font-weight: bold; -fx-font-size: 16;" text="Event Ticketing" />
+                            <Label style="-fx-font-size: 10;" text="Management System" textFill="#6c757d" />
+                        </VBox>
+                    </children>
+                    <VBox.margin><Insets bottom="30.0" /></VBox.margin>
+                </HBox>
+
+                <Button alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: #eef2ff; -fx-text-fill: #3b71fe; -fx-background-radius: 8; -fx-padding: 10;" text="Home" />
+                <Button alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #495057; -fx-padding: 10;" text="Users" />
+                <Button alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #495057; -fx-padding: 10;" text="Events" />
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background-insets: 0;">
+            <content>
+                <VBox spacing="25.0">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+                    </padding>
+                    <children>
+
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="Event Ticketing Management" />
+                                    <Label text="Browse all events and manage your ticketing operations" textFill="#6c757d" />
+                                </VBox>
+                                <HBox alignment="CENTER" spacing="10.0">
+                                    <VBox alignment="CENTER_RIGHT">
+                                        <Label style="-fx-font-weight: bold;" text="Admin User" />
+                                        <Label style="-fx-font-size: 11;" text="Admin" textFill="#6c757d" />
+                                    </VBox>
+                                    <StackPane>
+                                        <Circle fill="#3b71fe" radius="18" />
+                                        <Label style="-fx-font-weight: bold;" text="AD" textFill="WHITE" />
+                                    </StackPane>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="20.0">
+                            <children>
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 20; -fx-border-color: #e9ecef; -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
+                                    <Label style="-fx-font-weight: bold;" text="Total Events" textFill="#495057" />
+                                    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="2" />
+                                    <Label text="2 upcoming" textFill="#6c757d" />
+                                </VBox>
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 20; -fx-border-color: #e9ecef; -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
+                                    <Label style="-fx-font-weight: bold;" text="Total Tickets Issued" textFill="#495057" />
+                                    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="2" />
+                                    <Label text="Across all events" textFill="#6c757d" />
+                                </VBox>
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 20; -fx-border-color: #e9ecef; -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
+                                    <Label style="-fx-font-weight: bold;" text="Ticket Types" textFill="#495057" />
+                                    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="4" />
+                                    <Label text="Available options" textFill="#6c757d" />
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="All Events" />
+
+                        <HBox spacing="20.0">
+                            <children>
+                                <VBox prefWidth="350.0" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; -fx-border-color: #e9ecef; -fx-border-radius: 15;">
+                                    <children>
+                                        <HBox alignment="TOP_LEFT">
+                                            <Label maxWidth="200" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Summer Music Festival 2026" wrapText="true" HBox.hgrow="ALWAYS" />
+                                            <Region HBox.hgrow="ALWAYS" />
+                                            <Label style="-fx-background-color: black; -fx-text-fill: white; -fx-padding: 4 10; -fx-background-radius: 10; -fx-font-size: 10;" text="Upcoming" />
+                                        </HBox>
+                                        <VBox spacing="8.0">
+                                            <Label text="📍 Central Park Amphitheater" textFill="#495057" />
+                                            <Label text="📅 Jul 15, 2026, 06:00 PM" textFill="#495057" />
+                                            <Label text="👤 John Coordinator, Sarah Coordinator" textFill="#495057" />
+                                        </VBox>
+                                        <Separator />
+                                        <HBox spacing="40.0">
+                                            <VBox><Label text="Ticket Types" textFill="#6c757d" /><Label style="-fx-font-weight: bold;" text="3" /></VBox>
+                                            <VBox><Label text="Tickets Issued" textFill="#6c757d" /><Label style="-fx-font-weight: bold;" text="2" /></VBox>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

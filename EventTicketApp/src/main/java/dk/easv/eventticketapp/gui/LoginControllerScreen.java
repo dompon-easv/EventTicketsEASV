@@ -1,0 +1,26 @@
+package dk.easv.eventticketapp.gui;
+
+import dk.easv.eventticketapp.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.control.Label;
+
+import java.io.IOException;
+
+public class LoginControllerScreen {
+    @FXML
+    private Label welcomeText;
+
+
+    public void onLoginButton(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/AdminScreen.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+}
