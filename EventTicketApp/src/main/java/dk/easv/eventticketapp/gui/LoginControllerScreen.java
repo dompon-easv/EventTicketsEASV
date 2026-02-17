@@ -17,7 +17,7 @@ public class LoginControllerScreen {
 
 
     public void onLoginButton(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/AdminScreen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AdminMainBar.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);

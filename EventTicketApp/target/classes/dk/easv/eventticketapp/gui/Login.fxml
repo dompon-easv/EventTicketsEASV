@@ -7,64 +7,53 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.LoginController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" styleClass="main-bg"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="dk.easv.eventticketapp.gui.LoginControllerScreen">
+
+    <stylesheets>
+        <URL value="@css/style.css" />
+    </stylesheets>
+
     <children>
-        <VBox alignment="TOP_CENTER" maxWidth="400.0" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+        <VBox alignment="TOP_CENTER" maxWidth="400.0" spacing="15.0" styleClass="stat-card">
             <padding>
                 <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
             </padding>
             <children>
-                <VBox alignment="CENTER" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" style="-fx-background-color: #3b71fe; -fx-background-radius: 30;">
-                    <children>
-                        <Label text="🎫" textFill="WHITE">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
+                <Label styleClass="logo-icon" text="🎫">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+
                 <VBox alignment="CENTER" spacing="5.0">
                     <children>
-                        <Label text="Event Ticketing System">
-                            <font>
-                                <Font name="System Bold" size="22.0" />
-                            </font>
-                        </Label>
-                        <Label text="Login to manage your events and tickets" textFill="#757575" />
+                        <Label styleClass="header-title" text="Event Ticketing System" />
+                        <Label styleClass="header-subtitle" text="Login to manage your events and tickets" />
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>
                 </VBox>
+
                 <VBox spacing="5.0">
                     <children>
-                        <Label text="Username or Email">
-                            <font>
-                                <Font name="System Bold" size="13.0" />
-                            </font>
-                        </Label>
-                        <TextField promptText="admin or your.email@example.com" style="-fx-background-color: #f0f2f5; -fx-background-radius: 8; -fx-padding: 10;" />
+                        <Label styleClass="stat-label" text="Username or Email" />
+                        <TextField promptText="admin or your.email@example.com" styleClass="login-input" />
                     </children>
                 </VBox>
+
                 <VBox spacing="5.0">
                     <children>
-                        <Label text="Password">
-                            <font>
-                                <Font name="System Bold" size="13.0" />
-                            </font>
-                        </Label>
-                        <PasswordField promptText="Enter your password" style="-fx-background-color: #f0f2f5; -fx-background-radius: 8; -fx-padding: 10;" />
+                        <Label styleClass="stat-label" text="Password" />
+                        <PasswordField promptText="Enter your password" styleClass="login-input" />
                     </children>
                 </VBox>
-                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#onLoginButton" style="-fx-background-color: #080911; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12;" text="Login">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="10.0" />
-                    </VBox.margin>
-                </Button>
+
+                <Button maxWidth="Infinity" onAction="#onLoginButton" styleClass="add-button" text="Login" />
             </children>
         </VBox>
     </children>

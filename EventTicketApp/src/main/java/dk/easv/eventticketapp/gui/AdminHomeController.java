@@ -1,4 +1,4 @@
 package dk.easv.eventticketapp.gui;
 
-public class AdminControllerScreen {
+public class AdminHomeController {
 }
