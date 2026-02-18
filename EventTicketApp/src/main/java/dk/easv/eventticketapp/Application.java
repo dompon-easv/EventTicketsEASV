@@ -11,6 +11,9 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

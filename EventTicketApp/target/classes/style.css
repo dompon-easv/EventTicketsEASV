@@ -1,0 +1,91 @@
+/* --- 1. GLOBAL VARIABLES --- */
+/* Changing these here updates the whole app */
+.root {
+    -fx-primary-color: #030213;      /* Dark black for main buttons */
+    -fx-accent-color: #3b82f6;       /* Focus blue */
+    -fx-bg-light: #f8f9fa;           /* Background for the whole app */
+    -fx-text-main: #1a1a1a;
+    -fx-text-sub: #6c757d;
+    -fx-border-gray: #e9ecef;
+}
+
+/* --- 2. LAYOUT & CONTAINERS --- */
+.main-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: -fx-border-gray;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
+    -fx-padding: 20;
+}
+
+/* Hover effect for the Event VBoxes */
+.main-card:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #fafafa;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 6);
+}
+
+/* --- 3. TYPOGRAPHY --- */
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-main;
+}
+
+.input-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-main;
+}
+
+/* --- 4. FORM ELEMENTS --- */
+.modern-input, .text-area {
+    -fx-background-color: #f1f3f5;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: transparent;
+    -fx-padding: 10;
+}
+
+.modern-input:focused, .text-area:focused {
+    -fx-background-color: white;
+    -fx-border-color: -fx-accent-color;
+}
+
+/* --- 5. BUTTONS --- */
+.btn-primary {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-padding: 10 24;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #222;
+    -fx-cursor: hand;
+}
+
+.btn-secondary {
+    -fx-background-color: #e9ecef;
+    -fx-text-fill: -fx-text-main;
+    -fx-background-radius: 8;
+    -fx-padding: 10 24;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #dee2e6;
+    -fx-cursor: hand;
+}
+
+.icon-btn-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-sub;
+    -fx-font-size: 16px;
+}
+
+.icon-btn-close:hover {
+    -fx-text-fill: #ff4d4d;
+    -fx-cursor: hand;
+}

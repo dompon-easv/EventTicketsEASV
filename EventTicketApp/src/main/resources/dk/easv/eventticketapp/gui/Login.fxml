@@ -14,7 +14,7 @@
       fx:controller="dk.easv.eventticketapp.gui.LoginController">
 
     <stylesheets>
-        <URL value="@css/style.css" />
+        <URL value="@../../../../style.css" />
     </stylesheets>
 
     <children>

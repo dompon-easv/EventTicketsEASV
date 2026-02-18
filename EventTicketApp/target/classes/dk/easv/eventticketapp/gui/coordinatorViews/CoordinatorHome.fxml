@@ -54,19 +54,19 @@
                                         <VBox onMouseClicked="#openEvent" spacing="10.0" HBox.hgrow="ALWAYS">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                    <Label styleClass="event-card-title" text="Summer Music Festival 2026" />
+                                                    <Label styleClass="event-card-title" text="Event" />
                                                     <Label styleClass="badge-owner" text="Owner" />
                                                 </HBox>
-                                                <Label styleClass="event-detail-text" text="📅 Wednesday, July 15, 2026 • 6:00 PM" />
-                                                <Label styleClass="event-detail-text" text="📍 Central Park Amphitheater" />
-                                                <Label styleClass="event-detail-text" text="👤 2 coordinators • Created by John Coordinator" />
+                                                <Label styleClass="event-detail-text" text="📅 Time" />
+                                                <Label styleClass="event-detail-text" text="📍 Location" />
+                                                <Label styleClass="event-detail-text" text="👤 number of coordinators" />
                                             </children>
                                         </VBox>
                                         <Button styleClass="icon-btn-delete" text="🗑" />
                                     </children>
                                 </HBox>
                                 <Separator styleClass="card-separator" />
-                                <Label styleClass="issued-text" text="2 tickets issued" />
+                                <Label styleClass="issued-text" text="number of tickets issued" />
                             </children>
                         </VBox>
                     </children>

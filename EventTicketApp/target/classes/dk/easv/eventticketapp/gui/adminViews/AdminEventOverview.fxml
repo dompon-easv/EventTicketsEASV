@@ -25,12 +25,12 @@
 
                 <VBox spacing="10.0">
                     <children>
-                        <Label styleClass="event-display-title" text="Summer Music Festival 2026" />
+                        <Label styleClass="event-display-title" text="Event name" />
                         <VBox spacing="8.0">
                             <children>
-                                <Label styleClass="event-info-row" text="📅 Wednesday, July 15, 2026 • 6:00 PM - 11:00 PM" />
-                                <Label styleClass="event-info-row" text="📍 Central Park Amphitheater" />
-                                <Label styleClass="event-info-row" text="👥 2 coordinators" />
+                                <Label styleClass="event-info-row" text="📅 Time" />
+                                <Label styleClass="event-info-row" text="📍 Location" />
+                                <Label styleClass="event-info-row" text="👥 Number of coordinators" />
                             </children>
                         </VBox>
                         <HBox styleClass="tab-container">
@@ -70,8 +70,8 @@
                             <children>
                                 <VBox HBox.hgrow="ALWAYS">
                                     <children>
-                                        <Label styleClass="item-main-text" text="John Coordinator" />
-                                        <Label styleClass="item-sub-text" text="john@ticketing.com" />
+                                        <Label styleClass="item-main-text" text="name of coordinator" />
+                                        <Label styleClass="item-sub-text" text="mail of coordinator" />
                                     </children>
                                 </VBox>
                             </children>
