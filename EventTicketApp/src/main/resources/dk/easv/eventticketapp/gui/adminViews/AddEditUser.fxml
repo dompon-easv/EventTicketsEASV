@@ -42,7 +42,7 @@
 
         <HBox alignment="CENTER_RIGHT" spacing="15.0">
             <children>
-                <Button styleClass="btn-secondary" text="Cancel" />
+                <Button styleClass="btn-secondary" text="Cancel" onAction="#onClickCancel"/>
                 <Button styleClass="btn-primary" text="Update User" />
             </children>
             <VBox.margin>
