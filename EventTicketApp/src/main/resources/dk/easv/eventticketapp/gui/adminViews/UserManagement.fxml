@@ -25,7 +25,7 @@
                         <Label styleClass="header-subtitle" text="Manage system users and event coordinators" />
                     </children>
                 </VBox>
-                <Button styleClass="add-user-btn" text="+ Add User" />
+                <Button styleClass="add-user-btn" text="+ Add User" onAction="#showAddUser"/>
             </children>
         </HBox>
 
