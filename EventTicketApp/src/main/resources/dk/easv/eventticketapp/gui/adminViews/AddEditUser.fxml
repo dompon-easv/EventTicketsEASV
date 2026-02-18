@@ -13,8 +13,8 @@
             <children>
                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label styleClass="header-title" text="Edit User" />
-                        <Label styleClass="header-subtitle" text="Update the user's information and role." />
+                        <Label styleClass="header-title" text="Add User" />
+                        <Label styleClass="header-subtitle" text="Add the user's information and role." />
                     </children>
                 </VBox>
                 <Button styleClass="icon-btn-close" text="✕" />
@@ -43,7 +43,7 @@
         <HBox alignment="CENTER_RIGHT" spacing="15.0">
             <children>
                 <Button styleClass="btn-secondary" text="Cancel" onAction="#onClickClose"/>
-                <Button styleClass="btn-primary" text="Update User" />
+                <Button styleClass="btn-primary" text="Add User" />
             </children>
             <VBox.margin>
                 <Insets top="10.0" />
