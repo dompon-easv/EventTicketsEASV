@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.Region?>
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.EventHeaderController">
+    <content>
+        <VBox spacing="25.0" styleClass="main-content-container">
+            <padding>
+                <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+            <children>
+                <VBox spacing="15.0">
+                    <children>
+                        <Button onAction="#handleBack" styleClass="btn-back" text="← Back to Events" />
+
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label styleClass="display-title" text="Summer Music Festival 2026" HBox.hgrow="ALWAYS" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button styleClass="btn-edit-event" text="✎ Edit Event" />
+                            </children>
+                        </HBox>
+
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label styleClass="info-row" text="📅 Wednesday, July 15, 2026 • 6:00 PM - 11:00 PM" />
+                                <Label styleClass="info-row" text="📍 Central Park Amphitheater" />
+                                <Label styleClass="info-row" text="👥 2 coordinators" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <HBox spacing="10.0" styleClass="tab-nav-container">
+                    <children>
+                        <Button fx:id="btnOverview" onAction="#handleTabChange" styleClass="tab-btn, active" text="Overview" />
+                        <Button fx:id="btnTicketTypes" onAction="#handleTabChange" styleClass="tab-btn" text="Ticket Types" />
+                        <Button fx:id="btnIssueTickets" onAction="#handleTabChange" styleClass="tab-btn" text="Issue Tickets" />
+                        <Button fx:id="btnIssuedTickets" onAction="#handleTabChange" styleClass="tab-btn" text="Issued Tickets (2)" />
+                    </children>
+                </HBox>
+
+                <StackPane fx:id="tabContentArea" VBox.vgrow="ALWAYS" />
+
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

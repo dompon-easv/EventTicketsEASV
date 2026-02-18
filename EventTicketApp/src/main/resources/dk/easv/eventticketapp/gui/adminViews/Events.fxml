@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.adminControllers.EventsController">
+    <content>
+        <VBox spacing="25.0" styleClass="main-content-container">
+            <padding>
+                <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+            <children>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="header-title" text="All Events" />
+                        <Label styleClass="header-subtitle" text="Manage all events in the system" />
+                    </children>
+                </VBox>
+
+                <HBox spacing="20.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="main-card, stat-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label styleClass="stat-label" text="Total Events" />
+                                    <Label styleClass="stat-value" />
+                                </VBox>
+                                <StackPane styleClass="stat-icon-container, bg-blue">
+                                    <Label styleClass="stat-icon" text="📅" />
+                                </StackPane>
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="main-card, stat-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label styleClass="stat-label" text="Event Coordinators" />
+                                    <Label styleClass="stat-value" />
+                                </VBox>
+                                <StackPane styleClass="stat-icon-container, bg-green">
+                                    <Label styleClass="stat-icon" text="👥" />
+                                </StackPane>
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </HBox>
+                    </children>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" styleClass="search-container">
+                    <children>
+                        <Label styleClass="search-icon" text="🔍" />
+                        <TextField promptText="Search events by name, location, or description..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                    </padding>
+                </HBox>
+
+                <VBox spacing="20.0">
+                    <children>
+                        <VBox spacing="15.0" styleClass="main-card, event-card">
+                            <padding>
+                                <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+                            </padding>
+                            <children>
+                                <HBox alignment="TOP_LEFT">
+                                    <children>
+                                        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="event-card-title" text="Event name" />
+                                                <Label styleClass="event-detail-text" text="📅 Wednesday, July 15, 2026 • 6:00 PM" />
+                                                <Label styleClass="event-detail-text" text="📍 Central Park Amphitheater" />
+                                                <Label styleClass="event-detail-text" text="👤 2 coordinators • Created by John Coordinator" />
+                                            </children>
+                                        </VBox>
+                                        <Label styleClass="icon-btn-delete" text="🗑" />
+                                    </children>
+                                </HBox>
+                                <VBox styleClass="card-footer-separator">
+                                    <padding>
+                                        <Insets top="15.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="footer-bold-text" text="0 tickets issued" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="15.0" styleClass="main-card, event-card">
+                            <padding>
+                                <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+                            </padding>
+                            <children>
+                                <HBox alignment="TOP_LEFT">
+                                    <children>
+                                        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="event-card-title" text="Event name" />
+                                                <Label styleClass="event-detail-text" text="📅 Tuesday, March 10, 2026 • 9:00 AM" />
+                                                <Label styleClass="event-detail-text" text="📍 Downtown Convention Center" />
+                                                <Label styleClass="event-detail-text" text="👤 1 coordinator • Created by John Coordinator" />
+                                            </children>
+                                        </VBox>
+                                        <Label styleClass="icon-btn-delete" text="🗑" />
+                                    </children>
+                                </HBox>
+                                <VBox styleClass="card-footer-separator">
+                                    <padding>
+                                        <Insets top="15.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="footer-bold-text" text="0 tickets issued" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

@@ -4,7 +4,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
-<BorderPane fx:id="mainRoot" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.AdminMainController">
+<BorderPane fx:id="mainRoot" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController">
     <stylesheets>
         <URL value="@../css/style.css" />
     </stylesheets>
@@ -13,8 +13,6 @@
             <padding><Insets left="15.0" right="15.0" top="20.0" /></padding>
             <children>
                 <Button maxWidth="Infinity" onAction="#showHome" styleClass="nav-button" text="Home" />
-                <Button maxWidth="Infinity" onAction="#showUsers" styleClass="nav-button" text="Users" />
-                <Button maxWidth="Infinity" onAction="#showEvents" styleClass="nav-button" text="Events" />
             </children>
         </VBox>
     </left>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20.0" styleClass="main-card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.adminControllers.AddEditUserController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <HBox alignment="TOP_RIGHT">
+            <children>
+                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="header-title" text="Edit User" />
+                        <Label styleClass="header-subtitle" text="Update the user's information and role." />
+                    </children>
+                </VBox>
+                <Button styleClass="icon-btn-close" text="✕" />
+            </children>
+        </HBox>
+
+        <VBox spacing="15.0">
+            <children>
+                <VBox styleClass="input-group">
+                    <Label styleClass="input-label" text="Name" />
+                    <TextField fx:id="nameField" promptText="Enter name" styleClass="modern-input" />
+                </VBox>
+
+                <VBox styleClass="input-group">
+                    <Label styleClass="input-label" text="Email" />
+                    <TextField fx:id="emailField" promptText="Enter email" styleClass="modern-input" />
+                </VBox>
+
+                <VBox styleClass="input-group">
+                    <Label styleClass="input-label" text="Role" />
+                    <ComboBox fx:id="roleComboBox" maxWidth="Infinity" styleClass="modern-input" />
+                </VBox>
+            </children>
+        </VBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <children>
+                <Button styleClass="btn-secondary" text="Cancel" />
+                <Button styleClass="btn-primary" text="Update User" />
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

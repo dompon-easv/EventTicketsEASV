@@ -11,13 +11,13 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class LoginControllerScreen {
+public class LoginController {
     @FXML
     private Label welcomeText;
 
 
     public void onLoginButton(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AdminMainBar.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AdminMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
