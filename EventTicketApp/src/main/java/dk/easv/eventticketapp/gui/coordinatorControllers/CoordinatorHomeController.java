@@ -30,6 +30,6 @@ public class CoordinatorHomeController {
     public void showVouchers(ActionEvent actionEvent) {
     }
 
-    public void showEvents(ActionEvent actionEvent) {
+    public void showEvents(ActionEvent actionEvent) throws IOException {
     }
 }
