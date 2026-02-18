@@ -26,4 +26,10 @@ public class CoordinatorHomeController {
         //Injection into contentArea without opening new window
         CoordinatorMainController.staticContentArea.getChildren().setAll(node);
     }
+
+    public void showVouchers(ActionEvent actionEvent) {
+    }
+
+    public void showEvents(ActionEvent actionEvent) {
+    }
 }

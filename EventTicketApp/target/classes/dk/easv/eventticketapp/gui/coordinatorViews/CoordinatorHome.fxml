@@ -26,8 +26,8 @@
                         </VBox>
                         <HBox spacing="0.0" styleClass="toggle-container">
                             <children>
-                                <Button styleClass="toggle-btn-left, active" text="📅 Events" />
-                                <Button styleClass="toggle-btn-right" text="🎫 Special Vouchers" />
+                                <Button styleClass="toggle-btn-left, active" text="📅 Events" onAction="#showEvents"/>
+                                <Button styleClass="toggle-btn-right" text="🎫 Special Vouchers" onAction="#showVouchers"/>
                             </children>
                         </HBox>
                     </children>
