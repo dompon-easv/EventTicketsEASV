@@ -1,11 +1,10 @@
-package dk.easv.eventticketapp.gui.coordinatorControllers;
+package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class EventHeaderController {
                 fxmlFile = "IssuedTickets.fxml";
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/" + fxmlFile));
             Node node = loader.load();
 
 

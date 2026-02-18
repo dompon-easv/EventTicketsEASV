@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.IssueTicketController">
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.IssueTicketController">
     <children>
         <VBox spacing="20.0" styleClass="main-card">
             <padding><Insets bottom="30.0" left="30.0" right="30.0" top="30.0" /></padding>

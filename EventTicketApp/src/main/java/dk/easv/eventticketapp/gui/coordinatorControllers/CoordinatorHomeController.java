@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CoordinatorHomeController {
     public void createEventBtn(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/coordinatorViews/AddEvent.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/coordinatorViews/eventManagement/AddEditEvent.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Add Event");
@@ -21,7 +21,7 @@ public class CoordinatorHomeController {
     }
 
     public void openEvent(MouseEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/coordinatorViews/EventHeader.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/coordinatorViews/eventManagement/EventHeader.fxml"));
         Node node = fxmlLoader.load();
         //Injection into contentArea without opening new window
         CoordinatorMainController.staticContentArea.getChildren().setAll(node);

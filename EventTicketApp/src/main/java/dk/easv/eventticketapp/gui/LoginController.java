@@ -17,7 +17,7 @@ public class LoginController {
 
     @FXML private TextField txtUsername;
     @FXML private TextField txtPassword;
-    
+
     @FXML private  void onLoginAction(ActionEvent actionEvent) throws IOException {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
