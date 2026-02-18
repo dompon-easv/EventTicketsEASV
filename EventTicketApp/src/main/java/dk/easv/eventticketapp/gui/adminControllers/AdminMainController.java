@@ -21,7 +21,7 @@ public class AdminMainController {
     }
 
     public void showEvents(ActionEvent actionEvent) {
-        loadView("AdminEventManagement.fxml");
+        loadView("Events.fxml");
     }
 
     private void loadView(String fxml) {

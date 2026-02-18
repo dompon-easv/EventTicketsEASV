@@ -1,68 +1,68 @@
-/* --- Admin Home Specifics --- */
+/* --- GLOBAL VARIABLES --- */
+.root {
+    -fx-primary-color: #030213;      /* Tmavá modrá/čierna z tvojich tlačidiel */
+    -fx-accent-color: #3b82f6;       /* Modrá pre ikony a aktívne stavy */
+    -fx-bg-light: #f8f9fa;           /* Svetlosivý podklad aplikácie */
+    -fx-text-main: #1a1a1a;          /* Hlavná farba textu */
+    -fx-text-sub: #6c757d;           /* Farba pre popisky a vedľajší text */
+    -fx-app-border: #e9ecef;         /* Farba jemných čiar a okrajov */
+}
 
-/* ScrollPane Fixes */
+/* --- CONTAINERS & CARDS --- */
 .content-scroll-pane {
     -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
-.content-scroll-pane > .viewport {
-    -fx-background-color: #f8f9fa; /* Light grey background from screenshot */
 }
 
-/* Statistics Cards */
-.stat-card {
+.main-content-container {
+    -fx-background-color: -fx-bg-light;
+}
+
+.main-card {
     -fx-background-color: white;
     -fx-background-radius: 12;
-    -fx-padding: 20;
     -fx-border-color: -fx-app-border;
     -fx-border-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
 }
-.stat-label { -fx-text-fill: -fx-text-muted; -fx-font-size: 13px; }
-.stat-value { -fx-font-size: 28px; -fx-font-weight: bold; }
 
-.stat-icon-container {
-    -fx-min-width: 45;
-    -fx-min-height: 45;
-    -fx-background-radius: 8;
+/* --- TYPOGRAPHY --- */
+.header-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-main;
 }
-.icon-blue  { -fx-background-color: #3b71fe; }
-.icon-green { -fx-background-color: #4ade80; }
 
-/* Search Bar */
-.search-container {
-    -fx-background-color: #f1f3f5; /* Light grey bar */
-    -fx-background-radius: 8;
-    -fx-padding: 8 15;
+.header-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-sub;
 }
-.search-field {
-    -fx-background-color: transparent;
-    -fx-prompt-text-fill: #adb5bd;
-}
-.search-icon { -fx-opacity: 0.5; }
 
-/* Event Cards */
-.event-card {
+.card-title-small {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-main;
+}
+
+.display-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+/* --- INPUTS --- */
+.input-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-text-main;
+}
+
+.modern-input {
+    -fx-background-color: #f1f3f5;
+    -fx-background-radius: 6;
+    -fx-padding: 10 12;
+    -fx-border-color: transparent;
+    -fx-text-fill: -fx-text-main;
+}
+
+.modern-input:focused {
     -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-padding: 20;
-    -fx-border-color: -fx-app-border;
-    -fx-border-radius: 12;
-}
-.event-card-title { -fx-font-size: 18px; -fx-font-weight: bold; }
-.event-info-label { -fx-text-fill: #495057; -fx-font-size: 13px; }
-
-.event-card-footer {
-    -fx-border-color: -fx-app-border;
-    -fx-border-width: 1 0 0 0; /* Top border separator */
-    -fx-padding: 15 0 0 0;
-    -fx-margin: 15 0 0 0;
-}
-.ticket-count-text { -fx-font-weight: bold; -fx-font-size: 13px; }
-
-/* Delete Button */
-.delete-icon-btn {
-    -fx-text-fill: #fa5252; /* Red trash icon */
-    -fx-cursor: hand;
-    -fx-font-size: 16px;
-}
-.delete-icon-btn:hover { -fx-opacity: 0.7; }
+    -fx-border-color: -fx-accent-color;}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" styleClass="ticket-window-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VoucherTicketController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="20.0" />
+    </padding>
+    <children>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Button styleClass="btn-primary" text="⎙ Print Ticket" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button styleClass="icon-btn-close" text="✕" />
+            </children>
+        </HBox>
+
+        <VBox fx:id="ticketPaper" maxWidth="500.0" prefHeight="700.0" styleClass="ticket-paper">
+            <children>
+                <StackPane VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="placeholder-text" text="[ Ticket Content Placeholder ]" />
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
+    </children>
+</VBox>

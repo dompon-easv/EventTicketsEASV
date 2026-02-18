@@ -13,6 +13,12 @@ public class CoordinatorMainController {
 
     @FXML private StackPane contentArea;
 
+    public static StackPane staticContentArea;
+
+    public void initialize() {
+        staticContentArea = contentArea;
+    }
+
     public void showHome(ActionEvent actionEvent) {
         loadView("CoordinatorHome.fxml");
 

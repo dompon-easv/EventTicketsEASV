@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorEventOverview">
+    <children>
+        <VBox spacing="15.0" styleClass="main-card">
+            <padding><Insets bottom="25.0" left="25.0" right="25.0" top="25.0" /></padding>
+            <children>
+                <Label styleClass="card-title-small" text="Event Details" />
+                <VBox spacing="10.0">
+                    <children>
+                        <VBox styleClass="detail-group">
+                            <Label styleClass="detail-label" text="Description" />
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+
+        <VBox spacing="15.0" styleClass="main-card">
+            <padding><Insets bottom="25.0" left="25.0" right="25.0" top="25.0" /></padding>
+            <children>
+                <Label styleClass="card-title-small" text="Coordinators" />
+                <VBox spacing="10.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" styleClass="list-item-row">
+                            <VBox HBox.hgrow="ALWAYS">
+                                <Label styleClass="item-primary" text="John Coordinator" />
+                                <Label styleClass="item-secondary" text="john@ticketing.com" />
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" styleClass="list-item-row">
+                            <VBox HBox.hgrow="ALWAYS" />
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>
