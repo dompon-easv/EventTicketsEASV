@@ -11,11 +11,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class UserManagementController {
-    public void showAddUser(ActionEvent actionEvent) throws IOException {
+    public void onAddUser(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AddEditUser.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
     }
