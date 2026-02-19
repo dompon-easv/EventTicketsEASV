@@ -52,4 +52,5 @@ public class LoginController {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+        stage.centerOnScreen();
 }}
