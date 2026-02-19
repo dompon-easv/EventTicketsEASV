@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -49,33 +50,9 @@
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                     </padding>
                     <children>
-                        <Label styleClass="card-section-title" text="Event Details" />
+                  <ListView prefHeight="200.0" prefWidth="200.0" />
 
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label prefHeight="86.0" prefWidth="383.0" styleClass="detail-text" text="Description" wrapText="true" />
-                            </children>
-                        </VBox>
-                    </children>
-                </VBox>
-
-                <VBox spacing="15.0" styleClass="main-card">
-                    <padding>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                    </padding>
-                    <children>
-                        <Label styleClass="card-section-title" text="Coordinators" />
-
-                        <HBox alignment="CENTER_LEFT" styleClass="list-item-row">
-                            <children>
-                                <VBox HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label styleClass="item-main-text" text="name of coordinator" />
-                                        <Label styleClass="item-sub-text" text="mail of coordinator" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
+                        <VBox spacing="5.0" />
                     </children>
                 </VBox>
             </children>
