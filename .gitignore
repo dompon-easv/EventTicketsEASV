@@ -38,7 +38,6 @@ build/
 ### Mac OS ###
 .DS_Store
 config/config.settings
-src/main/resources/Movies/
 *.mp4
 *.mkv
 *.avi

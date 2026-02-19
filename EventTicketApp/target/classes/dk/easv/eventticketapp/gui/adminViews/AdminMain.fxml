@@ -16,12 +16,6 @@
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="dk.easv.eventticketapp.gui.adminControllers.AdminMainController">
-
-    <stylesheets>
-        <URL value="@../../../../../style.css" />
-    </stylesheets>
-
-    <!-- ================= HEADER ================= -->
     <top>
         <VBox spacing="5.0"
               style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);">

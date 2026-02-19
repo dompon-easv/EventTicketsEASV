@@ -1,123 +1,151 @@
-/* --- 1. THE FOUNDATION --- */
+/* ================= ROOT & COLORS ================= */
 .root {
-    -fx-primary-color: #030213;      /* Deep black for main buttons */
-    -fx-accent-color: #3b82f6;       /* Blue for focus/toggles */
-    -fx-bg-light: #f8f9fa;           /* Background color */
-    -fx-text-main: #1a1a1a;
-    -fx-text-sub: #6c757d;           /* Lighter gray for descriptions */
-    -fx-border-gray: #e9ecef;
+    -fx-font-family: "Segoe UI", sans-serif;
+    /* Background color for the whole app */
+    -fx-background-color: #f3f4f6;
+
+    /* Define your main colors here for easy changing */
+    -fx-color-primary: #1f2937;  /* Dark Grey/Black */
+    -fx-color-accent: #2563eb;   /* Blue */
+    -fx-color-white: #ffffff;
+    -fx-color-border: #e5e7eb;
 }
 
-/* --- 2. THE MAIN CARD (Event VBox & Popups) --- */
-.main-card {
-    -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: -fx-border-gray;
-    -fx-padding: 20;
-    /* Soft shadow from your Figma shots */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 10, 0, 0, 4);
-}
-
-/* Hover for Event Cards to make them interactive */
-.main-card:hover {
-    -fx-cursor: hand;
-    -fx-background-color: #fafafa;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 15, 0, 0, 6);
-}
-
-/* --- 3. NAVIGATION BUTTONS (Sidebar/Tabs) --- */
-/* The buttons like 'Overview', 'Ticket Types', or 'Home' */
-.btn-tab {
-    -fx-background-color: #f1f3f5;
-    -fx-background-radius: 8;
-    -fx-text-fill: -fx-text-main;
-    -fx-font-weight: bold;
-    -fx-padding: 8 16;
-}
-
-.btn-tab:hover, .btn-tab:focused {
-    -fx-background-color: -fx-primary-color;
-    -fx-text-fill: white;
-    -fx-cursor: hand;
-}
-
-/* --- 4. ACTION BUTTONS --- */
-.btn-primary {
-    -fx-background-color: -fx-primary-color;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-font-weight: bold;
-    -fx-padding: 10 24;
-}
-
-.btn-primary:hover {
-    -fx-background-color: #222;
-    -fx-cursor: hand;
-}
-
-.btn-secondary {
-    -fx-background-color: white;
-    -fx-border-color: #ced4da;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-text-fill: -fx-text-main;
-    -fx-padding: 10 24;
-}
-
-.btn-secondary:hover {
-    -fx-background-color: #f8f9fa;
-    -fx-cursor: hand;
-}
-
-/* --- 5. INPUTS & FORMS (Voucher/Login) --- */
-.modern-input, .text-area, .combo-box {
-    -fx-background-color: #f1f3f5;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: transparent;
-    -fx-padding: 8;
-}
-
-.modern-input:focused, .text-area:focused, .combo-box:focused {
-    -fx-background-color: white;
-    -fx-border-color: -fx-accent-color;
-}
-
-/* --- 6. TEXT STYLES --- */
-.header-title {
+/* ================= TYPOGRAPHY ================= */
+/* Big Titles */
+.header-title, .display-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-main;
+    -fx-text-fill: -fx-color-primary;
 }
 
-.input-label {
+/* Subtitles & Descriptions */
+.header-subtitle, .section-subtitle, .helper-text, .input-label {
     -fx-font-size: 13px;
+    -fx-text-fill: #6b7280; /* Muted gray */
+}
+
+/* Section Headers */
+.section-title, .card-title, .card-title-small {
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-main;
+    -fx-text-fill: -fx-color-primary;
 }
 
-.text-sub {
-    -fx-text-fill: -fx-text-sub;
-    -fx-font-size: 12px;
+/* ================= CARDS & CONTAINERS ================= */
+/* All cards share this simple white look */
+.main-card, .table-card, .event-card, .stat-card, .sidebar {
+    -fx-background-color: -fx-color-white;
+    -fx-background-radius: 8;
+    -fx-border-color: -fx-color-border;
+    -fx-border-radius: 8;
+    /* No heavy drop shadows, just a clean flat look */
 }
 
-/* Close button (the X in the corner) */
-.icon-btn-close {
+.content-scroll-pane, .content-scroll-pane > .viewport {
     -fx-background-color: transparent;
-    -fx-text-fill: -fx-text-sub;
-    -fx-font-size: 18px;
+}
+
+/* ================= BUTTONS ================= */
+/* The main dark button */
+.btn-primary, .create-btn, .add-user-btn {
+    -fx-background-color: -fx-color-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+    -fx-padding: 8 15;
+    -fx-font-weight: bold;
     -fx-cursor: hand;
 }
+.btn-primary:hover { -fx-background-color: #374151; }
 
-.icon-btn-close:hover {
-    -fx-text-fill: #dc3545;
+/* The white secondary button */
+.btn-secondary, .btn-back, .btn-edit-event {
+    -fx-background-color: -fx-color-white;
+    -fx-border-color: -fx-color-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover { -fx-background-color: #f9fafb; }
+
+/* Sidebar Navigation Links */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-padding: 10 15;
+    -fx-alignment: CENTER-LEFT;
+    -fx-cursor: hand;
+}
+.nav-button:hover { -fx-background-color: #f3f4f6; }
+
+/* Icon Buttons (Delete/Close) */
+.icon-btn-delete { -fx-text-fill: #ef4444; -fx-background-color: transparent; -fx-cursor: hand; }
+.icon-btn-close  { -fx-text-fill: #9ca3af; -fx-background-color: transparent; -fx-cursor: hand; }
+
+/* ================= INPUTS ================= */
+.modern-input, .modern-text-area {
+    -fx-background-color: -fx-color-white;
+    -fx-border-color: -fx-color-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+}
+.modern-input:focused { -fx-border-color: -fx-color-accent; }
+
+/* Search Bar Wrapper */
+.search-container {
+    -fx-background-color: -fx-color-white;
+    -fx-border-color: -fx-color-border;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 0 10;
+}
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+.search-field:focused { -fx-background-color: transparent; }
+
+/* ================= TABLES & LISTS ================= */
+.modern-table, .list-view {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+.modern-table .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -fx-color-border transparent;
+}
+.modern-table .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+}
+.table-row-cell, .list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #f3f4f6 transparent;
+    -fx-padding: 5 0;
+}
+.table-row-cell:selected, .list-cell:selected {
+    -fx-background-color: #eff6ff; /* Light blue highlight */
 }
 
-/* --- 7. SPECIAL VOUCHER TOGGLE BOX --- */
-.toggle-container {
-    -fx-padding: 15;
-    -fx-border-color: -fx-border-gray;
-    -fx-border-radius: 10;
+/* ================= EXTRAS ================= */
+/* Badges for "Owner", "Admin", etc */
+.badge-owner, .badge-status {
+    -fx-background-color: -fx-color-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+    -fx-font-size: 10px;
+}
+
+/* Toggles (Events / Vouchers) */
+.toggle-btn-left, .toggle-btn-right {
     -fx-background-color: transparent;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+}
+.toggle-btn-left:focused, .toggle-btn-right:focused, .toggle-btn-left.active {
+    -fx-background-color: -fx-color-white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+    -fx-background-radius: 12;
 }

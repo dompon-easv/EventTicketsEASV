@@ -8,11 +8,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.net.URL?>
+
 <VBox spacing="25.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.adminControllers.UserManagementController">
-    <stylesheets>
-        <URL value="@../../../../../style.css" />
-    </stylesheets>
     <padding>
         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
     </padding>
