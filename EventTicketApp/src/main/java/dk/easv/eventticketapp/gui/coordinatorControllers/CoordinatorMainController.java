@@ -20,6 +20,7 @@ public class CoordinatorMainController {
 
     public void initialize() {
         staticContentArea = contentArea;
+        loadView("CoordinatorHome.fxml");
     }
 
     public void showHome(ActionEvent actionEvent) {
