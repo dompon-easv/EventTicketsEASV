@@ -47,6 +47,7 @@ public class CoordinatorMainController {
 
             stage.setScene(scene);
             stage.show();
+            stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();

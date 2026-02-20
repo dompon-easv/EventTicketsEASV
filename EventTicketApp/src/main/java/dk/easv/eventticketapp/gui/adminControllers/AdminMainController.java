@@ -54,6 +54,7 @@ public class AdminMainController {
 
             stage.setScene(scene);
             stage.show();
+            stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();
