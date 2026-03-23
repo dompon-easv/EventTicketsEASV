@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -41,3 +42,8 @@ config/config.settings
 *.mp4
 *.mkv
 *.avi
+=======
+/EventTicketApp/target/
+
+config/config.settings
+>>>>>>> Stashed changes
