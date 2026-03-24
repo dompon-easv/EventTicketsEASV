@@ -1,16 +1,25 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.User;
+import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
+import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.dao.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AddEventController {
@@ -28,14 +37,16 @@ public class AddEventController {
 
     @FXML private TextArea locationDescriptionField;
     @FXML private TextArea notesField;
+    @FXML private VBox coordinatorContainer;
 
     @FXML
     public void initialize() {
         loadTimeOptions(startTimeCombo);
         loadTimeOptions(endTimeCombo);
-        startDatePicker.setValue(java.time.LocalDate.now());
+        startDatePicker.setValue(LocalDate.now());
         startTimeCombo.setValue("12:00");
         endTimeCombo.setValue("13:00");
+        loadCoordinators();
 
     }
 
@@ -50,10 +61,15 @@ public class AddEventController {
             LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
 
             LocalDateTime end = null;
-            if (endDatePicker.getValue() != null || endTimeCombo.getValue() != null) {
+            if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) {
                 end = combineDateTime(endDatePicker, endTimeCombo);
+
+                if (!end.isAfter(start)) {
+                    throw new Exception("End time must be after start time");
+                }
             }
 
+            // ✅ CREATE EVENT OBJECT HERE (ONLY HERE)
             Event event = new Event(
                     name,
                     location,
@@ -63,12 +79,32 @@ public class AddEventController {
                     locationDescription
             );
 
-            eventLogic.createEvent(event);
+            // ✅ SAVE EVENT
+            Event createdEvent = eventLogic.createEvent(event);
+
+            // ✅ ASSIGN COORDINATORS
+            List<Integer> selectedUsers = getSelectedCoordinatorIds();
+
+            EventCoordinatorLogic ecLogic = new EventCoordinatorLogic();
+            ecLogic.assignCoordinators(createdEvent.getId(), selectedUsers);
+
             closeBtn(actionEvent);
 
         } catch (Exception e) {
             showError(e.getMessage());
         }
+    }
+
+    private List<Integer> getSelectedCoordinatorIds() {
+        List<Integer> selected = new ArrayList<>();
+
+        for (Node node : coordinatorContainer.getChildren()) {
+            if (node instanceof CheckBox cb && cb.isSelected() && cb.getUserData() != null) {
+                selected.add((Integer) cb.getUserData());
+            }
+        }
+
+        return selected;
     }
 
     private void loadTimeOptions(ComboBox<String> comboBox) {
@@ -114,6 +150,31 @@ public class AddEventController {
             CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private List<User> coordinators = new ArrayList<>();
+    
+
+    private void loadCoordinators() {
+        try {
+            UserManager userManager = new UserManager(new UserDAO());
+
+            coordinators = userManager.getAllUsers().stream()
+                    .filter(u -> u.getRole() == UserRole.COORDINATOR) // ✅ FIXED
+                    .toList();
+
+            coordinatorContainer.getChildren().clear();
+
+            for (User user : coordinators) {
+                CheckBox cb = new CheckBox(user.getName() + " " + user.getSurname());
+                cb.setUserData(user.getId()); // ✅ NOW WORKS
+                cb.getStyleClass().add("modern-checkbox");
+
+                coordinatorContainer.getChildren().add(cb);
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

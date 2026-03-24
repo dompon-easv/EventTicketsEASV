@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.be;
 
 public class User {
+
     private int id;
     private String email;
     private UserRole role;
@@ -9,8 +10,19 @@ public class User {
     private String password;
     private String username;
 
+    // ✅ Constructor WITHOUT ID (for creating new users)
     public User(String email, UserRole role, String name, String surname, String password, String username) {
-        //this.id = id;
+        this.email = email;
+        this.role = role;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.username = username;
+    }
+
+    // ✅ Constructor WITH ID (for DB loading)
+    public User(int id, String email, UserRole role, String name, String surname, String password, String username) {
+        this.id = id;
         this.email = email;
         this.role = role;
         this.name = name;
@@ -46,5 +58,4 @@ public class User {
     public String getUsername() {
         return username;
     }
-
 }

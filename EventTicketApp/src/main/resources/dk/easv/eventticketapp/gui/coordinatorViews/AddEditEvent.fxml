@@ -118,7 +118,7 @@
                         <!-- Coordinators (unchanged) -->
                         <VBox spacing="10.0" styleClass="input-group">
                             <Label styleClass="input-label" text="Assign Coordinators" />
-                            <VBox styleClass="selection-box">
+                            <VBox fx:id="coordinatorContainer" styleClass="selection-box">
                                 <padding>
                                     <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                 </padding>
