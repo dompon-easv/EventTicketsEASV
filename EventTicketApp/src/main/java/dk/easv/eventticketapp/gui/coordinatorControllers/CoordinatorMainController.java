@@ -1,6 +1,9 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.bll.AuthenticationLogic;
+import dk.easv.eventticketapp.bll.SessionManager;
+import dk.easv.eventticketapp.gui.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,9 @@ public class CoordinatorMainController {
 
     public static StackPane staticContentArea;
 
+    private AuthenticationLogic authenticationLogic;
+    private SessionManager sessionManager;
+
     public void initialize() {
         staticContentArea = contentArea;
         loadView("CoordinatorHome.fxml");
@@ -29,6 +35,7 @@ public class CoordinatorMainController {
 
     @FXML
     private void handleLogout(ActionEvent actionEvent) {
+        SessionManager.clearSession();
         try {
             FXMLLoader loader = new FXMLLoader(
                     Application.class.getResource("gui/Login.fxml")
@@ -49,6 +56,9 @@ public class CoordinatorMainController {
             stage.show();
             stage.centerOnScreen();
 
+            LoginController loginController = loader.getController();
+            loginController.setAuthenticationLogic(authenticationLogic);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,5 +77,9 @@ public class CoordinatorMainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setAuthenticationLogic(AuthenticationLogic authenticationLogic) {
+        this.authenticationLogic = authenticationLogic;
     }
 }
