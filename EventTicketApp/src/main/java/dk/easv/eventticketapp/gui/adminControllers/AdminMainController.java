@@ -3,6 +3,7 @@ package dk.easv.eventticketapp.gui.adminControllers;
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.bll.AuthenticationLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
+import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.gui.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,11 @@ public class AdminMainController {
 
     private SessionManager sessionManager;
     private AuthenticationLogic authenticationLogic;
+    private UserManager userManager;
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
 
     public void setAuthenticationLogic(AuthenticationLogic authenticationLogic) {
         this.authenticationLogic = authenticationLogic;
@@ -77,14 +83,21 @@ public class AdminMainController {
 
     private void loadView(String fxml) {
         try {
-            Node node = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(
                             getClass().getResource(
                                     "/dk/easv/eventticketapp/gui/adminViews/" + fxml
                             )
                     )
             );
+
+            Node node = loader.load();
+            Object controller = loader.getController();
+            if (controller instanceof UserManagementController userManagementController) {
+                userManagementController.setUserManager(userManager);
+            }
             contentArea.getChildren().setAll(node);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

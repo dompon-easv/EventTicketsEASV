@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
 import dk.easv.eventticketapp.bll.AuthenticationLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
+import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
@@ -25,9 +26,13 @@ public class LoginController {
 
     private AuthenticationLogic authenticationLogic;
     private SessionManager sessionManager;
+    private UserManager userManager;
 
     public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {
         this.authenticationLogic = authenticationLogic;
+    }
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
 
@@ -66,6 +71,7 @@ public class LoginController {
         if(role == UserRole.ADMIN){
             AdminMainController adminMainController = fxmlLoader.getController();
             adminMainController.setAuthenticationLogic(authenticationLogic);
+            adminMainController.setUserManager(userManager);
         }
         if(role == UserRole.COORDINATOR){
             CoordinatorMainController coordinatorMainController = fxmlLoader.getController();
@@ -77,4 +83,7 @@ public class LoginController {
         stage.show();
         stage.centerOnScreen();
 
-}}
+}
+
+
+}

@@ -36,6 +36,8 @@
                 <TableView fx:id="userTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="nameColumn" prefWidth="250.0" text="Name" />
+                        <TableColumn fx:id="surnameColumn" prefWidth="250.0" text="Surname" />
+                        <TableColumn fx:id="usernameColumn" prefWidth="250.0" text="Username" />
                         <TableColumn fx:id="emailColumn" prefWidth="300.0" text="Email" />
                         <TableColumn fx:id="roleColumn" prefWidth="150.0" text="Role" />
                         <TableColumn fx:id="actionsColumn" prefWidth="120.0" style="-fx-alignment: CENTER-RIGHT;" text="Actions" />
