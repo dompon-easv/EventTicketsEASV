@@ -75,6 +75,7 @@ public class AdminMainController {
 
             LoginController loginController = loader.getController();
             loginController.setAuthenticationLogic(authenticationLogic);
+            loginController.setUserManager(userManager);
 
         } catch (IOException e) {
             e.printStackTrace();
