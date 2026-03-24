@@ -1,0 +1,29 @@
+package dk.easv.eventticketapp.bll;
+
+import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.dao.EventDAO;
+import dk.easv.eventticketapp.dao.IEventDAO;
+
+public class EventLogic {
+
+    private final IEventDAO eventDAO;
+
+    public EventLogic() {
+        eventDAO = new EventDAO();
+    }
+
+    public Event createEvent(Event event) throws Exception {
+
+        // Basic validation
+        if (event.getName().isEmpty())
+            throw new Exception("Event name is required");
+
+        if (event.getLocation().isEmpty())
+            throw new Exception("Location is required");
+
+        if (event.getStartDate() == null)
+            throw new Exception("Start date is required");
+
+        return eventDAO.createEvent(event);
+    }
+}

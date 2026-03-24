@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEventController">
+<ScrollPane fitToWidth="true"
+            styleClass="content-scroll-pane"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEventController">
+
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
             <padding>
                 <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
             </padding>
+
             <children>
+
+                <!-- HEADER -->
                 <VBox spacing="5.0">
                     <children>
                         <Label styleClass="header-title" text="My Events" />
@@ -26,46 +26,96 @@
                     </children>
                 </VBox>
 
+                <!-- CARD -->
                 <VBox spacing="20.0" styleClass="main-card">
                     <padding>
                         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                     </padding>
+
                     <children>
+
                         <Label styleClass="card-title" text="Create New Event" />
 
+                        <!-- Event Name -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Event Name *" />
-                            <TextField promptText="Summer Music Festival" styleClass="modern-input" />
+                            <TextField fx:id="nameField"
+                                       promptText="Summer Music Festival"
+                                       styleClass="modern-input" />
                         </VBox>
 
+                        <!-- Dates -->
                         <HBox spacing="20.0">
                             <children>
+
+                                <!-- START -->
                                 <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
                                     <Label styleClass="input-label" text="Start Date &amp; Time *" />
-                                    <DatePicker maxWidth="Infinity" promptText="dd/mm/yyyy, --:--" styleClass="modern-input" />
+                                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                        <children>
+                                            <DatePicker fx:id="startDatePicker"
+                                                        promptText="dd/mm/yyyy"
+                                                        styleClass="modern-input" />
+
+                                            <ComboBox fx:id="startTimeCombo"
+                                                      promptText="HH:mm"
+                                                      maxWidth="Infinity"
+                                                      HBox.hgrow="ALWAYS"
+                                                      styleClass="modern-input"/>
+                                        </children>
+                                    </HBox>
                                 </VBox>
+
+                                <!-- END -->
                                 <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
                                     <Label styleClass="input-label" text="End Date &amp; Time" />
-                                    <DatePicker maxWidth="Infinity" promptText="dd/mm/yyyy, --:--" styleClass="modern-input" />
+                                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                        <children>
+                                            <DatePicker fx:id="endDatePicker"
+                                                        promptText="dd/mm/yyyy"
+                                                        styleClass="modern-input" />
+
+                                            <ComboBox fx:id="endTimeCombo"
+                                                      promptText="HH:mm"
+                                                      maxWidth="Infinity"
+                                                      HBox.hgrow="ALWAYS"
+                                                      styleClass="modern-input"/>
+                                        </children>
+                                    </HBox>
                                 </VBox>
+
                             </children>
                         </HBox>
 
+                        <!-- Location -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Location *" />
-                            <TextField promptText="Central Park Amphitheater" styleClass="modern-input" />
+                            <TextField fx:id="locationField"
+                                       promptText="Central Park Amphitheater"
+                                       styleClass="modern-input" />
                         </VBox>
 
+                        <!-- Location Guidance -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Location Guidance (How to get there)" />
-                            <TextArea prefHeight="80.0" promptText="Take subway line A to..." styleClass="modern-input, modern-text-area" wrapText="true" />
+                            <TextArea fx:id="locationDescriptionField"
+                                      prefHeight="80.0"
+                                      promptText="Take subway line A to..."
+                                      styleClass="modern-input, modern-text-area"
+                                      wrapText="true" />
                         </VBox>
 
+                        <!-- Notes -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Notes *" />
-                            <TextArea prefHeight="80.0" promptText="Important information about the event..." styleClass="modern-input, modern-text-area" wrapText="true" />
+                            <TextArea fx:id="notesField"
+                                      prefHeight="80.0"
+                                      promptText="Important information about the event..."
+                                      styleClass="modern-input, modern-text-area"
+                                      wrapText="true" />
                         </VBox>
 
+                        <!-- Coordinators (unchanged) -->
                         <VBox spacing="10.0" styleClass="input-group">
                             <Label styleClass="input-label" text="Assign Coordinators" />
                             <VBox styleClass="selection-box">
@@ -85,12 +135,19 @@
                         </VBox>
 
                         <Separator styleClass="card-separator" />
+
+                        <!-- Buttons -->
                         <HBox alignment="CENTER_RIGHT" spacing="15.0">
                             <children>
-                                <Button onAction="#closeBtn" styleClass="btn-secondary" text="Cancel" />
-                                <Button styleClass="btn-primary" text="Create Event" />
+                                <Button onAction="#closeBtn"
+                                        styleClass="btn-secondary"
+                                        text="Cancel" />
+                                <Button onAction="#onCreateEvent"
+                                        styleClass="btn-primary"
+                                        text="Create Event" />
                             </children>
                         </HBox>
+
                     </children>
                 </VBox>
             </children>
