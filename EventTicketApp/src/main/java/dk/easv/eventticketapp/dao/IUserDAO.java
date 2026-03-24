@@ -13,4 +13,6 @@ public interface IUserDAO {
     void addUser(User user) throws SQLException;
 
     List<User> getAllUsers() throws SQLException;
+
+    void deleteUser(String username) throws SQLException;
 }

@@ -14,7 +14,7 @@
         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
     </padding>
     <children>
-        <HBox alignment="CENTER_LEFT">
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
             <children>
                 <VBox HBox.hgrow="ALWAYS">
                     <children>
@@ -22,6 +22,17 @@
                         <Label styleClass="header-subtitle" text="Manage system users and event coordinators" />
                     </children>
                 </VBox>
+                <Button text="−" onAction="#handleDeleteUser"
+                        styleClass="add-user-btn"
+                        prefWidth="40.0" prefHeight="40.0"
+                        minWidth="40.0" minHeight="40.0"
+                        maxWidth="40.0" maxHeight="40.0" />
+                <Button text="✎" onAction="#handleEditUser"
+                        styleClass="add-user-btn"
+                        style="-fx-font-size: 20px; -fx-text-fill: white;"
+                        prefWidth="40.0" prefHeight="40.0"
+                        minWidth="40.0" minHeight="40.0"
+                        maxWidth="40.0" maxHeight="40.0" />
                 <Button styleClass="add-user-btn" text="+ Add User" onAction="#onAddUser"/>
             </children>
         </HBox>
@@ -40,7 +51,6 @@
                         <TableColumn fx:id="usernameColumn" prefWidth="250.0" text="Username" />
                         <TableColumn fx:id="emailColumn" prefWidth="300.0" text="Email" />
                         <TableColumn fx:id="roleColumn" prefWidth="150.0" text="Role" />
-                        <TableColumn fx:id="actionsColumn" prefWidth="120.0" style="-fx-alignment: CENTER-RIGHT;" text="Actions" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

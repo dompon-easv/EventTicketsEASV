@@ -77,6 +77,18 @@ public class UserDAO implements IUserDAO {
         }
     }
 
+    @Override
+    public void deleteUser(String username) throws SQLException {
+        String sql = "DELETE FROM dbo.Users WHERE username = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            System.out.println("connected" + conn.getCatalog());
+
+            stmt.setString(1, username.trim());
+            stmt.executeUpdate();
+        }
+    }
+
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM dbo.Users";

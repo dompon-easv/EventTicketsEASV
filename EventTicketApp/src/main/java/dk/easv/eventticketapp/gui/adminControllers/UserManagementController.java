@@ -66,4 +66,15 @@ public class UserManagementController {
     }
 
 
+    public void handleDeleteUser(ActionEvent actionEvent) {
+        User user = userTable.getSelectionModel().getSelectedItem();
+        if (user != null) {
+            userManager.deleteUser(user.getUsername());
+            loadUsers();
+        }
+    }
+
+    public void handleEditUser(ActionEvent actionEvent) {
+
+    }
 }

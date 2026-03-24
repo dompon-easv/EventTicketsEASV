@@ -27,4 +27,13 @@ public class UserManager {
             e.printStackTrace();
         }return null;
     }
+
+    public void deleteUser(String username) {
+        try{
+            userDAO.deleteUser(username);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
