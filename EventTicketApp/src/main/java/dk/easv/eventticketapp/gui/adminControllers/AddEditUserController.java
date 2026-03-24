@@ -9,4 +9,7 @@ public class AddEditUserController {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    public void onAddUser(ActionEvent actionEvent) {
+    }
 }
