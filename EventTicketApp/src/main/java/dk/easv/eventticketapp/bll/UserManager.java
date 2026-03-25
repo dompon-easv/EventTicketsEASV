@@ -14,25 +14,36 @@ public class UserManager {
         this.userDAO = userDAO;
     }
 
-    public void addUser(String email, UserRole role, String name, String surname, String password, String username) throws SQLException {
-        userDAO.addUser(new User(email,role,name,surname,password,username));
+    public void addUser(String email, UserRole role, String name, String surname, String password, String username) {
+        try {
+            userDAO.addUser(new User(email, role, name, surname, password, username));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<User> getAllUsers() {
-        try
-        {
+        try {
             return userDAO.getAllUsers();
-        }catch(SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }return null;
+        }
+        return null;
     }
 
     public void deleteUser(String username) {
-        try{
+        try {
             userDAO.deleteUser(username);
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editUser(User updatedUser) {
+        try {
+            userDAO.editUser(updatedUser);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

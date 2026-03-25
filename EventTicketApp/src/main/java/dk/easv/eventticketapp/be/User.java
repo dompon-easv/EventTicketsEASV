@@ -58,4 +58,23 @@ public class User {
     public String getUsername() {
         return username;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setUserRole(UserRole role) {
+        this.role = role;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

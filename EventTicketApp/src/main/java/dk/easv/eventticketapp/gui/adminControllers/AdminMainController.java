@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -18,6 +19,8 @@ import java.util.Objects;
 
 public class AdminMainController {
 
+    public Label lblUser;
+    public Label lblRole;
     @FXML
     private StackPane contentArea;
 
@@ -33,9 +36,15 @@ public class AdminMainController {
         this.authenticationLogic = authenticationLogic;
     }
 
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
     // Optional: automatically load default view
     public void initialize() {
         loadView("AdminHome.fxml");
+        lblUser.setText(SessionManager.getCurrentUser().getName() + " " +SessionManager.getCurrentUser().getSurname());
+        lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
     }
 
     public void showHome(ActionEvent actionEvent) {

@@ -74,7 +74,27 @@ public class UserManagementController {
         }
     }
 
-    public void handleEditUser(ActionEvent actionEvent) {
+    public void handleEditUser(ActionEvent actionEvent) throws IOException {
+
+        System.out.println("clicked edit");
+        User user = userTable.getSelectionModel().getSelectedItem();
+        System.out.println("selected user: " + user);
+        if (user == null) {
+            System.out.println("no user selected");
+            return;
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AddEditUser.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        AddEditUserController controller = fxmlLoader.getController();
+        controller.init(userManager);
+        controller.setUser(user);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        loadUsers();
+
 
     }
 }

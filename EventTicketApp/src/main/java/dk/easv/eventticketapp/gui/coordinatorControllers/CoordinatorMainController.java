@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -18,6 +19,8 @@ import java.util.Objects;
 
 public class CoordinatorMainController {
 
+    public Label lblUser;
+    public Label lblRole;
     @FXML private StackPane contentArea;
 
     public static StackPane staticContentArea;
@@ -29,6 +32,8 @@ public class CoordinatorMainController {
     public void initialize() {
         staticContentArea = contentArea;
         loadView("CoordinatorHome.fxml");
+        lblUser.setText(SessionManager.getCurrentUser().getName() + " " + SessionManager.getCurrentUser().getSurname());
+        lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
     }
 
     public void showHome(ActionEvent actionEvent) {

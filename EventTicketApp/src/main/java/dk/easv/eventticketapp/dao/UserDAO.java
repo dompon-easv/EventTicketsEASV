@@ -113,4 +113,22 @@ public class UserDAO implements IUserDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public void editUser(User updatedUser) throws SQLException {
+        String sql = "UPDATE Users SET email = ?, role = ?, name = ?, surname = ?, password = ?, username = ? WHERE id = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, updatedUser.getEmail());
+            stmt.setString(2, updatedUser.getRole().name().toLowerCase());
+            stmt.setString(3, updatedUser.getName());
+            stmt.setString(4, updatedUser.getSurname());
+            stmt.setString(5, updatedUser.getPassword());
+            stmt.setString(6, updatedUser.getUsername());
+            stmt.setInt(7, updatedUser.getId());
+
+            stmt.executeUpdate();
+        }
+    }
 }

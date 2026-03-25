@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainRoot" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController">
+<BorderPane fx:id="mainRoot" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController">
     <stylesheets>
         <URL value="@../../../../../style.css" />
     </stylesheets>
@@ -58,12 +58,12 @@
                                     <children>
                                         <VBox alignment="CENTER_RIGHT">
                                             <children>
-                                                <Label text="John Coordinator" textFill="#333333">
+                                                <Label fx:id="lblUser" text="John Coordinator" textFill="#333333">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Label alignment="CENTER_RIGHT" text="Coordinator" textFill="#666666">
+                                                <Label fx:id="lblRole" alignment="CENTER_RIGHT" text="Coordinator" textFill="#666666">
                                                     <font>
                                                         <Font size="12.0" />
                                                     </font>
