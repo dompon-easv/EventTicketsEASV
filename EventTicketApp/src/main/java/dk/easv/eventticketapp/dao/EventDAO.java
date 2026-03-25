@@ -131,4 +131,37 @@ public class EventDAO implements IEventDAO {
             stmt.executeUpdate();
         }
     }
+    @Override
+    public List<Event> getEventsByIds(List<Integer> ids) throws Exception {
+        List<Event> events = new ArrayList<>();
+
+        if (ids == null || ids.isEmpty()) return events;
+
+        String placeholders = String.join(",", ids.stream().map(id -> "?").toList());
+        String sql = "SELECT * FROM Events WHERE id IN (" + placeholders + ")";
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < ids.size(); i++) {
+                stmt.setInt(i + 1, ids.get(i));
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                events.add(new Event(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("location"),
+                        rs.getTimestamp("startDate") != null ? rs.getTimestamp("startDate").toLocalDateTime() : null,
+                        rs.getTimestamp("endDate") != null ? rs.getTimestamp("endDate").toLocalDateTime() : null,
+                        rs.getString("description"),
+                        rs.getString("location_description")
+                ));
+            }
+        }
+
+        return events;
+    }
 }

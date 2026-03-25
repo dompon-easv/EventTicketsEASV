@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="12"
+      styleClass="event-card">
+
+    <padding>
+        <Insets top="18" right="18" bottom="18" left="18"/>
+    </padding>
+
+    <children>
+
+        <!-- HEADER -->
+        <HBox alignment="TOP_LEFT" spacing="10">
+
+            <children>
+
+                <!-- CLICKABLE CONTENT -->
+                <VBox fx:id="clickArea"
+                      spacing="8"
+                      HBox.hgrow="ALWAYS">
+
+                    <children>
+
+                        <!-- TITLE + BADGE -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <children>
+                                <Label fx:id="titleLabel"
+                                       styleClass="event-card-title"/>
+
+                                <Label text="Owner"
+                                       styleClass="badge-owner"/>
+                            </children>
+                        </HBox>
+
+                        <!-- DATE -->
+                        <Label fx:id="dateLabel"
+                               styleClass="event-detail-text"/>
+
+                        <!-- LOCATION -->
+                        <Label fx:id="locationLabel"
+                               styleClass="event-detail-text"/>
+
+                        <!-- COORDINATORS -->
+                        <Label fx:id="coordinatorLabel"
+                               styleClass="event-detail-text"/>
+
+                    </children>
+                </VBox>
+
+                <!-- DELETE BUTTON -->
+                <Button fx:id="deleteBtn"
+                        text="🗑"
+                        styleClass="icon-btn-delete"/>
+
+            </children>
+        </HBox>
+
+        <!-- DIVIDER -->
+        <Separator styleClass="card-separator"/>
+
+        <!-- FOOTER -->
+        <Label fx:id="ticketsLabel"
+               text="0 tickets issued"
+               styleClass="issued-text"/>
+
+    </children>
+</VBox>

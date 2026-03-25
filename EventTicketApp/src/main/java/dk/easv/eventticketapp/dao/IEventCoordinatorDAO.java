@@ -10,4 +10,6 @@ public interface IEventCoordinatorDAO {
 
     // 🔥 NEW
     void deleteCoordinatorsByEventId(int eventId) throws Exception;
+    // 🔥 NEW biatch
+    List<Integer> getEventIdsByUser(int userId) throws Exception;
 }

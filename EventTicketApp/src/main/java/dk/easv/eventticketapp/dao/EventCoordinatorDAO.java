@@ -55,5 +55,25 @@ public class EventCoordinatorDAO implements IEventCoordinatorDAO {
             stmt.executeUpdate();
         }
     }
+    @Override
+    public List<Integer> getEventIdsByUser(int userId) throws Exception {
+        List<Integer> eventIds = new ArrayList<>();
+
+        String sql = "SELECT eventId FROM EventCoordinators WHERE userId = ?";
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                eventIds.add(rs.getInt("eventId"));
+            }
+        }
+
+        return eventIds;
+    }
 }
 
