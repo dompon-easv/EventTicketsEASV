@@ -2,6 +2,7 @@ package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.bll.AuthenticationLogic;
+import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
 import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.gui.LoginController;
@@ -19,14 +20,15 @@ import java.util.Objects;
 
 public class AdminMainController {
 
-    public Label lblUser;
-    public Label lblRole;
-    @FXML
-    private StackPane contentArea;
+    @FXML Label lblUser;
+    @FXML Label lblRole;
+    @FXML Label lblInitials;
+    @FXML StackPane contentArea;
 
     private SessionManager sessionManager;
     private AuthenticationLogic authenticationLogic;
     private UserManager userManager;
+    private EventLogic eventLogic;
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
@@ -40,11 +42,16 @@ public class AdminMainController {
         this.sessionManager = sessionManager;
     }
 
+    public void setEventLogic(EventLogic eventLogic) {
+        this.eventLogic = eventLogic;
+    }
+
     // Optional: automatically load default view
     public void initialize() {
         loadView("AdminHome.fxml");
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " +SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
+        lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
     }
 
     public void showHome(ActionEvent actionEvent) {
@@ -108,6 +115,7 @@ public class AdminMainController {
             }
             if (controller instanceof EventsController eventsController) {
                 eventsController.setUserManager(userManager);
+                eventsController.setEventLogic(eventLogic);
             }
             contentArea.getChildren().setAll(node);
 

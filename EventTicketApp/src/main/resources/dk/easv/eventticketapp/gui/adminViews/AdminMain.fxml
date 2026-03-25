@@ -70,7 +70,7 @@
                                 <StackPane>
                                     <children>
                                         <Circle fill="#F44336" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
-                                        <Label text="AD" textFill="WHITE">
+                                        <Label text="AD" textFill="WHITE" fx:id="lblInitials">
                                             <font>
                                                 <Font name="System Bold" size="16.0" />
                                             </font>

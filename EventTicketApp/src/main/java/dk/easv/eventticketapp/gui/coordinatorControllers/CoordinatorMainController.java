@@ -19,9 +19,10 @@ import java.util.Objects;
 
 public class CoordinatorMainController {
 
-    public Label lblUser;
-    public Label lblRole;
-    @FXML private StackPane contentArea;
+    @FXML Label lblUser;
+    @FXML Label lblRole;
+    @FXML Label lblInitials;
+    @FXML StackPane contentArea;
 
     public static StackPane staticContentArea;
 
@@ -34,6 +35,7 @@ public class CoordinatorMainController {
         loadView("CoordinatorHome.fxml");
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " + SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
+        lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
     }
 
     public void showHome(ActionEvent actionEvent) {

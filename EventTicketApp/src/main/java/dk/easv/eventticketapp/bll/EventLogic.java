@@ -4,6 +4,8 @@ import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.dao.EventDAO;
 import dk.easv.eventticketapp.dao.IEventDAO;
 
+import java.sql.SQLException;
+
 public class EventLogic {
 
     private final IEventDAO eventDAO;
@@ -25,5 +27,15 @@ public class EventLogic {
             throw new Exception("Start date is required");
 
         return eventDAO.createEvent(event);
+    }
+
+    public int getEventCount() {
+        try{
+           return eventDAO.getEventCount();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

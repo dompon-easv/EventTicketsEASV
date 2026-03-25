@@ -29,7 +29,7 @@
                             <children>
                                 <VBox HBox.hgrow="ALWAYS">
                                     <Label styleClass="stat-label" text="Total Events" />
-                                    <Label styleClass="stat-value" />
+                                    <Label fx:id="lblEventNumber" styleClass="stat-value" />
                                 </VBox>
                                 <StackPane styleClass="stat-icon-container, bg-blue">
                                     <Label styleClass="stat-icon" text="📅" />

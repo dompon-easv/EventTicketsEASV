@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.dao;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.UserRole;
 
 import java.sql.*;
 
@@ -53,5 +54,20 @@ public class EventDAO implements IEventDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public int getEventCount() throws SQLException {
+        int eventCount;
+        String sql = "SELECT COUNT(*) FROM Events";
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return eventCount = rs.getInt(1);
+                }
+            }
+
+        } return 0;
     }
 }
