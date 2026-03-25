@@ -3,10 +3,7 @@ package dk.easv.eventticketapp.gui;
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
-import dk.easv.eventticketapp.bll.AuthenticationLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
@@ -30,9 +27,8 @@ public class LoginController {
     private UserManager userManager;
     private EventLogic eventLogic;
 
-    public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {
-        this.authenticationLogic = authenticationLogic;
-    }
+
+    public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {this.authenticationLogic = authenticationLogic;}
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
@@ -91,6 +87,7 @@ public class LoginController {
         stage.centerOnScreen();
 
 }
+
 
 
 }

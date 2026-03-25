@@ -1,9 +1,6 @@
 package dk.easv.eventticketapp;
 
-import dk.easv.eventticketapp.bll.AuthenticationLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.dao.IUserDAO;
 import dk.easv.eventticketapp.dao.UserDAO;
 import dk.easv.eventticketapp.gui.LoginController;

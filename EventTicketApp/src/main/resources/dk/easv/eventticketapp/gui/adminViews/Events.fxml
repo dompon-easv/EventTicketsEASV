@@ -60,7 +60,7 @@
                 <HBox alignment="CENTER_LEFT" styleClass="search-container">
                     <children>
                         <Label styleClass="search-icon" text="🔍" />
-                        <TextField promptText="Search events by name, location, or description..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        <TextField promptText="Search events by name, location, or description..." styleClass="search-field" HBox.hgrow="ALWAYS" fx:id="txtFilter" />
                     </children>
                     <padding>
                         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
