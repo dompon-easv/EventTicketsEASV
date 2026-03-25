@@ -74,6 +74,7 @@ public class LoginController {
             adminMainController.setAuthenticationLogic(authenticationLogic);
             adminMainController.setUserManager(userManager);
             adminMainController.setEventLogic(eventLogic);
+            adminMainController.init();
         }
         if(role == UserRole.COORDINATOR){
             CoordinatorMainController coordinatorMainController = fxmlLoader.getController();

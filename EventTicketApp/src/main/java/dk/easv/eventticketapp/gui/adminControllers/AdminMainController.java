@@ -43,9 +43,13 @@ public class AdminMainController {
         this.eventLogic = eventLogic;
     }
 
-    // Optional: automatically load default view
+    public void init()
+    {
+        loadView("UserManagement.fxml");
+    }
     public void initialize() {
-       // loadView("UserManagement.fxml");
+
+
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " +SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
         lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
