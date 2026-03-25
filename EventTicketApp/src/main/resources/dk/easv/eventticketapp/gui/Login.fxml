@@ -39,7 +39,7 @@
 
                 <VBox spacing="5.0">
                     <children>
-                        <Label styleClass="stat-label" text="Username or Email" />
+                        <Label styleClass="stat-label" text="Username" />
                         <TextField fx:id="txtUsername" promptText="admin or your.email@example.com" styleClass="login-input" />
                     </children>
                 </VBox>
