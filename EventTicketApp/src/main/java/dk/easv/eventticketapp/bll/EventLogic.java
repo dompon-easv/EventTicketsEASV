@@ -49,4 +49,7 @@ public class EventLogic {
             throw new RuntimeException("Error while getting all events", e);
         }
     }
+    public void updateEvent(Event event) throws Exception {
+        eventDAO.updateEvent(event);
+    }
 }

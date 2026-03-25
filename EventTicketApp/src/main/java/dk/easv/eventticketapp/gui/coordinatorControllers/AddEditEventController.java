@@ -22,9 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AddEventController {
+public class AddEditEventController {
 
     private final EventLogic eventLogic = new EventLogic();
+
+    private boolean isEditMode = false;
+    private Event currentEvent = null;
 
     @FXML private TextField nameField;
     @FXML private TextField locationField;
@@ -40,6 +43,9 @@ public class AddEventController {
     @FXML private VBox coordinatorContainer;
     @FXML private Label selectedCountLabel;
 
+    @FXML private Label formTitle;
+    @FXML private Button saveButton;
+
     @FXML
     public void initialize() {
         loadTimeOptions(startTimeCombo);
@@ -52,16 +58,16 @@ public class AddEventController {
     }
 
     @FXML
-    public void onCreateEvent(ActionEvent actionEvent) {
+    public void onSaveEvent(ActionEvent actionEvent) {
         try {
-            String name = nameField.getText() != null ? nameField.getText().trim() : "";
-            String location = locationField.getText() != null ? locationField.getText().trim() : "";
-            String description = notesField.getText() != null ? notesField.getText().trim() : "";
-            String locationDescription = locationDescriptionField.getText() != null ? locationDescriptionField.getText().trim() : "";
+            String name = nameField.getText().trim();
+            String location = locationField.getText().trim();
+            String description = notesField.getText().trim();
+            String locationDescription = locationDescriptionField.getText().trim();
 
             LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
-
             LocalDateTime end = null;
+
             if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) {
                 end = combineDateTime(endDatePicker, endTimeCombo);
 
@@ -70,24 +76,36 @@ public class AddEventController {
                 }
             }
 
-            // ✅ CREATE EVENT OBJECT HERE (ONLY HERE)
-            Event event = new Event(
-                    name,
-                    location,
-                    start,
-                    end,
-                    description,
-                    locationDescription
-            );
+            if (isEditMode) {
 
-            // ✅ SAVE EVENT
-            Event createdEvent = eventLogic.createEvent(event);
+                currentEvent.setName(name);
+                currentEvent.setLocation(location);
+                currentEvent.setStartDate(start);
+                currentEvent.setEndDate(end);
+                currentEvent.setDescription(description);
+                currentEvent.setLocationDescription(locationDescription);
 
-            // ✅ ASSIGN COORDINATORS
-            List<Integer> selectedUsers = getSelectedCoordinatorIds();
+                eventLogic.updateEvent(currentEvent);
 
-            EventCoordinatorLogic ecLogic = new EventCoordinatorLogic();
-            ecLogic.assignCoordinators(createdEvent.getId(), selectedUsers);
+                // 🔥 NEW — update coordinators
+                List<Integer> selectedUsers = getSelectedCoordinatorIds();
+                new EventCoordinatorLogic().updateCoordinators(currentEvent.getId(), selectedUsers);
+            } else {
+                // ➕ CREATE
+                Event newEvent = new Event(
+                        name,
+                        location,
+                        start,
+                        end,
+                        description,
+                        locationDescription
+                );
+
+                Event createdEvent = eventLogic.createEvent(newEvent);
+
+                List<Integer> selectedUsers = getSelectedCoordinatorIds();
+                new EventCoordinatorLogic().assignCoordinators(createdEvent.getId(), selectedUsers);
+            }
 
             closeBtn(actionEvent);
 
@@ -168,18 +186,19 @@ public class AddEventController {
             coordinatorContainer.getChildren().clear();
 
             for (User user : coordinators) {
-
                 CheckBox cb = new CheckBox(user.getName() + " " + user.getSurname());
                 cb.setUserData(user.getId());
                 cb.getStyleClass().add("modern-checkbox");
 
-                // 🔥 LISTENER → update count on change
                 cb.selectedProperty().addListener((obs, oldVal, newVal) -> updateSelectedLabel());
 
                 coordinatorContainer.getChildren().add(cb);
             }
 
-            // initial update
+            if (isEditMode && currentEvent != null) {
+                preselectCoordinators(currentEvent.getId());
+            }
+
             updateSelectedLabel();
 
         } catch (Exception e) {
@@ -203,6 +222,47 @@ public class AddEventController {
             selectedCountLabel.setText("1 coordinator: " + selectedNames.get(0));
         } else {
             selectedCountLabel.setText(count + " coordinators: " + String.join(", ", selectedNames));
+        }
+    }
+    public void setEditMode(Event event) {
+        this.isEditMode = true;
+        this.currentEvent = event;
+
+        // 🔥 Change UI text
+        formTitle.setText("Edit Event");
+        saveButton.setText("Save Changes");
+
+        // 🔥 Pre-fill fields
+        nameField.setText(event.getName());
+        locationField.setText(event.getLocation());
+        notesField.setText(event.getDescription());
+        locationDescriptionField.setText(event.getLocationDescription());
+
+        startDatePicker.setValue(event.getStartDate().toLocalDate());
+        startTimeCombo.setValue(event.getStartDate().toLocalTime().toString());
+
+        if (event.getEndDate() != null) {
+            endDatePicker.setValue(event.getEndDate().toLocalDate());
+            endTimeCombo.setValue(event.getEndDate().toLocalTime().toString());
+        }
+    }
+    private void preselectCoordinators(int eventId) {
+        try {
+            EventCoordinatorLogic ecLogic = new EventCoordinatorLogic();
+            List<Integer> assignedIds = ecLogic.getCoordinatorIdsForEvent(eventId);
+
+            for (Node node : coordinatorContainer.getChildren()) {
+                if (node instanceof CheckBox cb) {
+                    Integer userId = (Integer) cb.getUserData();
+
+                    if (assignedIds.contains(userId)) {
+                        cb.setSelected(true);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -14,4 +14,18 @@ public class EventCoordinatorLogic {
             dao.addCoordinatorToEvent(eventId, userId);
         }
     }
+
+    // 🔥 NEW
+    public List<Integer> getCoordinatorIdsForEvent(int eventId) throws Exception {
+        return dao.getUserIdsByEventId(eventId);
+    }
+
+    // 🔥 NEW (replace all coordinators)
+    public void updateCoordinators(int eventId, List<Integer> userIds) throws Exception {
+        dao.deleteCoordinatorsByEventId(eventId); // remove old
+
+        for (int userId : userIds) {
+            dao.addCoordinatorToEvent(eventId, userId); // insert new
+        }
+    }
 }

@@ -102,4 +102,33 @@ public class EventDAO implements IEventDAO {
 
         return events;
     }
+    @Override
+    public void updateEvent(Event event) throws Exception {
+
+        String sql = """
+        UPDATE Events
+        SET name = ?, location = ?, startDate = ?, endDate = ?, description = ?, location_description = ?
+        WHERE id = ?
+    """;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, event.getName());
+            stmt.setString(2, event.getLocation());
+            stmt.setTimestamp(3, Timestamp.valueOf(event.getStartDate()));
+
+            if (event.getEndDate() != null)
+                stmt.setTimestamp(4, Timestamp.valueOf(event.getEndDate()));
+            else
+                stmt.setNull(4, Types.TIMESTAMP);
+
+            stmt.setString(5, event.getDescription());
+            stmt.setString(6, event.getLocationDescription());
+
+            stmt.setInt(7, event.getId());
+
+            stmt.executeUpdate();
+        }
+    }
 }

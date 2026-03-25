@@ -9,4 +9,5 @@ public interface IEventDAO {
     int getEventCount() throws Exception;
 
     List<Event> getAllEvents() throws Exception;
+    void updateEvent(Event event) throws Exception;
 }

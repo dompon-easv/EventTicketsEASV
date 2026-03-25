@@ -8,7 +8,7 @@
             styleClass="content-scroll-pane"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEventController">
+            fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEditEventController">
 
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
@@ -34,7 +34,9 @@
 
                     <children>
 
-                        <Label styleClass="card-title" text="Create New Event" />
+                        <Label fx:id="formTitle"
+                               styleClass="card-title"
+                               text="Create New Event" />
 
                         <!-- Event Name -->
                         <VBox styleClass="input-group">
@@ -144,7 +146,8 @@
                                 <Button onAction="#closeBtn"
                                         styleClass="btn-secondary"
                                         text="Cancel" />
-                                <Button onAction="#onCreateEvent"
+                                <Button fx:id="saveButton"
+                                        onAction="#onSaveEvent"
                                         styleClass="btn-primary"
                                         text="Create Event" />
                             </children>
