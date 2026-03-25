@@ -1,9 +1,12 @@
 package dk.easv.eventticketapp.dao;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventDAO implements IEventDAO {
 
@@ -69,5 +72,34 @@ public class EventDAO implements IEventDAO {
             }
 
         } return 0;
+    }
+    @Override
+    public List<Event> getAllEvents() throws SQLException {
+        List<Event> events = new ArrayList<>();
+        String sql = "SELECT * FROM dbo.Events";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Timestamp startDate = rs.getTimestamp("startDate");
+                    Timestamp endDate = rs.getTimestamp("endDate");
+
+                    Event event = new Event(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("location"),
+                            startDate != null ? startDate.toLocalDateTime() : null,
+                            endDate != null ? endDate.toLocalDateTime() : null,
+                            rs.getString("description"),
+                            rs.getString("location_description")
+                    );
+
+                    events.add(event);
+                }
+            }
+
+
+        return events;
     }
 }

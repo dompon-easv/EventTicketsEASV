@@ -74,7 +74,7 @@
                                 <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
                             </padding>
                             <children>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="lstEvents" prefHeight="200.0" prefWidth="200.0" />
                             </children>
                         </VBox>
                     </children>

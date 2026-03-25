@@ -1,10 +1,13 @@
 package dk.easv.eventticketapp.bll;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.dao.EventDAO;
 import dk.easv.eventticketapp.dao.IEventDAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventLogic {
 
@@ -36,6 +39,14 @@ public class EventLogic {
         {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public List<Event> getAllEvents() {
+        try {
+            return eventDAO.getAllEvents();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while getting all events", e);
         }
     }
 }

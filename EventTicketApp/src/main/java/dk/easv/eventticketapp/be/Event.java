@@ -30,14 +30,41 @@ public class Event {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+
     // =========================
     // GETTERS
     // =========================
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getLocation() { return location; }
-    public LocalDateTime getStartDate() { return startDate; }
-    public LocalDateTime getEndDate() { return endDate; }
-    public String getDescription() { return description; }
-    public String getLocationDescription() { return locationDescription; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLocationDescription() {
+        return locationDescription;
+    }
 }
+
