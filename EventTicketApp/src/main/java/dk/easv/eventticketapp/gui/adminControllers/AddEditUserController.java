@@ -7,12 +7,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
 public class AddEditUserController {
+    @FXML Label lblAddEditInfo;
+    @FXML Label lblAddEdit;
+
     @FXML
     private TextField usernameField;
     @FXML
@@ -32,8 +36,7 @@ public class AddEditUserController {
     public void init (UserManager userManager)
     {this.userManager = userManager;}
 
-    public void initialize() {
-        roleComboBox.getItems().addAll(UserRole.values());
+    public void initialize() { roleComboBox.getItems().addAll(UserRole.values());
     }
 
     public void onClickClose(ActionEvent actionEvent) {
@@ -81,7 +84,10 @@ public class AddEditUserController {
             emailField.setText(user.getEmail());
             nameField.setText(user.getName());
             surnameField.setText(user.getSurname());
-            roleComboBox.getItems().addAll(UserRole.values());
+
+            lblAddEditInfo.setText("Update the user " + user.getUsername() +"'s information below");
+            lblAddEdit.setText("Edit User Information");
+           roleComboBox.setValue(user.getRole());
         }
     }
 }

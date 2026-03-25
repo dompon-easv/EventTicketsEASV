@@ -20,8 +20,8 @@
             <children>
                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label styleClass="header-title" text="Add User" />
-                        <Label styleClass="header-subtitle" text="Add the user's information and role." />
+                        <Label styleClass="header-title" text="Add User" fx:id="lblAddEdit"/>
+                        <Label styleClass="header-subtitle" text="Add the user's information and role."  fx:id="lblAddEditInfo"/>
                     </children>
                 </VBox>
                 <Button styleClass="icon-btn-close" text="✕" onAction="#onClickClose"/>
@@ -73,7 +73,7 @@
         <HBox alignment="CENTER_RIGHT" spacing="15.0">
             <children>
                 <Button styleClass="btn-secondary" text="Cancel" onAction="#onClickClose"/>
-                <Button styleClass="btn-primary" text="Add User" onAction="#onSave"/>
+                <Button styleClass="btn-primary" text="Save" onAction="#onSave"/>
             </children>
             <VBox.margin>
                 <Insets top="10.0" />
