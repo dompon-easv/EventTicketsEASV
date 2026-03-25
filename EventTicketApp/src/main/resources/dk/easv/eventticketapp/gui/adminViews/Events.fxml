@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.adminControllers.EventsController">
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.adminControllers.EventsController">
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
             <padding>
@@ -44,7 +44,7 @@
                             <children>
                                 <VBox HBox.hgrow="ALWAYS">
                                     <Label styleClass="stat-label" text="Event Coordinators" />
-                                    <Label styleClass="stat-value" />
+                                    <Label fx:id="lblCoordinatorsNumber" styleClass="stat-value" />
                                 </VBox>
                                 <StackPane styleClass="stat-icon-container, bg-green">
                                     <Label styleClass="stat-icon" text="👥" />

@@ -131,4 +131,22 @@ public class UserDAO implements IUserDAO {
             stmt.executeUpdate();
         }
     }
-}
+
+    @Override
+    public int getCoordinatorCount() throws SQLException
+    {
+        int coordinatorCount;
+        String sql1 = "SELECT COUNT(*) FROM dbo.Users WHERE role = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql1)) {
+            stmt.setString(1, UserRole.COORDINATOR.name().toLowerCase());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return coordinatorCount = rs.getInt(1);
+                }
+            }
+
+    } return 0;
+
+
+} }

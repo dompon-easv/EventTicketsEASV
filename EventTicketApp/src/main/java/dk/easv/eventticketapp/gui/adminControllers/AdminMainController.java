@@ -106,6 +106,9 @@ public class AdminMainController {
             if (controller instanceof UserManagementController userManagementController) {
                 userManagementController.setUserManager(userManager);
             }
+            if (controller instanceof EventsController eventsController) {
+                eventsController.setUserManager(userManager);
+            }
             contentArea.getChildren().setAll(node);
 
         } catch (IOException e) {

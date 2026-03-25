@@ -17,4 +17,6 @@ public interface IUserDAO {
     void deleteUser(String username) throws SQLException;
 
     void editUser(User user) throws SQLException;
+
+    int getCoordinatorCount() throws SQLException;
 }
