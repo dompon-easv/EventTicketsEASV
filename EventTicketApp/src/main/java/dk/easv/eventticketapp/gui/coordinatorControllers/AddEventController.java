@@ -38,6 +38,7 @@ public class AddEventController {
     @FXML private TextArea locationDescriptionField;
     @FXML private TextArea notesField;
     @FXML private VBox coordinatorContainer;
+    @FXML private Label selectedCountLabel;
 
     @FXML
     public void initialize() {
@@ -154,28 +155,54 @@ public class AddEventController {
         }
     }
     private List<User> coordinators = new ArrayList<>();
-    
+
 
     private void loadCoordinators() {
         try {
             UserManager userManager = new UserManager(new UserDAO());
 
             coordinators = userManager.getAllUsers().stream()
-                    .filter(u -> u.getRole() == UserRole.COORDINATOR) // ✅ FIXED
+                    .filter(u -> u.getRole() == UserRole.COORDINATOR)
                     .toList();
 
             coordinatorContainer.getChildren().clear();
 
             for (User user : coordinators) {
+
                 CheckBox cb = new CheckBox(user.getName() + " " + user.getSurname());
-                cb.setUserData(user.getId()); // ✅ NOW WORKS
+                cb.setUserData(user.getId());
                 cb.getStyleClass().add("modern-checkbox");
+
+                // 🔥 LISTENER → update count on change
+                cb.selectedProperty().addListener((obs, oldVal, newVal) -> updateSelectedLabel());
 
                 coordinatorContainer.getChildren().add(cb);
             }
 
+            // initial update
+            updateSelectedLabel();
+
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    private void updateSelectedLabel() {
+        List<String> selectedNames = new ArrayList<>();
+
+        for (Node node : coordinatorContainer.getChildren()) {
+            if (node instanceof CheckBox cb && cb.isSelected()) {
+                selectedNames.add(cb.getText());
+            }
+        }
+
+        int count = selectedNames.size();
+
+        if (count == 0) {
+            selectedCountLabel.setText("No coordinators selected");
+        } else if (count == 1) {
+            selectedCountLabel.setText("1 coordinator: " + selectedNames.get(0));
+        } else {
+            selectedCountLabel.setText(count + " coordinators: " + String.join(", ", selectedNames));
         }
     }
 }

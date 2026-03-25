@@ -131,7 +131,9 @@
                                     </CheckBox>
                                 </children>
                             </VBox>
-                            <Label styleClass="helper-text" text="1 coordinator selected" />
+                            <Label fx:id="selectedCountLabel"
+                                   styleClass="helper-text"
+                                   text="0 coordinators selected" />
                         </VBox>
 
                         <Separator styleClass="card-separator" />
