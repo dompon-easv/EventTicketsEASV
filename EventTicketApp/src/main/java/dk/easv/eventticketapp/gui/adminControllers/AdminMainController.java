@@ -45,14 +45,10 @@ public class AdminMainController {
 
     // Optional: automatically load default view
     public void initialize() {
-        loadView("AdminHome.fxml");
+       // loadView("UserManagement.fxml");
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " +SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
         lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
-    }
-
-    public void showHome(ActionEvent actionEvent) {
-        loadView("AdminHome.fxml");
     }
 
     public void showUsers(ActionEvent actionEvent) {
@@ -89,6 +85,7 @@ public class AdminMainController {
             LoginController loginController = loader.getController();
             loginController.setAuthenticationLogic(authenticationLogic);
             loginController.setUserManager(userManager);
+            loginController.setEventLogic(eventLogic);
 
         } catch (IOException e) {
             e.printStackTrace();

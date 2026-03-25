@@ -2,6 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.bll.AuthenticationLogic;
+import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
 import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.gui.LoginController;
@@ -29,6 +30,7 @@ public class CoordinatorMainController {
     private AuthenticationLogic authenticationLogic;
     private SessionManager sessionManager;
     private UserManager userManager;
+    private EventLogic eventLogic;
 
     public void initialize() {
         staticContentArea = contentArea;
@@ -68,6 +70,7 @@ public class CoordinatorMainController {
             LoginController loginController = loader.getController();
             loginController.setAuthenticationLogic(authenticationLogic);
             loginController.setUserManager(userManager);
+            loginController.setEventLogic(eventLogic);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,4 +100,7 @@ public class CoordinatorMainController {
         this.userManager = userManager;
     }
 
+    public void setEventLogic(EventLogic eventLogic) {
+        this.eventLogic = eventLogic;
+    }
 }

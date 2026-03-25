@@ -79,6 +79,7 @@ public class LoginController {
             CoordinatorMainController coordinatorMainController = fxmlLoader.getController();
             coordinatorMainController.setAuthenticationLogic(authenticationLogic);
             coordinatorMainController.setUserManager(userManager);
+            coordinatorMainController.setEventLogic(eventLogic);
         }
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

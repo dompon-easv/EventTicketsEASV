@@ -112,7 +112,6 @@
                 <Insets left="15.0" right="15.0" top="20.0" />
             </padding>
             <children>
-                <Button maxWidth="Infinity" onAction="#showHome" styleClass="nav-button" text="Home" />
                 <Button maxWidth="Infinity" onAction="#showUsers" styleClass="nav-button" text="Users" />
                 <Button maxWidth="Infinity" onAction="#showEvents" styleClass="nav-button" text="Events" />
             </children>
