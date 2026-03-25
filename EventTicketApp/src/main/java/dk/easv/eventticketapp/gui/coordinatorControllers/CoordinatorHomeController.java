@@ -41,7 +41,7 @@ public class CoordinatorHomeController {
             Node node = loader.load();
 
             AddEditEventController controller = loader.getController();
-            controller.setEditMode(selectedEvent);
+            controller.populateEvent(selectedEvent);
 
             CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 

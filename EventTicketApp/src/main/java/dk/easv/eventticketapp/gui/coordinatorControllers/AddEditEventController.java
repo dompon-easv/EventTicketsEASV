@@ -25,86 +25,82 @@ import java.util.Objects;
 public class AddEditEventController {
 
     private final EventLogic eventLogic = new EventLogic();
+    private final EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
+    private final UserManager userManager = new UserManager(new UserDAO());
 
     private boolean isEditMode = false;
-    private Event currentEvent = null;
+    private Event currentEvent;
 
     @FXML private TextField nameField;
     @FXML private TextField locationField;
-
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
-
     @FXML private ComboBox<String> startTimeCombo;
     @FXML private ComboBox<String> endTimeCombo;
-
     @FXML private TextArea locationDescriptionField;
     @FXML private TextArea notesField;
     @FXML private VBox coordinatorContainer;
     @FXML private Label selectedCountLabel;
-
     @FXML private Label formTitle;
     @FXML private Button saveButton;
 
+    private List<User> coordinators = new ArrayList<>();
+
     @FXML
     public void initialize() {
+        setupTimeInputs();
+        loadCoordinators();
+    }
+
+    private void setupTimeInputs() {
         loadTimeOptions(startTimeCombo);
         loadTimeOptions(endTimeCombo);
         startDatePicker.setValue(LocalDate.now());
         startTimeCombo.setValue("12:00");
         endTimeCombo.setValue("13:00");
-        loadCoordinators();
+    }
 
+    public void populateEvent(Event event) {
+        if (event == null) return;
+
+        this.currentEvent = event;
+        this.isEditMode = true;
+
+        updateFormMode();
+        fillForm(event);
+        preselectCoordinators(event.getId());
+        updateSelectedLabel();
+    }
+
+    private void updateFormMode() {
+        formTitle.setText(isEditMode ? "Edit Event" : "Create New Event");
+        saveButton.setText(isEditMode ? "Save Changes" : "Create Event");
+    }
+
+    private void fillForm(Event event) {
+        nameField.setText(event.getName());
+        locationField.setText(event.getLocation());
+        notesField.setText(event.getDescription());
+        locationDescriptionField.setText(event.getLocationDescription());
+
+        startDatePicker.setValue(event.getStartDate().toLocalDate());
+        startTimeCombo.setValue(event.getStartDate().toLocalTime().toString());
+
+        if (event.getEndDate() != null) {
+            endDatePicker.setValue(event.getEndDate().toLocalDate());
+            endTimeCombo.setValue(event.getEndDate().toLocalTime().toString());
+        }
     }
 
     @FXML
     public void onSaveEvent(ActionEvent actionEvent) {
         try {
-            String name = nameField.getText().trim();
-            String location = locationField.getText().trim();
-            String description = notesField.getText().trim();
-            String locationDescription = locationDescriptionField.getText().trim();
-
-            LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
-            LocalDateTime end = null;
-
-            if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) {
-                end = combineDateTime(endDatePicker, endTimeCombo);
-
-                if (!end.isAfter(start)) {
-                    throw new Exception("End time must be after start time");
-                }
-            }
+            Event event = buildEventFromInput();
 
             if (isEditMode) {
-
-                currentEvent.setName(name);
-                currentEvent.setLocation(location);
-                currentEvent.setStartDate(start);
-                currentEvent.setEndDate(end);
-                currentEvent.setDescription(description);
-                currentEvent.setLocationDescription(locationDescription);
-
-                eventLogic.updateEvent(currentEvent);
-
-                // 🔥 NEW — update coordinators
-                List<Integer> selectedUsers = getSelectedCoordinatorIds();
-                new EventCoordinatorLogic().updateCoordinators(currentEvent.getId(), selectedUsers);
+                updateEvent(event);
             } else {
-                // ➕ CREATE
-                Event newEvent = new Event(
-                        name,
-                        location,
-                        start,
-                        end,
-                        description,
-                        locationDescription
-                );
-
-                Event createdEvent = eventLogic.createEvent(newEvent);
-
-                List<Integer> selectedUsers = getSelectedCoordinatorIds();
-                new EventCoordinatorLogic().assignCoordinators(createdEvent.getId(), selectedUsers);
+                createEvent(event);
             }
 
             closeBtn(actionEvent);
@@ -112,6 +108,47 @@ public class AddEditEventController {
         } catch (Exception e) {
             showError(e.getMessage());
         }
+    }
+
+    private Event buildEventFromInput() throws Exception {
+        String name = nameField.getText().trim();
+        String location = locationField.getText().trim();
+        String description = notesField.getText().trim();
+        String locationDescription = locationDescriptionField.getText().trim();
+
+        LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
+        LocalDateTime end = null;
+
+        if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) {
+            end = combineDateTime(endDatePicker, endTimeCombo);
+            if (!end.isAfter(start)) {
+                throw new Exception("End time must be after start time");
+            }
+        }
+
+        if (isEditMode) {
+            currentEvent.setName(name);
+            currentEvent.setLocation(location);
+            currentEvent.setStartDate(start);
+            currentEvent.setEndDate(end);
+            currentEvent.setDescription(description);
+            currentEvent.setLocationDescription(locationDescription);
+            return currentEvent;
+        }
+
+        return new Event(name, location, start, end, description, locationDescription);
+    }
+
+    private void createEvent(Event event) throws Exception {
+        Event createdEvent = eventLogic.createEvent(event);
+        List<Integer> selectedUsers = getSelectedCoordinatorIds();
+        eventCoordinatorLogic.assignCoordinators(createdEvent.getId(), selectedUsers);
+    }
+
+    private void updateEvent(Event event) throws Exception {
+        eventLogic.updateEvent(event);
+        List<Integer> selectedUsers = getSelectedCoordinatorIds();
+        eventCoordinatorLogic.updateCoordinators(event.getId(), selectedUsers);
     }
 
     private List<Integer> getSelectedCoordinatorIds() {
@@ -126,59 +163,8 @@ public class AddEditEventController {
         return selected;
     }
 
-    private void loadTimeOptions(ComboBox<String> comboBox) {
-        comboBox.getItems().clear();
-        for (int hour = 0; hour < 24; hour++) {
-            for (int min = 0; min < 60; min += 15) {
-                comboBox.getItems().add(String.format("%02d:%02d", hour, min));
-            }
-        }
-    }
-
-    private LocalDateTime combineDateTime(DatePicker datePicker, ComboBox<String> timeCombo) throws Exception {
-        if (datePicker.getValue() == null) {
-            throw new Exception("Date is required");
-        }
-
-        String timeText = timeCombo.getValue();
-        if (timeText == null || timeText.isBlank()) {
-            throw new Exception("Time must be selected");
-        }
-
-        LocalTime time = LocalTime.parse(timeText);
-        return LocalDateTime.of(datePicker.getValue(), time);
-    }
-
-    private void showError(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Could not create event");
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
-    public void closeBtn(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
-                    ))
-            );
-
-            Node node = loader.load();
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    private List<User> coordinators = new ArrayList<>();
-
-
     private void loadCoordinators() {
         try {
-            UserManager userManager = new UserManager(new UserDAO());
-
             coordinators = userManager.getAllUsers().stream()
                     .filter(u -> u.getRole() == UserRole.COORDINATOR)
                     .toList();
@@ -205,6 +191,25 @@ public class AddEditEventController {
             e.printStackTrace();
         }
     }
+
+    private void preselectCoordinators(int eventId) {
+        try {
+            List<Integer> assignedIds = eventCoordinatorLogic.getCoordinatorIdsForEvent(eventId);
+
+            for (Node node : coordinatorContainer.getChildren()) {
+                if (node instanceof CheckBox cb) {
+                    Integer userId = (Integer) cb.getUserData();
+                    if (assignedIds.contains(userId)) {
+                        cb.setSelected(true);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateSelectedLabel() {
         List<String> selectedNames = new ArrayList<>();
 
@@ -224,44 +229,46 @@ public class AddEditEventController {
             selectedCountLabel.setText(count + " coordinators: " + String.join(", ", selectedNames));
         }
     }
-    public void setEditMode(Event event) {
-        this.isEditMode = true;
-        this.currentEvent = event;
 
-        // 🔥 Change UI text
-        formTitle.setText("Edit Event");
-        saveButton.setText("Save Changes");
-
-        // 🔥 Pre-fill fields
-        nameField.setText(event.getName());
-        locationField.setText(event.getLocation());
-        notesField.setText(event.getDescription());
-        locationDescriptionField.setText(event.getLocationDescription());
-
-        startDatePicker.setValue(event.getStartDate().toLocalDate());
-        startTimeCombo.setValue(event.getStartDate().toLocalTime().toString());
-
-        if (event.getEndDate() != null) {
-            endDatePicker.setValue(event.getEndDate().toLocalDate());
-            endTimeCombo.setValue(event.getEndDate().toLocalTime().toString());
+    private void loadTimeOptions(ComboBox<String> comboBox) {
+        comboBox.getItems().clear();
+        for (int hour = 0; hour < 24; hour++) {
+            for (int min = 0; min < 60; min += 15) {
+                comboBox.getItems().add(String.format("%02d:%02d", hour, min));
+            }
         }
     }
-    private void preselectCoordinators(int eventId) {
+
+    private LocalDateTime combineDateTime(DatePicker datePicker, ComboBox<String> timeCombo) throws Exception {
+        if (datePicker.getValue() == null) throw new Exception("Date is required");
+
+        String timeText = timeCombo.getValue();
+        if (timeText == null || timeText.isBlank()) throw new Exception("Time must be selected");
+
+        LocalTime time = LocalTime.parse(timeText);
+        return LocalDateTime.of(datePicker.getValue(), time);
+    }
+
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Operation failed");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    public void closeBtn(ActionEvent actionEvent) {
         try {
-            EventCoordinatorLogic ecLogic = new EventCoordinatorLogic();
-            List<Integer> assignedIds = ecLogic.getCoordinatorIdsForEvent(eventId);
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
+                    ))
+            );
 
-            for (Node node : coordinatorContainer.getChildren()) {
-                if (node instanceof CheckBox cb) {
-                    Integer userId = (Integer) cb.getUserData();
+            Node node = loader.load();
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
-                    if (assignedIds.contains(userId)) {
-                        cb.setSelected(true);
-                    }
-                }
-            }
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
