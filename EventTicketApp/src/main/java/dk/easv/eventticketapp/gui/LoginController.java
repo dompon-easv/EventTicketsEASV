@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.gui;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
 import dk.easv.eventticketapp.bll.*;
@@ -26,6 +27,7 @@ public class LoginController {
     private SessionManager sessionManager;
     private UserManager userManager;
     private EventLogic eventLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
 
 
     public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {this.authenticationLogic = authenticationLogic;}
@@ -35,6 +37,7 @@ public class LoginController {
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
     }
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
 
 
     @FXML private  void onLoginAction(ActionEvent actionEvent) throws IOException {
@@ -74,6 +77,7 @@ public class LoginController {
             adminMainController.setAuthenticationLogic(authenticationLogic);
             adminMainController.setUserManager(userManager);
             adminMainController.setEventLogic(eventLogic);
+            adminMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
             adminMainController.init();
         }
         if(role == UserRole.COORDINATOR){
@@ -81,6 +85,8 @@ public class LoginController {
             coordinatorMainController.setAuthenticationLogic(authenticationLogic);
             coordinatorMainController.setUserManager(userManager);
             coordinatorMainController.setEventLogic(eventLogic);
+            coordinatorMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
+            coordinatorMainController.init();
         }
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

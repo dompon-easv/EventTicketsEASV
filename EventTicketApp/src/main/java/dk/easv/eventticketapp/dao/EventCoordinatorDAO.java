@@ -75,5 +75,15 @@ public class EventCoordinatorDAO implements IEventCoordinatorDAO {
 
         return eventIds;
     }
+
+    @Override
+    public void deleteEvent(int id) throws SQLException {
+        String sql = "DELETE FROM EventCoordinators WHERE eventId = ?";
+        try (Connection conn = connectionManager.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
 }
 

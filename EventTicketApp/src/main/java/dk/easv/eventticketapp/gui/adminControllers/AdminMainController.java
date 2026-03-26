@@ -28,6 +28,7 @@ public class AdminMainController {
     private AuthenticationLogic authenticationLogic;
     private UserManager userManager;
     private EventLogic eventLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
@@ -44,6 +45,7 @@ public class AdminMainController {
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
     }
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
 
     public void init()
     {
@@ -116,6 +118,8 @@ public class AdminMainController {
             if (controller instanceof EventsController eventsController) {
                 eventsController.setUserManager(userManager);
                 eventsController.setEventLogic(eventLogic);
+                eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                eventsController.init();
             }
             contentArea.getChildren().setAll(node);
 

@@ -1,8 +1,10 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,9 +27,11 @@ public class EventsController {
     Label lblCoordinatorsNumber;
     private FilteredList<Event> filteredEvents;
     @FXML VBox eventContainer;
+    @FXML Label lblOwner;
 
     private UserManager userManager;
     private EventLogic eventLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
 
     private ObservableList<Event> events;
 
@@ -40,7 +44,12 @@ public class EventsController {
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
         lblEventNumber.setText(String.valueOf(eventLogic.getEventCount()));
-        loadEvents();
+        //loadEvents();
+    }
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        System.out.println("events controller got logic:"+eventCoordinatorLogic);
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
     }
 
 
@@ -66,29 +75,14 @@ public class EventsController {
            try{
                VBox card = loader.load();
 
-            Label title = (Label) card.lookup("#titleLabel");
-            Label date = (Label) card.lookup("#dateLabel");
-            Label location = (Label) card.lookup("#locationLabel");
-            Label coordinator = (Label) card.lookup("#coordinatorLabel");
-            Label tickets = (Label) card.lookup("#ticketsLabel");
-            VBox clickArea = (VBox) card.lookup("#clickArea");
+               EventCardController controller = loader.getController();
+               controller.setEventLogic(eventLogic);
+               controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+               System.out.println("rendering got logic" + eventCoordinatorLogic);
+               controller.setEvent(event);
+               controller.setOnDeleteSuccess(this::loadEvents);
 
-            title.setText(event.getName());
 
-            String formattedDate = event.getStartDate()
-                    .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy • HH:mm"));
-            date.setText("📅 " + formattedDate);
-
-            location.setText("📍 " + event.getLocation());
-
-            //int count = filteredEvents.size();
-            // coordinator.setText("👤 " + count + " coordinator(s)");
-
-            tickets.setText("0 tickets issued");
-
-            //clickArea.setOnMouseClicked(e -> {
-             //   selectedEvent = event;
-             //   openEvent(e);
 
 
             eventContainer.getChildren().add(card); }
@@ -122,5 +116,9 @@ public class EventsController {
 
     private boolean contains(String text, String filter) {
         return text != null && text.toLowerCase().contains(filter.toLowerCase());
+    }
+
+    public void init(){
+        loadEvents();
     }
 }

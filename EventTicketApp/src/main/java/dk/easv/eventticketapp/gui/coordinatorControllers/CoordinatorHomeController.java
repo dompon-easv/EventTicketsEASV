@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -32,11 +33,23 @@ public class CoordinatorHomeController {
 
     private ObservableList<Event> events;
     private FilteredList<Event> filteredEvents;
-    EventCoordinatorLogic logic = new EventCoordinatorLogic();
+    private EventCoordinatorLogic eventCoordinatorLogic;
+    private EventLogic eventLogic;
+
+    public void setEventLogic(EventLogic eventLogic) {
+        this.eventLogic = eventLogic;
+    }
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
+    }
+    public void init()
+    {
+        loadMyEvents();
+    }
+
 
     @FXML
     public void initialize() {
-        loadMyEvents();
 
         filtering();
     }
@@ -44,7 +57,7 @@ public class CoordinatorHomeController {
     private void loadMyEvents() {
         try {
             User currentUser = SessionManager.getCurrentUser();
-            events = FXCollections.observableArrayList(logic.getEventsForUser(currentUser.getId()));
+            events = FXCollections.observableArrayList(eventCoordinatorLogic.getEventsForUser(currentUser.getId()));
             filteredEvents = new FilteredList<>(events, event -> true);
             renderEventCards(filteredEvents);
         } catch (Exception e) {
@@ -67,35 +80,16 @@ public class CoordinatorHomeController {
             try {
 
                 VBox card = loader.load();
+                EventCardController controller = loader.getController();
+                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+                controller.setEventLogic(eventLogic);
+                controller.setEvent(event);
+                controller.setOnDeleteSuccess(this::loadMyEvents);
 
-                Label title = (Label) card.lookup("#titleLabel");
-                Label date = (Label) card.lookup("#dateLabel");
-                Label location = (Label) card.lookup("#locationLabel");
-                Label coordinator = (Label) card.lookup("#coordinatorLabel");
-                Label tickets = (Label) card.lookup("#ticketsLabel");
-                VBox clickArea = (VBox) card.lookup("#clickArea");
-
-                title.setText(event.getName());
-
-                String formattedDate = event.getStartDate()
-                        .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy • HH:mm"));
-                date.setText("📅 " + formattedDate);
-
-                location.setText("📍 " + event.getLocation());
-
-                int count = logic.getCoordinatorIdsForEvent(event.getId()).size();
-                coordinator.setText("👤 " + count + " coordinator(s)");
-
-                tickets.setText("0 tickets issued");
-
-                clickArea.setOnMouseClicked(e -> {
-                    selectedEvent = event;
-                    openEvent(e);
-                });
 
                 eventContainer.getChildren().add(card);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

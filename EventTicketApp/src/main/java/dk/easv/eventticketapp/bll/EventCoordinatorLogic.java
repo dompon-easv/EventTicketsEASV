@@ -72,4 +72,9 @@ public class EventCoordinatorLogic {
     public List<Event> getAllEvents() throws Exception {
         return eventDAO.getAllEvents();
     }
+
+    public void deleteEvent(Event event) throws Exception {
+        dao.deleteEvent(event.getId());
+        eventDAO.deleteEvent(event.getId());
+    }
 }

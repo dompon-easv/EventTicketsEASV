@@ -1,11 +1,9 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
-import dk.easv.eventticketapp.bll.AuthenticationLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.LoginController;
+import dk.easv.eventticketapp.gui.adminControllers.EventsController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,13 +29,19 @@ public class CoordinatorMainController {
     private SessionManager sessionManager;
     private UserManager userManager;
     private EventLogic eventLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
 
     public void initialize() {
         staticContentArea = contentArea;
-        loadView("CoordinatorHome.fxml");
+
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " + SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
         lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
+    }
+
+    public void init()
+    {
+        loadView("CoordinatorHome.fxml");
     }
 
     public void showHome(ActionEvent actionEvent) {
@@ -71,6 +75,7 @@ public class CoordinatorMainController {
             loginController.setAuthenticationLogic(authenticationLogic);
             loginController.setUserManager(userManager);
             loginController.setEventLogic(eventLogic);
+            loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,13 +84,20 @@ public class CoordinatorMainController {
 
     private void loadView(String fxml) {
         try {
-            Node node = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(
                             getClass().getResource(
                                     "/dk/easv/eventticketapp/gui/coordinatorViews/" + fxml
                             )
                     )
             );
+            Node node = loader.load();
+            Object controller = loader.getController();
+            if (controller instanceof CoordinatorHomeController coordinatorHomeController) {
+                coordinatorHomeController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                coordinatorHomeController.setEventLogic(eventLogic);
+                coordinatorHomeController.init();
+            }
             contentArea.getChildren().setAll(node);
         } catch (IOException e) {
             e.printStackTrace();
@@ -102,5 +114,9 @@ public class CoordinatorMainController {
 
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
+    }
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic =eventCoordinatorLogic;
     }
 }

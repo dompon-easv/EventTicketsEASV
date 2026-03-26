@@ -12,4 +12,6 @@ public interface IEventDAO {
     void updateEvent(Event event) throws Exception;
 
     List<Event> getEventsByIds(List<Integer> ids) throws Exception;
+
+    void deleteEvent(int id) throws Exception;
 }

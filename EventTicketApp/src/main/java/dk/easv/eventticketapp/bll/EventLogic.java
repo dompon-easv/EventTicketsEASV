@@ -52,4 +52,8 @@ public class EventLogic {
     public void updateEvent(Event event) throws Exception {
         eventDAO.updateEvent(event);
     }
+
+    public void deleteEvent(Event event) throws Exception {
+        eventDAO.deleteEvent(event.getId());
+    }
 }

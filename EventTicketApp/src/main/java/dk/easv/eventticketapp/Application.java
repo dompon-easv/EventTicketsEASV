@@ -18,6 +18,7 @@ public class Application extends javafx.application.Application {
         AuthenticationLogic authenticationLogic = new AuthenticationLogic(userDAO);
         UserManager userManager = new UserManager(userDAO);
         EventLogic eventLogic = new EventLogic();
+        EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -25,6 +26,7 @@ public class Application extends javafx.application.Application {
         loginController.setAuthenticationLogic(authenticationLogic);
         loginController.setUserManager(userManager);
         loginController.setEventLogic(eventLogic);
+        loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
 
 
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
