@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
@@ -60,7 +59,7 @@
                 <HBox alignment="CENTER_LEFT" styleClass="search-container">
                     <children>
                         <Label styleClass="search-icon" text="🔍" />
-                        <TextField promptText="Search events by name, location, or description..." styleClass="search-field" HBox.hgrow="ALWAYS" fx:id="txtFilter" />
+                        <TextField fx:id="txtFilter" promptText="Search events by name, location, or description..." styleClass="search-field" HBox.hgrow="ALWAYS" />
                     </children>
                     <padding>
                         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
@@ -69,13 +68,10 @@
 
                 <VBox spacing="20.0">
                     <children>
-                        <VBox spacing="15.0" styleClass="main-card, event-card">
+                        <VBox fx:id="eventContainer" spacing="15.0" styleClass="main-card, event-card">
                             <padding>
                                 <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
                             </padding>
-                            <children>
-                        <ListView fx:id="lstEvents" prefHeight="200.0" prefWidth="200.0" />
-                            </children>
                         </VBox>
                     </children>
                 </VBox>

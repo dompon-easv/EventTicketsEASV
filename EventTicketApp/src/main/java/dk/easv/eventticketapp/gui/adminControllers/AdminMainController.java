@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class AdminMainController {
     @FXML Label lblRole;
     @FXML Label lblInitials;
     @FXML StackPane contentArea;
+
 
     private SessionManager sessionManager;
     private AuthenticationLogic authenticationLogic;

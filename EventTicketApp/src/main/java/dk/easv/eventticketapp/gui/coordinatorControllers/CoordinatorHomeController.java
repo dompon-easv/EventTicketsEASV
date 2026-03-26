@@ -3,12 +3,17 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
+import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.MouseEvent;
 
@@ -22,28 +27,44 @@ public class CoordinatorHomeController {
 
     @FXML
     private VBox eventContainer;
+    @FXML
+    TextField txtFilter;
+
+    private ObservableList<Event> events;
+    private FilteredList<Event> filteredEvents;
+    EventCoordinatorLogic logic = new EventCoordinatorLogic();
 
     @FXML
     public void initialize() {
         loadMyEvents();
+
+        filtering();
     }
 
     private void loadMyEvents() {
         try {
             User currentUser = SessionManager.getCurrentUser();
+            events = FXCollections.observableArrayList(logic.getEventsForUser(currentUser.getId()));
+            filteredEvents = new FilteredList<>(events, event -> true);
+            renderEventCards(filteredEvents);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            EventCoordinatorLogic logic = new EventCoordinatorLogic();
-            List<Event> events = logic.getEventsForUser(currentUser.getId());
+    public void renderEventCards(FilteredList<Event> filteredEvents) {
 
-            eventContainer.getChildren().clear();
+        eventContainer.getChildren().clear();
 
-            for (Event event : events) {
+        for (Event event : filteredEvents) {
 
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventCard.fxml"
-                        )
-                );
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventCard.fxml"
+                    )
+            );
+
+            try {
 
                 VBox card = loader.load();
 
@@ -73,10 +94,9 @@ public class CoordinatorHomeController {
                 });
 
                 eventContainer.getChildren().add(card);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -151,5 +171,28 @@ public class CoordinatorHomeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
-}
+
+        public void filtering() {
+            txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredEvents.setPredicate(event -> {
+                    if (newValue == null || newValue.isBlank()) {
+                        return true;
+                    }
+
+                    String filter = newValue.toLowerCase().trim();
+
+                    return contains(event.getName(), filter)
+                            || contains(event.getLocation(), filter)
+                            || contains(event.getDescription(), filter);
+                });
+                renderEventCards(filteredEvents);
+            });
+        }
+
+
+        private boolean contains(String text, String filter) {
+            return text != null && text.toLowerCase().contains(filter.toLowerCase());
+        }
+    }
