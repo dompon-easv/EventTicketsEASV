@@ -13,53 +13,88 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class CoordinatorHomeController {
 
-    private Event selectedEvent;
-
     @FXML
     private VBox eventContainer;
+
     @FXML
-    TextField txtFilter;
+    private TextField txtFilter;
 
     private ObservableList<Event> events;
     private FilteredList<Event> filteredEvents;
+
     private EventCoordinatorLogic eventCoordinatorLogic;
     private EventLogic eventLogic;
+    private SessionManager sessionManager;
+
+    // ✅ IMPORTANT: reusable click behavior
+    private Consumer<Event> onCardClick;
 
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
     }
+
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
         this.eventCoordinatorLogic = eventCoordinatorLogic;
     }
-    public void init()
-    {
-        loadMyEvents();
+
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
 
+    public void setOnCardClick(Consumer<Event> onCardClick) {
+        this.onCardClick = onCardClick;
+    }
+
+    public void init() {
+        loadMyEvents();
+    }
+
     @FXML
     public void initialize() {
-
         filtering();
+
+        setOnCardClick(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditEvent.fxml"
+                        )
+                );
+
+                Node node = loader.load();
+
+                AddEditEventController controller = loader.getController();
+                controller.populateEvent(event);
+
+                CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void loadMyEvents() {
         try {
             User currentUser = SessionManager.getCurrentUser();
-            events = FXCollections.observableArrayList(eventCoordinatorLogic.getEventsForUser(currentUser.getId()));
-            filteredEvents = new FilteredList<>(events, event -> true);
+
+            events = FXCollections.observableArrayList(
+                    eventCoordinatorLogic.getEventsForUser(currentUser.getId())
+            );
+
+            filteredEvents = new FilteredList<>(events, e -> true);
+
             renderEventCards(filteredEvents);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,13 +121,12 @@ public class CoordinatorHomeController {
                 controller.setEventLogic(eventLogic);
                 controller.setEvent(event);
 
-                // ✅ FIX click → open edit
-                controller.setOnCardClick(clickedEvent -> {
-                    selectedEvent = clickedEvent;
-                    openEvent(null);
-                });
+                // ✅ Delegate click behavior (NO hardcoding)
+                if (onCardClick != null) {
+                    controller.setOnCardClick(onCardClick);
+                }
 
-                // ✅ keep delete refresh
+                // ✅ Refresh after delete
                 controller.setOnDeleteSuccess(this::loadMyEvents);
 
                 eventContainer.getChildren().add(card);
@@ -100,31 +134,6 @@ public class CoordinatorHomeController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void openEvent(MouseEvent event) {
-        try {
-            if (selectedEvent == null) {
-                System.out.println("No event selected!");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditEvent.fxml"
-                    )
-            );
-
-            Node node = loader.load();
-
-            AddEditEventController controller = loader.getController();
-            controller.populateEvent(selectedEvent);
-
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -174,28 +183,30 @@ public class CoordinatorHomeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-        public void filtering() {
-            txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredEvents.setPredicate(event -> {
-                    if (newValue == null || newValue.isBlank()) {
-                        return true;
-                    }
+    public void filtering() {
+        txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
 
-                    String filter = newValue.toLowerCase().trim();
+            if (filteredEvents == null) return;
 
-                    return contains(event.getName(), filter)
-                            || contains(event.getLocation(), filter)
-                            || contains(event.getDescription(), filter);
-                });
-                renderEventCards(filteredEvents);
+            filteredEvents.setPredicate(event -> {
+                if (newValue == null || newValue.isBlank()) {
+                    return true;
+                }
+
+                String filter = newValue.toLowerCase().trim();
+
+                return contains(event.getName(), filter)
+                        || contains(event.getLocation(), filter)
+                        || contains(event.getDescription(), filter);
             });
-        }
 
-
-        private boolean contains(String text, String filter) {
-            return text != null && text.toLowerCase().contains(filter.toLowerCase());
-        }
+            renderEventCards(filteredEvents);
+        });
     }
+
+    private boolean contains(String text, String filter) {
+        return text != null && text.toLowerCase().contains(filter);
+    }
+}
