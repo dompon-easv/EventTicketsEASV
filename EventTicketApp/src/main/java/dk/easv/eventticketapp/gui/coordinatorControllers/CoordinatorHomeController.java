@@ -6,6 +6,7 @@ import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -66,14 +67,15 @@ public class CoordinatorHomeController {
             try {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditEvent.fxml"
+                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventHeader.fxml"
                         )
                 );
 
                 Node node = loader.load();
 
-                AddEditEventController controller = loader.getController();
-                controller.populateEvent(event);
+                // 🔥 PASS EVENT DATA
+                EventHeaderController controller = loader.getController();
+                controller.setEvent(event);
 
                 CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 

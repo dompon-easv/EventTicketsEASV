@@ -1,52 +1,135 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
+import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 public class EventHeaderController {
-  @FXML private Button btnOverview;
-  @FXML private Button btnTicketTypes;
-  @FXML private Button btnIssueTickets;
-  @FXML private Button btnIssuedTickets;
-  @FXML private StackPane contentArea;
 
-    public void handleBack(ActionEvent actionEvent) {
-    }
+    @FXML private Label titleLabel;
+    @FXML private Label dateLabel;
+    @FXML private Label locationLabel;
+    @FXML private Label coordinatorLabel;
 
-    public void handleTabChange(ActionEvent actionEvent) {
-        Button clickedButton = (Button) actionEvent.getSource();
+    @FXML private StackPane contentArea;
 
-        contentArea.getChildren().clear();
+    @FXML private Button btnOverview;
+    @FXML private Button btnTicketTypes;
+    @FXML private Button btnIssueTickets;
+    @FXML private Button btnIssuedTickets;
+
+    private Event currentEvent;
+
+    public void setEvent(Event event) {
+        this.currentEvent = event;
+
+        titleLabel.setText(event.getName());
+
+        String formattedDate = event.getStartDate()
+                .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy • HH:mm"));
+
+        dateLabel.setText("📅 " + formattedDate);
+        locationLabel.setText("📍 " + event.getLocation());
 
         try {
-            String fxmlFile = "";
+            EventCoordinatorLogic logic = new EventCoordinatorLogic();
+            int count = logic.getCoordinatorIdsForEvent(event.getId()).size();
+            coordinatorLabel.setText("👥 " + count + " coordinators");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            if (clickedButton == btnOverview) {
-                fxmlFile = "CoordinatorEventOverview.fxml";
-            } else if (clickedButton == btnTicketTypes) {
-                fxmlFile = "TicketTypes.fxml";
-            } else if (clickedButton == btnIssueTickets) {
-                fxmlFile = "IssueTicket.fxml";
-            } else if (clickedButton == btnIssuedTickets) {
-                fxmlFile = "IssuedTickets.fxml";
-            }
+        // Load default tab
+        loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
+    }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/" + fxmlFile));
+    @FXML
+    private void handleBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
+                    )
+            );
+
             Node node = loader.load();
-
-
-            contentArea.getChildren().add(node);
-
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
+    private void handleEditEvent() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditEvent.fxml"
+                    )
+            );
+
+            Node node = loader.load();
+
+            var controller = loader.getController();
+            controller.getClass()
+                    .getMethod("populateEvent", Event.class)
+                    .invoke(controller, currentEvent);
+
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleTabChange(ActionEvent event) {
+        Button clicked = (Button) event.getSource();
+
+        resetTabStyles();
+        clicked.getStyleClass().add("active");
+
+        switch (clicked.getId()) {
+            case "btnOverview" ->
+                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
+
+            case "btnTicketTypes" ->
+                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml");
+
+            case "btnIssueTickets" ->
+                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssueTickets.fxml");
+
+            case "btnIssuedTickets" ->
+                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssuedTickets.fxml");
+        }
+    }
+
+    private void loadView(String path) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            Node view = loader.load();
+            contentArea.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resetTabStyles() {
+        btnOverview.getStyleClass().remove("active");
+        btnTicketTypes.getStyleClass().remove("active");
+        btnIssueTickets.getStyleClass().remove("active");
+        btnIssuedTickets.getStyleClass().remove("active");
+    }
 }
