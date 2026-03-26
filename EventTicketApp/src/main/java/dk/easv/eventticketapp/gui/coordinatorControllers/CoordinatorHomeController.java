@@ -78,16 +78,25 @@ public class CoordinatorHomeController {
             );
 
             try {
-
                 VBox card = loader.load();
+
                 EventCardController controller = loader.getController();
+
                 controller.setEventCoordinatorLogic(eventCoordinatorLogic);
                 controller.setEventLogic(eventLogic);
                 controller.setEvent(event);
+
+                // ✅ FIX click → open edit
+                controller.setOnCardClick(clickedEvent -> {
+                    selectedEvent = clickedEvent;
+                    openEvent(null);
+                });
+
+                // ✅ keep delete refresh
                 controller.setOnDeleteSuccess(this::loadMyEvents);
 
-
                 eventContainer.getChildren().add(card);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
