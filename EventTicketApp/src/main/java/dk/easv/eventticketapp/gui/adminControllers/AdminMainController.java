@@ -94,6 +94,7 @@ public class AdminMainController {
             loginController.setAuthenticationLogic(authenticationLogic);
             loginController.setUserManager(userManager);
             loginController.setEventLogic(eventLogic);
+            loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
 
         } catch (IOException e) {
             e.printStackTrace();
