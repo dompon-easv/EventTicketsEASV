@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.IssueTicketsController">
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.IssueTicketsController">
     <children>
         <VBox spacing="20.0" styleClass="main-card">
             <padding><Insets bottom="30.0" left="30.0" right="30.0" top="30.0" /></padding>
@@ -25,19 +25,19 @@
                     <children>
                         <VBox styleClass="input-group" GridPane.columnIndex="0" GridPane.rowIndex="0">
                             <Label styleClass="input-label" text="Customer Name *" />
-                            <TextField promptText="John Doe" styleClass="modern-input" />
+                            <TextField fx:id="customerName" promptText="John Doe" styleClass="modern-input" />
                         </VBox>
                         <VBox styleClass="input-group" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <Label styleClass="input-label" text="Customer Email *" />
-                            <TextField promptText="john@example.com" styleClass="modern-input" />
+                            <TextField fx:id="customerEmail" promptText="john@example.com" styleClass="modern-input" />
                         </VBox>
                         <VBox styleClass="input-group" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label styleClass="input-label" text="Ticket Type *" />
-                            <ComboBox maxWidth="Infinity" promptText="Select ticket type" styleClass="modern-input" />
+                            <ComboBox fx:id="ticketTypeSelection" maxWidth="Infinity" promptText="Select ticket type" styleClass="modern-input" />
                         </VBox>
                         <VBox styleClass="input-group" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <Label styleClass="input-label" text="Quantity *" />
-                            <TextField styleClass="modern-input" text="1" />
+                            <TextField fx:id="ticketQuantity" styleClass="modern-input" text="1" />
                             <Label styleClass="helper-text" text="Maximum 10 tickets per customer" />
                         </VBox>
                     </children>
@@ -47,7 +47,7 @@
                </rowConstraints>
                 </GridPane>
 
-                <Button maxWidth="Infinity" styleClass="btn-primary" text="🎫 Issue Ticket" />
+                <Button maxWidth="Infinity" onAction="#generateTicket" styleClass="btn-primary" text="🎫 Issue Ticket" />
             </children>
         </VBox>
     </children>

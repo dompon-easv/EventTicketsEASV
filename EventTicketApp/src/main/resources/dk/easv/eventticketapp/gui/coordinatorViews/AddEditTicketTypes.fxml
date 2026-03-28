@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true"
+            styleClass="content-scroll-pane"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController">
+
+    <content>
+        <VBox spacing="25.0" styleClass="main-content-container">
+            <padding>
+                <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+
+            <children>
+
+                <!-- HEADER -->
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="header-title" text="Ticket Types" />
+                        <Label styleClass="header-subtitle" text="Manage ticket types for your events" />
+                    </children>
+                </VBox>
+
+                <!-- CARD -->
+                <VBox spacing="20.0" styleClass="main-card">
+                    <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                    </padding>
+
+                    <children>
+
+                        <Label fx:id="formTitle"
+                               styleClass="card-title"
+                               text="Create New Ticket Type" />
+
+                        <!-- Ticket Name -->
+                        <VBox styleClass="input-group">
+                            <Label styleClass="input-label" text="Ticket Name *" />
+                            <TextField fx:id="nameField"
+                                       promptText="VIP Pass"
+                                       styleClass="modern-input" />
+                        </VBox>
+
+                        <!-- Price -->
+                        <VBox styleClass="input-group">
+                            <Label styleClass="input-label" text="Price *" />
+                            <TextField fx:id="priceField"
+                                       promptText="0.00"
+                                       styleClass="modern-input" />
+                        </VBox>
+
+                        <!-- Event Selection -->
+                        <VBox styleClass="input-group">
+                            <Label styleClass="input-label" text="Event *" />
+                            <ComboBox fx:id="eventComboBox"
+                                      promptText="Select an event"
+                                      styleClass="modern-input"
+                                      maxWidth="Infinity" />
+                        </VBox>
+
+                        <!-- Quantity -->
+                        <VBox styleClass="input-group">
+                            <Label styleClass="input-label" text="Quantity *" />
+                            <TextField fx:id="quantityField"
+                                       promptText="100"
+                                       styleClass="modern-input" />
+                        </VBox>
+
+                        <Separator styleClass="card-separator" />
+
+                        <!-- Buttons -->
+                        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                            <children>
+                                <Button onAction="#closeBtn"
+                                        styleClass="btn-secondary"
+                                        text="Cancel" />
+                                <Button fx:id="saveButton"
+                                        onAction="#onSaveTicketType"
+                                        styleClass="btn-primary"
+                                        text="Create Ticket Type" />
+                            </children>
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>
