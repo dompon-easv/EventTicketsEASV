@@ -154,6 +154,7 @@ public class EventHeaderController {
             AddEditEventController controller = loader.getController();
             controller.setSessionManager(sessionManager);
             controller.populateEvent(currentEvent);
+            controller.setCoordinatorMainController(coordinatorMainController);
             controller.init();
 
            /* var controller = loader.getController();
