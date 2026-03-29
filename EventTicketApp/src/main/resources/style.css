@@ -166,3 +166,57 @@
 .combo-box-popup {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
 }
+/* test user card */
+/* ================= USER CARD ================= */
+
+.user-card {
+    -fx-background-color: -fx-color-white;
+    -fx-background-radius: 8;
+    -fx-border-color: -fx-color-border;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+}
+
+/* Hover effect (matches clean modern UI) */
+.user-card:hover {
+    -fx-background-color: #f9fafb;
+    -fx-cursor: hand;
+}
+
+/* ================= TEXT ================= */
+
+/* Name */
+.item-primary {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-color-primary;
+}
+
+/* Username + Email */
+.item-secondary {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+/* ================= ROLE BADGE ================= */
+
+.role-badge {
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+    -fx-font-size: 10px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Role colors (aligned with your palette) */
+.role-admin {
+    -fx-background-color: #ef4444; /* red */
+}
+
+.role-coordinator {
+    -fx-background-color: #2563eb; /* your accent blue */
+}
+
+.role-user {
+    -fx-background-color: #6b7280; /* muted gray */
+}

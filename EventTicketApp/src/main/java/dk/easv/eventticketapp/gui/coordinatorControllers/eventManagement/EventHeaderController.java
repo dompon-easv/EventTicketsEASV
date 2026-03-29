@@ -79,7 +79,21 @@ public class EventHeaderController {
         }
 
         // Load default tab
-        loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
+            ));
+
+            Node view = loader.load();
+
+            CoordinatorEventOverviewController controller = loader.getController();
+            controller.setEvent(currentEvent);
+
+            contentArea.getChildren().setAll(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void init() {
@@ -170,9 +184,23 @@ public class EventHeaderController {
         clicked.getStyleClass().add("active");
 
         switch (clicked.getId()) {
-            case "btnOverview" ->
-                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
+            case "btnOverview" -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
+                    ));
 
+                    Node view = loader.load();
+
+                    CoordinatorEventOverviewController controller = loader.getController();
+                    controller.setEvent(currentEvent);
+
+                    contentArea.getChildren().setAll(view);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             case "btnTicketTypes" -> {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(
