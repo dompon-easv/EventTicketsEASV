@@ -30,6 +30,7 @@ public class CoordinatorMainController {
     private UserManager userManager;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
+    private TicketTypeManager ticketTypeManager;
 
     public void initialize() {
         staticContentArea = contentArea;
@@ -96,6 +97,7 @@ public class CoordinatorMainController {
             if (controller instanceof CoordinatorHomeController coordinatorHomeController) {
                 coordinatorHomeController.setEventCoordinatorLogic(eventCoordinatorLogic);
                 coordinatorHomeController.setEventLogic(eventLogic);
+                coordinatorHomeController.setTicketTypeManager(ticketTypeManager);
                 coordinatorHomeController.init();
             }
             contentArea.getChildren().setAll(node);
@@ -118,5 +120,9 @@ public class CoordinatorMainController {
 
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
         this.eventCoordinatorLogic =eventCoordinatorLogic;
+    }
+
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
+        this.ticketTypeManager = ticketTypeManager;
     }
 }

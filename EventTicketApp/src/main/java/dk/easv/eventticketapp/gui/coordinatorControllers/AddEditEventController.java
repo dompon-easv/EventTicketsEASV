@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
+import dk.easv.eventticketapp.bll.TicketTypeManager;
 import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.dao.UserDAO;
 import javafx.event.ActionEvent;
@@ -28,6 +29,8 @@ public class AddEditEventController {
     private final EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
     private final UserManager userManager = new UserManager(new UserDAO());
 
+    private TicketTypeManager ticketTypeManager; // Instance variable for dependency injection
+
     private boolean isEditMode = false;
     private Event currentEvent;
 
@@ -50,6 +53,11 @@ public class AddEditEventController {
     public void initialize() {
         setupTimeInputs();
         loadCoordinators();
+    }
+
+    // Setter for dependency injection
+    public void setTicketTypeManager(TicketTypeManager manager) {
+        this.ticketTypeManager = manager;
     }
 
     private void setupTimeInputs() {
@@ -143,12 +151,22 @@ public class AddEditEventController {
         Event createdEvent = eventLogic.createEvent(event);
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
         eventCoordinatorLogic.assignCoordinators(createdEvent.getId(), selectedUsers);
+
+        // Set the current event in the injected TicketTypeManager
+        if (ticketTypeManager != null) {
+            ticketTypeManager.setCurrentEvent(createdEvent);
+        }
     }
 
     private void updateEvent(Event event) throws Exception {
         eventLogic.updateEvent(event);
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
         eventCoordinatorLogic.updateCoordinators(event.getId(), selectedUsers);
+
+        // Update the current event in TicketTypeManager
+        if (ticketTypeManager != null) {
+            ticketTypeManager.setCurrentEvent(event);
+        }
     }
 
     private List<Integer> getSelectedCoordinatorIds() {

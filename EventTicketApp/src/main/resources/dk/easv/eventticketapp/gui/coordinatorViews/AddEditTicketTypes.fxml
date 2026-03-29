@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true"
-            styleClass="content-scroll-pane"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController">
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController">
 
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
@@ -34,41 +35,30 @@
 
                     <children>
 
-                        <Label fx:id="formTitle"
-                               styleClass="card-title"
-                               text="Create New Ticket Type" />
+                        <Label fx:id="formTitle" styleClass="card-title" text="Create New Ticket Type" />
 
                         <!-- Ticket Name -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Ticket Name *" />
-                            <TextField fx:id="nameField"
-                                       promptText="VIP Pass"
-                                       styleClass="modern-input" />
+                            <TextField fx:id="nameField" promptText="Insert Ticket Type Name" styleClass="modern-input" />
                         </VBox>
 
                         <!-- Price -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Price *" />
-                            <TextField fx:id="priceField"
-                                       promptText="0.00"
-                                       styleClass="modern-input" />
+                            <TextField fx:id="priceField" promptText="0.00" styleClass="modern-input" />
                         </VBox>
 
                         <!-- Event Selection -->
                         <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Event *" />
-                            <ComboBox fx:id="eventComboBox"
-                                      promptText="Select an event"
-                                      styleClass="modern-input"
-                                      maxWidth="Infinity" />
+                            <Label styleClass="input-label" text="Event" />
+                     <TextField fx:id="eventNameField" />
                         </VBox>
 
                         <!-- Quantity -->
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Quantity *" />
-                            <TextField fx:id="quantityField"
-                                       promptText="100"
-                                       styleClass="modern-input" />
+                            <TextField fx:id="quantityField" styleClass="modern-input" />
                         </VBox>
 
                         <Separator styleClass="card-separator" />
@@ -76,13 +66,8 @@
                         <!-- Buttons -->
                         <HBox alignment="CENTER_RIGHT" spacing="15.0">
                             <children>
-                                <Button onAction="#closeBtn"
-                                        styleClass="btn-secondary"
-                                        text="Cancel" />
-                                <Button fx:id="saveButton"
-                                        onAction="#onSaveTicketType"
-                                        styleClass="btn-primary"
-                                        text="Create Ticket Type" />
+                                <Button onAction="#closeBtn" styleClass="btn-secondary" text="Cancel" />
+                                <Button fx:id="saveButton" onAction="#onSaveTicketType" styleClass="btn-primary" text="Create Ticket Type" />
                             </children>
                         </HBox>
 

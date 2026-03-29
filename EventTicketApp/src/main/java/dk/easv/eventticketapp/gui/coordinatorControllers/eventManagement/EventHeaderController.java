@@ -2,6 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
+import dk.easv.eventticketapp.bll.TicketTypeManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,9 +30,17 @@ public class EventHeaderController {
     @FXML private Button btnIssuedTickets;
 
     private Event currentEvent;
+    private TicketTypeManager ticketTypeManager;
+
+    public void setTicketTypeManager(TicketTypeManager manager) {
+        this.ticketTypeManager = manager;
+    }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
+        if (ticketTypeManager != null) {
+            ticketTypeManager.setCurrentEvent(event);
+        }
 
         titleLabel.setText(event.getName());
 
@@ -104,8 +113,24 @@ public class EventHeaderController {
             case "btnOverview" ->
                     loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
 
-            case "btnTicketTypes" ->
-                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml");
+            case "btnTicketTypes" -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"
+                    ));
+                    Node view = loader.load();
+
+                    // Pass the current event to the TicketTypesController
+                    TicketTypesController controller = loader.getController();
+                    controller.setEvent(currentEvent);
+                    controller.setTicketTypeManager(ticketTypeManager);
+
+                    contentArea.getChildren().setAll(view);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             case "btnIssueTickets" ->
                     loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssueTickets.fxml");
