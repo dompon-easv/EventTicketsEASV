@@ -3,10 +3,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.dao.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +30,7 @@ public class AddEditEventController {
 
     private boolean isEditMode = false;
     private Event currentEvent;
+    private SessionManager sessionManager;
 
     @FXML private TextField nameField;
     @FXML private TextField locationField;
@@ -46,6 +44,7 @@ public class AddEditEventController {
     @FXML private Label selectedCountLabel;
     @FXML private Label formTitle;
     @FXML private Button saveButton;
+    @FXML private VBox eventDetailsSection;
 
     private List<User> coordinators = new ArrayList<>();
 
@@ -55,9 +54,21 @@ public class AddEditEventController {
         loadCoordinators();
     }
 
+    public void init()
+    {
+        if(sessionManager.getCurrentUser().getRole() == UserRole.ADMIN)
+        {
+            eventDetailsSection.setVisible(false);
+            eventDetailsSection.setManaged(false);
+        }
+    }
+
     // Setter for dependency injection
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
+    }
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     private void setupTimeInputs() {

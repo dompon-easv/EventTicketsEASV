@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.UserRole;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.adminControllers.EventsController;
+import dk.easv.eventticketapp.gui.coordinatorControllers.AddEditEventController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -141,13 +142,20 @@ public class EventHeaderController {
             );
 
             Node node = loader.load();
+            AddEditEventController controller = loader.getController();
+            controller.setSessionManager(sessionManager);
+            controller.populateEvent(currentEvent);
+            controller.init();
 
-            var controller = loader.getController();
+           /* var controller = loader.getController();
             controller.getClass()
                     .getMethod("populateEvent", Event.class)
-                    .invoke(controller, currentEvent);
+                    .invoke(controller, currentEvent);*/
 
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+            if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+                AdminMainController.staticContentArea.getChildren().setAll(node);
+            } else {
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node); }
 
         } catch (Exception e) {
             e.printStackTrace();
