@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.TicketTypeManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController;
@@ -16,11 +17,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class AddEditTicketTypeController {
-
-    @FXML private Label lblAddEditInfo;
-    @FXML private Label lblAddEdit;
 
     @FXML private TextField nameField;
     @FXML private TextField descriptionField;
@@ -30,10 +29,11 @@ public class AddEditTicketTypeController {
 
     private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
+    private Consumer<TicketType> onTicketCreated;
+
 
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
-        System.out.println("TicketTypeManager set in AddEditTicketTypeController: " + (manager != null ? "not null" : "null"));
     }
 
     public void setEvent(Event event) {
@@ -41,53 +41,44 @@ public class AddEditTicketTypeController {
         if (event != null) {
             eventNameField.setText(event.getName());
             eventNameField.setDisable(true);
-            System.out.println("Event set in AddEditTicketTypeController: " + event.getName());
 
-            // Update the current event in the manager
             if (ticketTypeManager != null) {
                 ticketTypeManager.setCurrentEvent(event);
-                System.out.println("Current event set in TicketTypeManager from AddEditTicketTypeController: " + event.getName());
             }
         } else {
             System.err.println("ERROR: Event is null in AddEditTicketTypeController.setEvent()");
         }
     }
 
+    public void setOnTicketCreated(Consumer<TicketType> callback) {
+        this.onTicketCreated = callback;
+    }
+
     @FXML
     public void onSaveTicketType(ActionEvent actionEvent) {
         try {
-            // Debug output
-            System.out.println("=== SAVING TICKET TYPE ===");
-            System.out.println("ticketTypeManager is " + (ticketTypeManager == null ? "null" : "not null"));
-            System.out.println("currentEvent is " + (currentEvent == null ? "null" : currentEvent.getName()));
-
             if (ticketTypeManager == null) {
                 throw new Exception("TicketTypeManager not initialized! Please restart the application.");
             }
 
-            // Get values from form
             String name = nameField.getText().trim();
             String description = descriptionField.getText().trim();
             double price = Double.parseDouble(priceField.getText().trim());
             int quantity = Integer.parseInt(quantityField.getText().trim());
 
-            System.out.println("Saving ticket type for event: " + currentEvent.getName());
-            System.out.println("Ticket details - Name: " + name + ", Description: " + description +
-                    ", Price: " + price + ", Quantity: " + quantity);
-            // Make sure the current event is set in the manager before saving
             ticketTypeManager.setCurrentEvent(currentEvent);
+            TicketType saved = ticketTypeManager.addTicketType(name, description, price, quantity);
 
-            // Add the ticket type - validation happens inside the BLL
-            ticketTypeManager.addTicketType(name, description, price, quantity);
+            if(onTicketCreated != null) {
+                onTicketCreated.accept(saved);
+            }
 
-            System.out.println("Ticket type saved successfully!");
             showSuccess("Success", "Ticket type '" + name + "' has been created successfully!");
             closeBtn(actionEvent);
 
         } catch (NumberFormatException e) {
             showError("Invalid Input", "Please enter valid numbers for price and quantity.");
         } catch (IllegalArgumentException e) {
-            // Catch validation errors from BLL
             showError("Validation Error", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,8 +108,8 @@ public class AddEditTicketTypeController {
 
             Node ticketTypesView = ticketTypesLoader.load();
             TicketTypesController ticketTypesController = ticketTypesLoader.getController();
-            ticketTypesController.setEvent(currentEvent);
             ticketTypesController.setTicketTypeManager(ticketTypeManager);
+            ticketTypesController.setEvent(currentEvent);
 
             headerController.contentArea.getChildren().setAll(ticketTypesView);
             headerController.btnTicketTypes.getStyleClass().add("active");

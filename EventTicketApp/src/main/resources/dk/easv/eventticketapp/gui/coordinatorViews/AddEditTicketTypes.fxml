@@ -63,7 +63,7 @@
 
                         <!-- Quantity -->
                         <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Quantity" />
+                            <Label styleClass="input-label" text="Quantity *" />
                             <TextField fx:id="quantityField" styleClass="modern-input" />
                         </VBox>
 

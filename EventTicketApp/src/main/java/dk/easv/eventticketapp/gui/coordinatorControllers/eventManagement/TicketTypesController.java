@@ -1,41 +1,85 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.TicketTypeManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 
 public class TicketTypesController {
 
     public Button btnAddTicketType;
+    public TableView<TicketType> tableView;
+    public TableColumn<TicketType, String> columnName;
+    public TableColumn<TicketType, String> columnDescription;
+    public TableColumn<TicketType, Double> columnPrice;
+    public TableColumn<TicketType, Integer> columnQuantity;
+
     private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
 
+    @FXML
+    public void initialize() {
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        columnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantityAvailable"));
+    }
+
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
-        System.out.println("TicketTypeManager set in TicketTypesController: " + (manager != null ? "not null" : "null"));
+        tryLoadData();
     }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
-        System.out.println("Event set in TicketTypesController: " + (event != null ? event.getName() : "null"));
+        tryLoadData();
 
-        // Set the current event in the manager
         if (ticketTypeManager != null && currentEvent != null) {
             ticketTypeManager.setCurrentEvent(currentEvent);
-            System.out.println("Current event set in TicketTypeManager: " + currentEvent.getName());
+            loadTicketTypes();
+        }
+    }
+
+    private void tryLoadData() {
+        if (ticketTypeManager != null && currentEvent != null) {
+            try {
+                ticketTypeManager.setCurrentEvent(currentEvent);
+
+                tableView.setItems(
+                        ticketTypeManager.getTicketTypesForEvent(currentEvent.getId())
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadTicketTypes() {
+        try {
+            if(currentEvent == null) return;
+            ObservableList<TicketType> list =
+                    ticketTypeManager.getTicketTypesForEvent(currentEvent.getId());
+            tableView.setItems(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void onAddTicketType(ActionEvent actionEvent) {
         try {
-            // Verify we have the event before proceeding
             if (currentEvent == null) {
                 System.err.println("ERROR: No event selected!");
                 return;
@@ -53,7 +97,6 @@ public class TicketTypesController {
 
             Node node = loader.load();
 
-            // Pass the current event and ticketTypeManager to the controller
             AddEditTicketTypeController controller = loader.getController();
             controller.setEvent(currentEvent);
             controller.setTicketTypeManager(ticketTypeManager);

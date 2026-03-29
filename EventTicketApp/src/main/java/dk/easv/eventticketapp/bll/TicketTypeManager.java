@@ -18,10 +18,6 @@ public class TicketTypeManager {
         this.ticketTypeDAO = ticketTypeDAO;
     }
 
-    public TicketTypeManager() {
-        this.ticketTypeDAO = new TicketTypeDAO();
-    }
-
     public void setCurrentEvent(Event event) {
         this.currentEvent = event;
     }
@@ -30,12 +26,12 @@ public class TicketTypeManager {
         return currentEvent;
     }
 
-    public void addTicketType(String name, String description, double price, int quantity) throws Exception {
+    public TicketType addTicketType(String name, String description, double price, int quantity) throws Exception {
         validateEventSelected();
         validateTicketType(name, description, price, quantity);
 
         TicketType ticketType = new TicketType(
-                0,                     // id placeholder
+                0, // id placeholder
                 name,
                 description,
                 price,
@@ -44,6 +40,7 @@ public class TicketTypeManager {
         );
 
         ticketTypeDAO.add(ticketType);
+        return ticketType;
     }
 
     public void updateTicketType(TicketType ticketType) throws Exception {

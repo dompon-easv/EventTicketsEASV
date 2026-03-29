@@ -21,7 +21,6 @@ public class TicketType {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.eventId = eventId;
         this.quantityAvailable = quantityAvailable;
     }
 

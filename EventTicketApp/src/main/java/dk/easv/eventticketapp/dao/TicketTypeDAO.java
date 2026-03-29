@@ -7,8 +7,7 @@ import java.util.List;
 
 public class TicketTypeDAO implements ITicketTypeDAO {
 
-    public TicketTypeDAO() {
-    }
+    public TicketTypeDAO() {}
 
     @Override
     public void add(TicketType ticketType) throws Exception {
