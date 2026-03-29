@@ -1,8 +1,10 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.be.Event;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
+import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.bll.*;
+import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
+import dk.easv.eventticketapp.gui.adminControllers.EventsController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
+import javax.management.relation.Role;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
@@ -31,9 +34,25 @@ public class EventHeaderController {
 
     private Event currentEvent;
     private TicketTypeManager ticketTypeManager;
+    private SessionManager sessionManager;
+    private EventCoordinatorLogic eventCoordinatorLogic;
+    private UserManager userManager;
+    private EventLogic eventLogic;
 
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
+    }
+    public void setSessionManager(SessionManager manager) {
+        this.sessionManager = manager;
+    }
+    public void setEventCoordinatorLogic(EventCoordinatorLogic logic) {
+        this.eventCoordinatorLogic = logic;
+    }
+    public void setUserManager(UserManager manager) {
+        this.userManager = manager;
+    }
+    public void setEventLogic(EventLogic logic) {
+        this.eventLogic = logic;
     }
 
     public void setEvent(Event event) {
@@ -62,20 +81,53 @@ public class EventHeaderController {
         loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml");
     }
 
+    public void init() {
+        if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+            btnOverview.setVisible(false);
+            btnTicketTypes.setVisible(false);
+            btnIssueTickets.setVisible(false);
+            btnIssuedTickets.setVisible(false);
+        }
+    }
+
     @FXML
     private void handleBack() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
-                    )
-            );
+        if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/adminViews/Events.fxml"
+                        )
+                );
 
-            Node node = loader.load();
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+                Node node = loader.load();
+                AdminMainController.staticContentArea.getChildren().setAll(node);
+                Object controller = loader.getController();
+                if (controller instanceof EventsController eventsController) {
+                    eventsController.setUserManager(userManager);
+                    eventsController.setEventLogic(eventLogic);
+                    eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                    eventsController.init();
+                }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
+                        )
+                );
+
+                Node node = loader.load();
+                CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

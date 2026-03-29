@@ -1,15 +1,17 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.be.Event;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
+import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -17,6 +19,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
 
 public class EventsController {
     @FXML
@@ -34,6 +37,8 @@ public class EventsController {
     private EventCoordinatorLogic eventCoordinatorLogic;
 
     private ObservableList<Event> events;
+    private SessionManager sessionManager;
+    private Consumer<Event> onCardClick;
 
 
     public void setUserManager(UserManager userManager) {
@@ -78,8 +83,10 @@ public class EventsController {
                EventCardController controller = loader.getController();
                controller.setEventLogic(eventLogic);
                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-               System.out.println("rendering got logic" + eventCoordinatorLogic);
                controller.setEvent(event);
+               if (onCardClick != null) {
+                   controller.setOnCardClick(onCardClick);
+               }
                controller.setOnDeleteSuccess(this::loadEvents);
 
 
@@ -94,6 +101,31 @@ public class EventsController {
 
     public void initialize() {
         filtering();
+        setOnCardClick(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventHeader.fxml"
+                        )
+                );
+
+                Node node = loader.load();
+
+                EventHeaderController controller = loader.getController();
+                controller.setEvent(event);
+                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+                controller.setEventLogic(eventLogic);
+                controller.setUserManager(userManager);
+                controller.setSessionManager(sessionManager);
+                //controller.setTicketTypeManager(ticketTypeManager);
+                controller.init();
+
+                AdminMainController.staticContentArea.getChildren().setAll(node);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void filtering() {
@@ -121,4 +153,13 @@ public class EventsController {
     public void init(){
         loadEvents();
     }
+
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public void setOnCardClick(Consumer<Event> onCardClick) {
+        this.onCardClick = onCardClick;
+    }
+
 }

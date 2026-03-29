@@ -98,6 +98,8 @@ public class CoordinatorMainController {
                 coordinatorHomeController.setEventCoordinatorLogic(eventCoordinatorLogic);
                 coordinatorHomeController.setEventLogic(eventLogic);
                 coordinatorHomeController.setTicketTypeManager(ticketTypeManager);
+                coordinatorHomeController.setUserManager(userManager);
+                coordinatorHomeController.setSessionManager(sessionManager);
                 coordinatorHomeController.init();
             }
             contentArea.getChildren().setAll(node);

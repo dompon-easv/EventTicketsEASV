@@ -22,6 +22,8 @@ public class AdminMainController {
     @FXML Label lblRole;
     @FXML Label lblInitials;
     @FXML StackPane contentArea;
+    @FXML
+    public static StackPane staticContentArea;
 
 
     private SessionManager sessionManager;
@@ -53,7 +55,7 @@ public class AdminMainController {
     }
     public void initialize() {
 
-
+        staticContentArea = contentArea;
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " +SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
         lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));

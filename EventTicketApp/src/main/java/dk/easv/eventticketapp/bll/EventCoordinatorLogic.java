@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.bll;
 
 import dk.easv.eventticketapp.be.Event;
+import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.dao.EventCoordinatorDAO;
 import dk.easv.eventticketapp.dao.EventDAO;
 import dk.easv.eventticketapp.dao.IEventCoordinatorDAO;
@@ -41,8 +42,9 @@ public class EventCoordinatorLogic {
     // READ (EVENT → USERS)
     // =============================
 
-    public List<Integer> getCoordinatorIdsForEvent(int eventId) throws Exception {
-        return dao.getUserIdsByEventId(eventId);
+    public List<Integer> getCoordinatorIdsForEvent(int eventId) {
+       try{ return dao.getUserIdsByEventId(eventId); }
+        catch(Exception e){return new ArrayList<>();}
     }
 
     // =============================
@@ -77,4 +79,12 @@ public class EventCoordinatorLogic {
         dao.deleteEvent(event.getId());
         eventDAO.deleteEvent(event.getId());
     }
+    public List<User> getCoordinatorsForEvent(int eventId) {
+        try
+        { return dao.getUsersByEventId(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();}
+        return new ArrayList<>();
+    }
+
 }

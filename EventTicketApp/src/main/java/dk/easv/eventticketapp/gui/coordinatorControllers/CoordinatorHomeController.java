@@ -2,10 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import javafx.collections.FXCollections;
@@ -36,6 +33,7 @@ public class CoordinatorHomeController {
     private EventLogic eventLogic;
     private SessionManager sessionManager;
     private TicketTypeManager ticketTypeManager;
+    private UserManager userManager;
 
     // ✅ IMPORTANT: reusable click behavior
     private Consumer<Event> onCardClick;
@@ -50,6 +48,9 @@ public class CoordinatorHomeController {
 
     public void setSessionManager(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
+    }
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
@@ -82,6 +83,10 @@ public class CoordinatorHomeController {
                 EventHeaderController controller = loader.getController();
                 controller.setEvent(event);
                 controller.setTicketTypeManager(ticketTypeManager);
+                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+                controller.setEventLogic(eventLogic);
+                controller.setUserManager(userManager);
+                controller.setSessionManager(sessionManager);
 
                 CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 

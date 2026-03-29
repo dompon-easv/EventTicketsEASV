@@ -21,17 +21,23 @@
                         </VBox>
 
                         <Button styleClass="btn-back" text="← Back to Events" />
+                        <Button onAction="#handleBackToEvents" styleClass="btn-back" text="← Back to Events" />
                     </children>
                 </VBox>
 
                 <VBox spacing="10.0">
                     <children>
                         <Label styleClass="event-display-title" text="Event name" />
+                        <Label fx:id="lblName" styleClass="event-display-title" text="Event name" />
                         <VBox spacing="8.0">
                             <children>
                                 <Label styleClass="event-info-row" text="📅 Time" />
                                 <Label styleClass="event-info-row" text="📍 Location" />
                                 <Label styleClass="event-info-row" text="👥 Number of coordinators" />
+                                <Label fx:id="lblTime" styleClass="event-info-row" text="📅 Time" />
+                                <Label fx:id="lblLocation" styleClass="event-info-row" text="📍 Location" />
+                                <Label fx:id="lblCoordinators" styleClass="event-info-row" text="👥 Number of coordinators" />
+
                             </children>
                         </VBox>
                         <HBox styleClass="tab-container">
@@ -50,7 +56,7 @@
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                     </padding>
                     <children>
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
+                  <ListView prefHeight="200.0" prefWidth="200.0" fx:id ="lstCoordinators"/>
 
                         <VBox spacing="5.0" />
                     </children>
