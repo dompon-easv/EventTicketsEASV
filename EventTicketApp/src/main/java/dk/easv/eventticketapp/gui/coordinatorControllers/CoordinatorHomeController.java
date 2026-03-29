@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
 import dk.easv.eventticketapp.bll.SessionManager;
+import dk.easv.eventticketapp.bll.TicketTypeManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import javafx.collections.FXCollections;
@@ -34,6 +35,7 @@ public class CoordinatorHomeController {
     private EventCoordinatorLogic eventCoordinatorLogic;
     private EventLogic eventLogic;
     private SessionManager sessionManager;
+    private TicketTypeManager ticketTypeManager;
 
     // ✅ IMPORTANT: reusable click behavior
     private Consumer<Event> onCardClick;
@@ -50,6 +52,9 @@ public class CoordinatorHomeController {
         this.sessionManager = sessionManager;
     }
 
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
+        this.ticketTypeManager = ticketTypeManager;
+    }
 
     public void setOnCardClick(Consumer<Event> onCardClick) {
         this.onCardClick = onCardClick;
@@ -76,6 +81,7 @@ public class CoordinatorHomeController {
                 // 🔥 PASS EVENT DATA
                 EventHeaderController controller = loader.getController();
                 controller.setEvent(event);
+                controller.setTicketTypeManager(ticketTypeManager);
 
                 CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 

@@ -28,7 +28,7 @@ public class LoginController {
     private UserManager userManager;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
-
+    private TicketTypeManager ticketTypeManager;
 
     public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {this.authenticationLogic = authenticationLogic;}
     public void setUserManager(UserManager userManager) {
@@ -38,7 +38,7 @@ public class LoginController {
         this.eventLogic = eventLogic;
     }
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
-
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
 
     @FXML private  void onLoginAction(ActionEvent actionEvent) throws IOException {
 
@@ -86,6 +86,7 @@ public class LoginController {
             coordinatorMainController.setUserManager(userManager);
             coordinatorMainController.setEventLogic(eventLogic);
             coordinatorMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
+            coordinatorMainController.setTicketTypeManager(ticketTypeManager);
             coordinatorMainController.init();
         }
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
