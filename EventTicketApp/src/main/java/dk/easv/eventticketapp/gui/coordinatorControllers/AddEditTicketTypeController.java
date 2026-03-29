@@ -23,6 +23,7 @@ public class AddEditTicketTypeController {
     @FXML private Label lblAddEdit;
 
     @FXML private TextField nameField;
+    @FXML private TextField descriptionField;
     @FXML private TextField priceField;
     @FXML private TextField quantityField;
     @FXML private TextField eventNameField;
@@ -66,17 +67,18 @@ public class AddEditTicketTypeController {
 
             // Get values from form
             String name = nameField.getText().trim();
+            String description = descriptionField.getText().trim();
             double price = Double.parseDouble(priceField.getText().trim());
             int quantity = Integer.parseInt(quantityField.getText().trim());
 
             System.out.println("Saving ticket type for event: " + currentEvent.getName());
-            System.out.println("Ticket details - Name: " + name + ", Price: " + price + ", Quantity: " + quantity);
-
+            System.out.println("Ticket details - Name: " + name + ", Description: " + description +
+                    ", Price: " + price + ", Quantity: " + quantity);
             // Make sure the current event is set in the manager before saving
             ticketTypeManager.setCurrentEvent(currentEvent);
 
             // Add the ticket type - validation happens inside the BLL
-            ticketTypeManager.addTicketType(name, price, quantity);
+            ticketTypeManager.addTicketType(name, description, price, quantity);
 
             System.out.println("Ticket type saved successfully!");
             showSuccess("Success", "Ticket type '" + name + "' has been created successfully!");

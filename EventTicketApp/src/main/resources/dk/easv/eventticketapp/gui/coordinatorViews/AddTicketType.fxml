@@ -4,47 +4,85 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?xml version="1.0" encoding="UTF-8"?>
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController">
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<VBox prefWidth="450.0" spacing="20.0" styleClass="main-card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <padding>
-        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-    </padding>
     <children>
+        <!-- Header with Add Button -->
         <HBox alignment="CENTER_LEFT">
             <children>
-                <Label styleClass="header-title" text="Create Ticket Type" HBox.hgrow="ALWAYS" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button styleClass="icon-btn-close" text="✕" />
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label styleClass="section-title" text="Ticket Types" />
+                    <Label styleClass="section-subtitle" text="Define different ticket categories for this event" />
+                </VBox>
+                <Button fx:id="btnAddTicketType" onAction="#onAddTicketType" styleClass="btn-primary" text="+ Add Ticket Type" />
             </children>
         </HBox>
 
-        <VBox spacing="15.0">
+        <!-- Stats Summary -->
+        <HBox spacing="20.0">
             <children>
-                <VBox styleClass="input-group">
-                    <Label styleClass="input-label" text="Type Name *" />
-                    <TextField fx:id="typeNameField" promptText="VIP Pass, General Admission, etc." styleClass="modern-input" />
-                </VBox>
-
-                <VBox styleClass="input-group">
-                    <Label styleClass="input-label" text="Description" />
-                    <TextArea fx:id="descriptionArea" prefHeight="100.0" promptText="Access to all areas including backstage..." styleClass="modern-input" wrapText="true" />
-                </VBox>
+                <Label fx:id="lblTotalTypes" styleClass="stats-label" text="Total Types: 0" />
+                <Label fx:id="lblTotalTickets" styleClass="stats-label" text="Total Tickets: 0" />
             </children>
-        </VBox>
-
-        <HBox alignment="CENTER_RIGHT" spacing="15.0">
-            <children>
-                <Button styleClass="btn-secondary" text="Cancel" />
-                <Button fx:id="createButton" styleClass="btn-primary" text="Create" />
-            </children>
-            <VBox.margin>
-                <Insets top="10.0" />
-            </VBox.margin>
         </HBox>
+
+        <!-- Ticket Types Table -->
+        <TableView fx:id="ticketTypesTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colName" text="Ticket Name" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="name" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="colPrice" text="Price" prefWidth="120">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="price" />
+                    </cellValueFactory>
+                    <cellFactory>
+                        <Callback>
+                            <TableColumn cellFactory="$priceCellFactory" />
+                        </Callback>
+                    </cellFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="colQuantity" text="Available" prefWidth="120">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="quantityAvailable" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="colSold" text="Sold" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="soldCount" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="120">
+                    <cellFactory>
+                        <Callback>
+                            <TableColumn cellFactory="$statusCellFactory" />
+                        </Callback>
+                    </cellFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150">
+                    <cellFactory>
+                        <Callback>
+                            <TableColumn cellFactory="$actionsCellFactory" />
+                        </Callback>
+                    </cellFactory>
+                </TableColumn>
+            </columns>
+
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+
+            <placeholder>
+                <Label styleClass="placeholder-text" text="No ticket types defined yet. Click '+ Add Ticket Type' to create one." />
+            </placeholder>
+        </TableView>
     </children>
 </VBox>

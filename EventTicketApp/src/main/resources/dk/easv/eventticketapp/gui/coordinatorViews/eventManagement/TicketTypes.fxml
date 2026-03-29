@@ -3,35 +3,54 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController">
+<VBox prefHeight="368.0" prefWidth="646.0" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController">
     <children>
         <HBox alignment="CENTER_LEFT">
             <children>
-                <VBox HBox.hgrow="ALWAYS">
+                <VBox prefHeight="34.0" prefWidth="351.0" HBox.hgrow="ALWAYS">
                     <Label styleClass="section-title" text="Ticket Types" />
                     <Label styleClass="section-subtitle" text="Define different ticket categories for this event" />
                 </VBox>
-                <Button fx:id="btnAddTicketType" onAction="#onAddTicketType" styleClass="btn-primary" text="+ Add Ticket Type" />
+                <Button fx:id="btnAddTicketType" onAction="#onAddTicketType" styleClass="btn-primary" text="+ Add Ticket Type">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin></Button>
+                  <Button onAction="#onEditTicketType" prefHeight="25.0" prefWidth="43.0" styleClass="icon-btn" text="Edit">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+                  <Button onAction="#onDeleteTicketType" styleClass="icon-btn-delete" text="🗑">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
             </children>
         </HBox>
-
-        <VBox spacing="15.0">
-            <children>
-                <HBox alignment="CENTER_LEFT" styleClass="main-card, list-item-card">
-                    <padding><Insets bottom="20.0" left="25.0" right="25.0" top="20.0" /></padding>
-                    <VBox HBox.hgrow="ALWAYS">
-                        <Label styleClass="item-primary-bold" text="VIP Pass" />
-                        <Label styleClass="item-secondary" text="Access to all areas including backstage" />
-                    </VBox>
-                    <HBox alignment="CENTER_RIGHT" spacing="15.0">
-                        <Button onAction="#onEditTicketType" styleClass="icon-btn" text="✎" />
-                        <Button onAction="#onDeleteTicketType" styleClass="icon-btn-delete" text="🗑" />
-                    </HBox>
-                </HBox>
-            </children>
-        </VBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <VBox prefHeight="42.0" prefWidth="250.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="263.0" text="Established Number Of Tickets For The Event:" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <TableView styleClass="modern-table">
+         <columns>
+            <TableColumn prefWidth="151.0" text="Name" />
+            <TableColumn prefWidth="227.0" text="Description" />
+            <TableColumn prefWidth="116.0" text="Price (kr)" />
+            <TableColumn prefWidth="105.0" text="Total Quantity" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
     </children>
 </VBox>

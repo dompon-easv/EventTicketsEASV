@@ -30,13 +30,14 @@ public class TicketTypeManager {
         return currentEvent;
     }
 
-    public void addTicketType(String name, double price, int quantity) throws Exception {
+    public void addTicketType(String name, String description, double price, int quantity) throws Exception {
         validateEventSelected();
-        validateTicketType(name, price, quantity);
+        validateTicketType(name, description, price, quantity);
 
         TicketType ticketType = new TicketType(
                 0,                     // id placeholder
                 name,
+                description,
                 price,
                 currentEvent.getId(),
                 quantity
@@ -45,16 +46,11 @@ public class TicketTypeManager {
         ticketTypeDAO.add(ticketType);
     }
 
-    public void addTicketType(String name, double price, int quantity, Event event) throws Exception {
-        setCurrentEvent(event);
-        addTicketType(name, price, quantity);
-    }
-
     public void updateTicketType(TicketType ticketType) throws Exception {
         if (ticketType.getId() <= 0) {
             throw new IllegalArgumentException("Invalid ticket type ID");
         }
-        validateTicketType(ticketType.getName(), ticketType.getPrice(), ticketType.getQuantityAvailable());
+        validateTicketType(ticketType.getName(), ticketType.getDescription(), ticketType.getPrice(), ticketType.getQuantityAvailable());
         ticketTypeDAO.update(ticketType);
     }
 
@@ -71,9 +67,13 @@ public class TicketTypeManager {
         }
     }
 
-    public void validateTicketType(String name, double price, int quantity) throws IllegalArgumentException {
+    public void validateTicketType(String name, String description, double price, int quantity) throws IllegalArgumentException {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Ticket name cannot be empty");
+        }
+
+        if (description != null && description.length() > 100) {
+            throw new IllegalArgumentException("Description cannot exceed 100 characters");
         }
 
         if (price < 0) {
