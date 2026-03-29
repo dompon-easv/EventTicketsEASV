@@ -11,23 +11,13 @@ import javafx.stage.Stage;
 
 public class AddEditTicketTypeController {
 
-    @FXML
-    private Label lblAddEditInfo;
+    @FXML private Label lblAddEditInfo;
+    @FXML private Label lblAddEdit;
 
-    @FXML
-    private Label lblAddEdit;
-
-    @FXML
-    private TextField nameField;
-
-    @FXML
-    private TextField priceField;
-
-    @FXML
-    private TextField quantityField;
-
-    @FXML
-    private TextField eventNameField;
+    @FXML private TextField nameField;
+    @FXML private TextField priceField;
+    @FXML private TextField quantityField;
+    @FXML private TextField eventNameField;
 
     private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
@@ -72,14 +62,7 @@ public class AddEditTicketTypeController {
                 throw new Exception("TicketTypeManager not initialized! Please restart the application.");
             }
 
-            if (currentEvent == null) {
-                throw new Exception("No event selected! Please go back and select an event first.");
-            }
-
-            if (!validateInputs()) {
-                return;
-            }
-
+            // Get values from form
             String name = nameField.getText().trim();
             double price = Double.parseDouble(priceField.getText().trim());
             int quantity = Integer.parseInt(quantityField.getText().trim());
@@ -90,7 +73,7 @@ public class AddEditTicketTypeController {
             // Make sure the current event is set in the manager before saving
             ticketTypeManager.setCurrentEvent(currentEvent);
 
-            // Add the ticket type
+            // Add the ticket type - validation happens inside the BLL
             ticketTypeManager.addTicketType(name, price, quantity);
 
             System.out.println("Ticket type saved successfully!");
@@ -99,55 +82,13 @@ public class AddEditTicketTypeController {
 
         } catch (NumberFormatException e) {
             showError("Invalid Input", "Please enter valid numbers for price and quantity.");
+        } catch (IllegalArgumentException e) {
+            // Catch validation errors from BLL
+            showError("Validation Error", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             showError("Error", "Failed to save ticket: " + e.getMessage());
         }
-    }
-
-    private boolean validateInputs() {
-        StringBuilder errors = new StringBuilder();
-
-        if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
-            errors.append("- Ticket name is required\n");
-        }
-
-        if (priceField.getText() == null || priceField.getText().trim().isEmpty()) {
-            errors.append("- Price is required\n");
-        } else {
-            try {
-                double price = Double.parseDouble(priceField.getText().trim());
-                if (price < 0) {
-                    errors.append("- Price cannot be negative\n");
-                }
-            } catch (NumberFormatException e) {
-                errors.append("- Price must be a valid number\n");
-            }
-        }
-
-        if (quantityField.getText() == null || quantityField.getText().trim().isEmpty()) {
-            errors.append("- Quantity is required\n");
-        } else {
-            try {
-                int quantity = Integer.parseInt(quantityField.getText().trim());
-                if (quantity < 0) {
-                    errors.append("- Quantity cannot be negative\n");
-                }
-            } catch (NumberFormatException e) {
-                errors.append("- Quantity must be a valid number\n");
-            }
-        }
-
-        if (currentEvent == null && (eventNameField.getText() == null || eventNameField.getText().trim().isEmpty())) {
-            errors.append("- Event information is missing\n");
-        }
-
-        if (errors.length() > 0) {
-            showError("Validation Error", errors.toString());
-            return false;
-        }
-
-        return true;
     }
 
     private void showError(String title, String message) {

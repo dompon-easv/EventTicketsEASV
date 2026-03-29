@@ -12,43 +12,27 @@ import java.util.List;
 public class TicketTypeManager {
 
     private final ITicketTypeDAO ticketTypeDAO;
-    private Event currentEvent; // This is an instance variable, not static
+    private Event currentEvent;
 
-    // Constructor with dependency injection
     public TicketTypeManager(ITicketTypeDAO ticketTypeDAO) {
         this.ticketTypeDAO = ticketTypeDAO;
     }
 
-    // Default constructor using TicketTypeDAO
     public TicketTypeManager() {
         this.ticketTypeDAO = new TicketTypeDAO();
     }
 
-    // This is an INSTANCE method, not static
     public void setCurrentEvent(Event event) {
         this.currentEvent = event;
     }
 
-    // This is an INSTANCE method, not static
     public Event getCurrentEvent() {
         return currentEvent;
     }
 
     public void addTicketType(String name, double price, int quantity) throws Exception {
-        if (currentEvent == null) {
-            throw new Exception("No event selected to associate ticket type with.");
-        }
-
-        // Business validation
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Ticket name cannot be empty");
-        }
-        if (price < 0) {
-            throw new IllegalArgumentException("Price cannot be negative");
-        }
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
-        }
+        validateEventSelected();
+        validateTicketType(name, price, quantity);
 
         TicketType ticketType = new TicketType(
                 0,                     // id placeholder
@@ -70,6 +54,7 @@ public class TicketTypeManager {
         if (ticketType.getId() <= 0) {
             throw new IllegalArgumentException("Invalid ticket type ID");
         }
+        validateTicketType(ticketType.getName(), ticketType.getPrice(), ticketType.getQuantityAvailable());
         ticketTypeDAO.update(ticketType);
     }
 
@@ -78,6 +63,26 @@ public class TicketTypeManager {
             throw new IllegalArgumentException("Invalid ticket type ID");
         }
         ticketTypeDAO.delete(id);
+    }
+
+    public void validateEventSelected() throws Exception {
+        if (currentEvent == null) {
+            throw new Exception("No event selected to associate ticket type with.");
+        }
+    }
+
+    public void validateTicketType(String name, double price, int quantity) throws IllegalArgumentException {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Ticket name cannot be empty");
+        }
+
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
+
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
     }
 
     public ObservableList<TicketType> getTicketTypesForEvent(int eventId) throws Exception {
