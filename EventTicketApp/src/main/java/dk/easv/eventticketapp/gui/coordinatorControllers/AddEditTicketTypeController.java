@@ -2,12 +2,20 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.TicketTypeManager;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
+import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class AddEditTicketTypeController {
 
@@ -42,12 +50,6 @@ public class AddEditTicketTypeController {
         } else {
             System.err.println("ERROR: Event is null in AddEditTicketTypeController.setEvent()");
         }
-    }
-
-    @FXML
-    public void closeBtn(ActionEvent actionEvent) {
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.close();
     }
 
     @FXML
@@ -88,6 +90,47 @@ public class AddEditTicketTypeController {
         } catch (Exception e) {
             e.printStackTrace();
             showError("Error", "Failed to save ticket: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void closeBtn(ActionEvent actionEvent) {
+        try {
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorMain.fxml"));
+
+            Parent mainRoot = mainLoader.load();
+            CoordinatorMainController mainController = mainLoader.getController();
+
+            FXMLLoader headerLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventHeader.fxml"));
+
+            Node headerView = headerLoader.load();
+            EventHeaderController headerController = headerLoader.getController();
+
+            headerController.setEvent(currentEvent);
+            headerController.setTicketTypeManager(ticketTypeManager);
+
+            mainController.contentArea.getChildren().setAll(headerView);
+
+            FXMLLoader ticketTypesLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"));
+
+            Node ticketTypesView = ticketTypesLoader.load();
+            TicketTypesController ticketTypesController = ticketTypesLoader.getController();
+            ticketTypesController.setEvent(currentEvent);
+            ticketTypesController.setTicketTypeManager(ticketTypeManager);
+
+            headerController.contentArea.getChildren().setAll(ticketTypesView);
+            headerController.btnTicketTypes.getStyleClass().add("active");
+            headerController.btnOverview.getStyleClass().remove("active");
+            headerController.btnIssueTickets.getStyleClass().remove("active");
+            headerController.btnIssuedTickets.getStyleClass().remove("active");
+
+            Stage stage = (Stage) nameField.getScene().getWindow();
+            Scene scene = stage.getScene();
+            scene.setRoot(mainRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Navigation Error", "Could not return to event details: " + e.getMessage());
         }
     }
 

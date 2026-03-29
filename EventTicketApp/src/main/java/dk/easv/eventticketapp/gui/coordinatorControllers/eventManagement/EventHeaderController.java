@@ -22,12 +22,12 @@ public class EventHeaderController {
     @FXML private Label locationLabel;
     @FXML private Label coordinatorLabel;
 
-    @FXML private StackPane contentArea;
-
-    @FXML private Button btnOverview;
-    @FXML private Button btnTicketTypes;
-    @FXML private Button btnIssueTickets;
-    @FXML private Button btnIssuedTickets;
+    @FXML
+    public StackPane contentArea;
+    @FXML public Button btnOverview;
+    @FXML public Button btnTicketTypes;
+    @FXML public Button btnIssueTickets;
+    @FXML public Button btnIssuedTickets;
 
     private Event currentEvent;
     private TicketTypeManager ticketTypeManager;
