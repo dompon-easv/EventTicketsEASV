@@ -119,7 +119,7 @@ public class AddEditEventController {
         LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
         LocalDateTime end = null;
 
-        if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) {
+        if (endDatePicker.getValue() != null && endTimeCombo.getValue() != null) { // validation should be moved to logic
             end = combineDateTime(endDatePicker, endTimeCombo);
             if (!end.isAfter(start)) {
                 throw new Exception("End time must be after start time");
