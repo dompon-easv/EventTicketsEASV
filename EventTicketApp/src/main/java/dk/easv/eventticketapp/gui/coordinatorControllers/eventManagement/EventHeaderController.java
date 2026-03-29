@@ -39,6 +39,11 @@ public class EventHeaderController {
     private EventCoordinatorLogic eventCoordinatorLogic;
     private UserManager userManager;
     private EventLogic eventLogic;
+    private CoordinatorMainController coordinatorMainController;
+
+    public void setCoordinatorMainController(CoordinatorMainController coordinatorMainController) {
+        this.coordinatorMainController = coordinatorMainController;
+    }
 
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
@@ -97,12 +102,14 @@ public class EventHeaderController {
     }
 
     public void init() {
+        System.out.println(eventCoordinatorLogic.getCoordinatorsForEvent(currentEvent.getId()));
         if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
             btnOverview.setVisible(false);
             btnTicketTypes.setVisible(false);
             btnIssueTickets.setVisible(false);
             btnIssuedTickets.setVisible(false);
         }
+
     }
 
     @FXML
@@ -130,19 +137,7 @@ public class EventHeaderController {
             }
 
         } else {
-            try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
-                        )
-                );
-
-                Node node = loader.load();
-                CoordinatorMainController.staticContentArea.getChildren().setAll(node);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            coordinatorMainController.loadView("CoordinatorHome.fxml");
         }
     }
 

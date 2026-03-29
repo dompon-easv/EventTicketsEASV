@@ -34,6 +34,7 @@ public class CoordinatorHomeController {
     private SessionManager sessionManager;
     private TicketTypeManager ticketTypeManager;
     private UserManager userManager;
+    private CoordinatorMainController coordinatorMainController;
 
     // ✅ IMPORTANT: reusable click behavior
     private Consumer<Event> onCardClick;
@@ -59,6 +60,9 @@ public class CoordinatorHomeController {
 
     public void setOnCardClick(Consumer<Event> onCardClick) {
         this.onCardClick = onCardClick;
+    }
+    public void setMainCoordinatorController(CoordinatorMainController coordinatorMainController) {
+        this.coordinatorMainController = coordinatorMainController;
     }
 
     public void init() {
@@ -87,6 +91,7 @@ public class CoordinatorHomeController {
                 controller.setEventLogic(eventLogic);
                 controller.setUserManager(userManager);
                 controller.setSessionManager(sessionManager);
+                controller.setCoordinatorMainController(coordinatorMainController);
 
                 CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
@@ -159,6 +164,8 @@ public class CoordinatorHomeController {
             );
 
             Node node = loader.load();
+            AddEditEventController controller = loader.getController();
+            controller.setCoordinatorMainController(coordinatorMainController);
             CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
@@ -167,35 +174,12 @@ public class CoordinatorHomeController {
     }
 
     public void showVouchers(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/VouchersOverview.fxml"
-                    )
-            );
-
-            Node node = loader.load();
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        coordinatorMainController.loadView("VouchersOverview.fxml");
     }
 
     public void showEvents(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
-                    )
-            );
+        coordinatorMainController.loadView("CoordinatorHome.fxml");
 
-            Node node = loader.load();
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void filtering() {

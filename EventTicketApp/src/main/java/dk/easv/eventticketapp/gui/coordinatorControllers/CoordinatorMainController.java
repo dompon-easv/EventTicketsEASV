@@ -83,7 +83,7 @@ public class CoordinatorMainController {
         }
     }
 
-    private void loadView(String fxml) {
+    public void loadView(String fxml) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(
@@ -100,7 +100,16 @@ public class CoordinatorMainController {
                 coordinatorHomeController.setTicketTypeManager(ticketTypeManager);
                 coordinatorHomeController.setUserManager(userManager);
                 coordinatorHomeController.setSessionManager(sessionManager);
+                coordinatorHomeController.setMainCoordinatorController(this);
                 coordinatorHomeController.init();
+            }
+            if (controller instanceof VouchersOverviewController vouchersOverviewController) {
+                vouchersOverviewController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                vouchersOverviewController.setEventLogic(eventLogic);
+                vouchersOverviewController.setTicketTypeManager(ticketTypeManager);
+                vouchersOverviewController.setUserManager(userManager);
+                vouchersOverviewController.setSessionManager(sessionManager);
+                vouchersOverviewController.setMainCoordinatorController(this);
             }
             contentArea.getChildren().setAll(node);
         } catch (IOException e) {

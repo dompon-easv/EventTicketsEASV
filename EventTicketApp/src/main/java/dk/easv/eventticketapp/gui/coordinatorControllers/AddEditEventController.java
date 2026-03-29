@@ -5,6 +5,8 @@ import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.dao.UserDAO;
+import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
+import dk.easv.eventticketapp.gui.adminControllers.EventsController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +33,7 @@ public class AddEditEventController {
     private boolean isEditMode = false;
     private Event currentEvent;
     private SessionManager sessionManager;
+    private CoordinatorMainController coordinatorMainController;
 
     @FXML private TextField nameField;
     @FXML private TextField locationField;
@@ -69,6 +72,9 @@ public class AddEditEventController {
     }
     public void setSessionManager(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
+    }
+    public void setCoordinatorMainController(CoordinatorMainController coordinatorMainController) {
+        this.coordinatorMainController = coordinatorMainController;
     }
 
     private void setupTimeInputs() {
@@ -287,18 +293,28 @@ public class AddEditEventController {
     }
 
     public void closeBtn(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorHome.fxml"
-                    ))
-            );
+        if (sessionManager.getCurrentUser().getRole() == UserRole.COORDINATOR) {
+            coordinatorMainController.loadView("CoordinatorHome.fxml");
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        Objects.requireNonNull(getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/adminViews/Events.fxml"
+                        ))
+                );
 
-            Node node = loader.load();
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+                Node node = loader.load();
+                AdminMainController.staticContentArea.getChildren().setAll(node);
+                Object controller = loader.getController();
+                if (controller instanceof EventsController eventsController) {
+                    eventsController.setUserManager(userManager);
+                    eventsController.setEventLogic(eventLogic);
+                    eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                    eventsController.init();
+                }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
-}
+    }}
