@@ -65,6 +65,7 @@
                         <VBox styleClass="input-group">
                             <Label styleClass="input-label" text="Quantity *" />
                             <TextField fx:id="quantityField" styleClass="modern-input" />
+                     <Label text="Quantity cannot exceed number of tickets set for the Event" />
                         </VBox>
 
                         <Separator styleClass="card-separator" />
