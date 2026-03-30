@@ -10,16 +10,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
 
 public class TicketTypesController {
 
     public Button btnAddTicketType;
+    public Button btnEditTicketType;
+    public Button btnDeleteTicketType;
+    public Button btnClearSelection;
+
     public TableView<TicketType> tableView;
     public TableColumn<TicketType, String> columnName;
     public TableColumn<TicketType, String> columnDescription;
@@ -35,6 +41,17 @@ public class TicketTypesController {
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         columnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantityAvailable"));
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            boolean isSelected = newSelection != null;
+            btnEditTicketType.setDisable(!isSelected);
+            btnDeleteTicketType.setDisable(!isSelected);
+            btnClearSelection.setDisable(!isSelected);
+        });
+
+        btnEditTicketType.setDisable(true);
+        btnDeleteTicketType.setDisable(true);
+        btnClearSelection.setDisable(true);
     }
 
     public void setTicketTypeManager(TicketTypeManager manager) {
@@ -56,11 +73,9 @@ public class TicketTypesController {
         if (ticketTypeManager != null && currentEvent != null) {
             try {
                 ticketTypeManager.setCurrentEvent(currentEvent);
-
                 tableView.setItems(
                         ticketTypeManager.getTicketTypesForEvent(currentEvent.getId())
                 );
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -100,7 +115,7 @@ public class TicketTypesController {
             AddEditTicketTypeController controller = loader.getController();
             controller.setEvent(currentEvent);
             controller.setTicketTypeManager(ticketTypeManager);
-
+            controller.setParentController(this);
             CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
@@ -109,10 +124,70 @@ public class TicketTypesController {
     }
 
     public void onEditTicketType(ActionEvent actionEvent) {
-        // Implement edit functionality
+        TicketType selectedTicket = tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedTicket == null) {
+            showError("No Selection", "Please select a ticket type to edit.");
+            return;
+        }
+
+        try {
+            if (currentEvent == null) {
+                System.err.println("ERROR: No event selected!");
+                return;
+            }
+
+            if (ticketTypeManager == null) {
+                System.err.println("ERROR: TicketTypeManager not initialized!");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditTicketTypes.fxml")
+            );
+
+            Node node = loader.load();
+
+            AddEditTicketTypeController controller = loader.getController();
+            controller.setEvent(currentEvent);
+            controller.setTicketTypeManager(ticketTypeManager);
+            controller.setTicketTypeToEdit(selectedTicket); // Pass the ticket to edit
+            controller.setParentController(this); // Set parent to refresh after edit
+
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Error", "Could not open edit form: " + e.getMessage());
+        }
     }
 
     public void onDeleteTicketType(ActionEvent actionEvent) {
         // Implement delete functionality
+    }
+
+    public void onClearSelection(ActionEvent actionEvent) {
+        tableView.getSelectionModel().clearSelection();
+    }
+
+    public void refreshTicketTypes() {
+        loadTicketTypes();
+    }
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

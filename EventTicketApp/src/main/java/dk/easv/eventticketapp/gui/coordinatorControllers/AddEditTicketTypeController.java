@@ -12,14 +12,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 public class AddEditTicketTypeController {
+
+    @FXML private Label formTitle;
+    @FXML private Button saveButton;
 
     @FXML private TextField nameField;
     @FXML private TextField descriptionField;
@@ -29,7 +32,9 @@ public class AddEditTicketTypeController {
 
     private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
-    private Consumer<TicketType> onTicketCreated;
+    private TicketTypesController parentController;
+    private TicketType ticketTypeToEdit;
+    private boolean isEditMode = false;
 
 
     public void setTicketTypeManager(TicketTypeManager manager) {
@@ -45,13 +50,26 @@ public class AddEditTicketTypeController {
             if (ticketTypeManager != null) {
                 ticketTypeManager.setCurrentEvent(event);
             }
-        } else {
-            System.err.println("ERROR: Event is null in AddEditTicketTypeController.setEvent()");
         }
     }
 
-    public void setOnTicketCreated(Consumer<TicketType> callback) {
-        this.onTicketCreated = callback;
+    public void setParentController(TicketTypesController parentController) {
+        this.parentController = parentController;
+    }
+
+    public void setTicketTypeToEdit(TicketType ticketType) {
+        this.ticketTypeToEdit = ticketType;
+        this.isEditMode = true;
+
+        formTitle.setText("Edit Ticket Type");
+        saveButton.setText("Update Ticket Type");
+
+        if (ticketType != null) {
+            nameField.setText(ticketType.getName());
+            descriptionField.setText(ticketType.getDescription());
+            priceField.setText(String.valueOf(ticketType.getPrice()));
+            quantityField.setText(String.valueOf(ticketType.getQuantityAvailable()));
+        }
     }
 
     @FXML
@@ -67,13 +85,24 @@ public class AddEditTicketTypeController {
             int quantity = Integer.parseInt(quantityField.getText().trim());
 
             ticketTypeManager.setCurrentEvent(currentEvent);
-            TicketType saved = ticketTypeManager.addTicketType(name, description, price, quantity);
 
-            if(onTicketCreated != null) {
-                onTicketCreated.accept(saved);
+            if (isEditMode) {
+                ticketTypeToEdit.setName(name);
+                ticketTypeToEdit.setDescription(description);
+                ticketTypeToEdit.setPrice(price);
+                ticketTypeToEdit.setQuantityAvailable(quantity);
+
+                ticketTypeManager.updateTicketType(ticketTypeToEdit);
+                showSuccess("Success", "Ticket type '" + name + "' has been updated successfully!");
+            } else {
+                ticketTypeManager.addTicketType(name, description, price, quantity);
+                showSuccess("Success", "Ticket type '" + name + "' has been created successfully!");
             }
 
-            showSuccess("Success", "Ticket type '" + name + "' has been created successfully!");
+            if(parentController != null) {
+                parentController.refreshTicketTypes();
+            }
+
             closeBtn(actionEvent);
 
         } catch (NumberFormatException e) {
