@@ -10,10 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 
@@ -164,7 +161,30 @@ public class TicketTypesController {
     }
 
     public void onDeleteTicketType(ActionEvent actionEvent) {
-        // Implement delete functionality
+        TicketType selectedTicket = tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedTicket == null) {
+            showError("No Selection", "Please select a ticket type to delete.");
+            return;
+        }
+
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirm Delete");
+        confirmDialog.setHeaderText("Delete Ticket Type");
+        confirmDialog.setContentText("Are you sure you want to delete '" + selectedTicket.getName() + "'?");
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    ticketTypeManager.deleteTicketType(selectedTicket.getId());
+                    loadTicketTypes();
+                    showSuccess("Success", "Ticket type '" + selectedTicket.getName() + "' has been deleted successfully.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showError("Error", "Failed to delete ticket type: " + e.getMessage());
+                }
+            }
+        });
     }
 
     public void onClearSelection(ActionEvent actionEvent) {
