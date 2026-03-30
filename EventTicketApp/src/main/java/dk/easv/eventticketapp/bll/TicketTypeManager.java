@@ -30,6 +30,11 @@ public class TicketTypeManager {
         validateEventSelected();
         validateTicketType(name, description, price, quantity);
 
+        String normalizedName = normalizeName(name);
+        if (ticketTypeDAO.existsByNameAndEvent(normalizedName, currentEvent.getId())) {
+            throw new IllegalArgumentException("A ticket type with this name already exists for this event.");
+        }
+
         TicketType ticketType = new TicketType(
                 0, // id placeholder
                 name,
@@ -47,7 +52,22 @@ public class TicketTypeManager {
         if (ticketType.getId() <= 0) {
             throw new IllegalArgumentException("Invalid ticket type ID");
         }
-        validateTicketType(ticketType.getName(), ticketType.getDescription(), ticketType.getPrice(), ticketType.getQuantityAvailable());
+
+        validateTicketType(
+                ticketType.getName(),
+                ticketType.getDescription(),
+                ticketType.getPrice(),
+                ticketType.getQuantityAvailable()
+        );
+
+        String normalizedName = normalizeName(ticketType.getName());
+        if (ticketTypeDAO.existsByNameAndEventExcludingId(
+                normalizedName,
+                ticketType.getEventId(),
+                ticketType.getId())) {
+            throw new IllegalArgumentException("A ticket type with this name already exists for this event.");
+        }
+
         ticketTypeDAO.update(ticketType);
     }
 
@@ -89,5 +109,9 @@ public class TicketTypeManager {
 
     public TicketType getTicketTypeById(int id) throws Exception {
         return ticketTypeDAO.getById(id);
+    }
+
+    private String normalizeName(String name) {
+        return name.replaceAll("\\s+", "").toLowerCase();
     }
 }

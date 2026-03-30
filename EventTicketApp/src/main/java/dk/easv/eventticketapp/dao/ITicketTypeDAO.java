@@ -9,4 +9,6 @@ public interface ITicketTypeDAO {
     void delete(int id) throws Exception;
     List<TicketType> getTicketTypesForEvent(int eventId) throws Exception;
     TicketType getById(int id) throws Exception;
+    boolean existsByNameAndEvent(String name, int eventId) throws Exception;
+    boolean existsByNameAndEventExcludingId(String name, int eventId, int id) throws Exception;
 }

@@ -110,4 +110,44 @@ public class TicketTypeDAO implements ITicketTypeDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean existsByNameAndEvent(String name, int eventId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM TicketTypes " +
+                "WHERE REPLACE(LOWER(name), ' ', '') = ? AND eventId = ?";
+        
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            stmt.setInt(2, eventId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public boolean existsByNameAndEventExcludingId(String name, int eventId, int id) throws Exception {
+        String sql = "SELECT COUNT(*) FROM TicketTypes " +
+                "WHERE REPLACE(LOWER(name), ' ', '') = ? " +
+                "AND eventId = ? AND id <> ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name.trim());
+            stmt.setInt(2, eventId);
+            stmt.setInt(3, id);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+            return false;
+        }
+    }
 }
