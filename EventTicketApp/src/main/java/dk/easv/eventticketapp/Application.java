@@ -1,10 +1,7 @@
 package dk.easv.eventticketapp;
 
 import dk.easv.eventticketapp.bll.*;
-import dk.easv.eventticketapp.dao.ITicketTypeDAO;
-import dk.easv.eventticketapp.dao.IUserDAO;
-import dk.easv.eventticketapp.dao.TicketTypeDAO;
-import dk.easv.eventticketapp.dao.UserDAO;
+import dk.easv.eventticketapp.dao.*;
 import dk.easv.eventticketapp.gui.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,12 +15,15 @@ public class Application extends javafx.application.Application {
 
         IUserDAO userDAO = new UserDAO();
         ITicketTypeDAO ticketTypeDAO = new TicketTypeDAO();
+        ITicketDAO ticketDAO = new TicketDAO();
 
         AuthenticationLogic authenticationLogic = new AuthenticationLogic(userDAO);
         UserManager userManager = new UserManager(userDAO);
         EventLogic eventLogic = new EventLogic();
         EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
         TicketTypeManager ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
+        TicketManager ticketManager = new TicketManager(ticketDAO);
+        CustomerLogic customerLogic = new CustomerLogic();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -33,6 +33,8 @@ public class Application extends javafx.application.Application {
         loginController.setEventLogic(eventLogic);
         loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
         loginController.setTicketTypeManager(ticketTypeManager);
+        loginController.setTicketManager(ticketManager);
+        loginController.setCustomerLogic(customerLogic);
 
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 

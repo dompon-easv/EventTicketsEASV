@@ -31,6 +31,8 @@ public class CoordinatorMainController {
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
     private TicketTypeManager ticketTypeManager;
+    private TicketManager ticketManager;
+    private CustomerLogic customerLogic;
 
     public void initialize() {
         staticContentArea = contentArea;
@@ -98,6 +100,8 @@ public class CoordinatorMainController {
                 coordinatorHomeController.setEventCoordinatorLogic(eventCoordinatorLogic);
                 coordinatorHomeController.setEventLogic(eventLogic);
                 coordinatorHomeController.setTicketTypeManager(ticketTypeManager);
+                coordinatorHomeController.setTicketManager(ticketManager);
+                coordinatorHomeController.setCustomerLogic(customerLogic);
                 coordinatorHomeController.setUserManager(userManager);
                 coordinatorHomeController.setSessionManager(sessionManager);
                 coordinatorHomeController.setMainCoordinatorController(this);
@@ -133,7 +137,7 @@ public class CoordinatorMainController {
         this.eventCoordinatorLogic =eventCoordinatorLogic;
     }
 
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
-        this.ticketTypeManager = ticketTypeManager;
-    }
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
+    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
+    public void setCustomerLogic(CustomerLogic customerLogic) {this.customerLogic = customerLogic;}
 }

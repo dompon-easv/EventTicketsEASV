@@ -1,4 +1,27 @@
 package dk.easv.eventticketapp.bll;
 
+import dk.easv.eventticketapp.be.Customer;
+import dk.easv.eventticketapp.dao.CustomerDAO;
+import dk.easv.eventticketapp.dao.ICustomerDAO;
+
 public class CustomerLogic {
+
+    private final ICustomerDAO customerDAO;
+
+    public CustomerLogic() {
+        this.customerDAO = new CustomerDAO();
+    }
+
+    public Customer createCustomer(String name, String email) throws Exception {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer name cannot be empty");
+        }
+
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer email cannot be empty");
+        }
+
+        Customer customer = new Customer(name.trim(), email.trim());
+        return customerDAO.createCustomer(customer);
+    }
 }

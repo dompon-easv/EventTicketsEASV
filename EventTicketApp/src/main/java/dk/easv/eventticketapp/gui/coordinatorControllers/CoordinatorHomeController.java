@@ -33,6 +33,8 @@ public class CoordinatorHomeController {
     private EventLogic eventLogic;
     private SessionManager sessionManager;
     private TicketTypeManager ticketTypeManager;
+    private TicketManager ticketManager;
+    private CustomerLogic customerLogic;
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
 
@@ -54,9 +56,9 @@ public class CoordinatorHomeController {
         this.userManager = userManager;
     }
 
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
-        this.ticketTypeManager = ticketTypeManager;
-    }
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
+    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
+    public void setCustomerLogic(CustomerLogic customerLogic) {this.customerLogic = customerLogic;}
 
     public void setOnCardClick(Consumer<Event> onCardClick) {
         this.onCardClick = onCardClick;
@@ -87,6 +89,8 @@ public class CoordinatorHomeController {
                 EventHeaderController controller = loader.getController();
                 controller.setEvent(event);
                 controller.setTicketTypeManager(ticketTypeManager);
+                controller.setTicketManager(ticketManager);
+                controller.setCustomerLogic(customerLogic);
                 controller.setEventCoordinatorLogic(eventCoordinatorLogic);
                 controller.setEventLogic(eventLogic);
                 controller.setUserManager(userManager);
