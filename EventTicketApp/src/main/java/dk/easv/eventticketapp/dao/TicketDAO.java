@@ -1,7 +1,10 @@
 package dk.easv.eventticketapp.dao;
 
+import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.be.Ticket;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketDAO implements ITicketDAO {
 
@@ -10,13 +13,42 @@ public class TicketDAO implements ITicketDAO {
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, ticket.getQuantity());
             stmt.setInt(2, ticket.getEventId());
             stmt.setInt(3, ticket.getTicketTypeId());
             stmt.setInt(4, ticket.getCustomerId());
-
             stmt.executeUpdate();
         }
+    }
+
+    public List<IssuedTicket> getIssuedTicketsByEvent(int eventId) throws Exception {
+        List<IssuedTicket> tickets = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            c.name AS customerName,
+            c.email,
+            tt.name AS ticketType,
+            t.quantity
+        FROM Tickets t
+        JOIN Customers c ON t.customerId = c.id
+        JOIN TicketTypes tt ON t.ticketTypeId = tt.id
+        WHERE t.eventId = ?
+    """;
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, eventId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tickets.add(new IssuedTicket(
+                        rs.getString("customerName"),
+                        rs.getString("email"),
+                        rs.getString("ticketType"),
+                        rs.getInt("quantity")
+                ));
+            }
+        }
+        return tickets;
     }
 }

@@ -246,8 +246,23 @@ public class EventHeaderController {
                 }
             }
 
-            case "btnIssuedTickets" ->
-                    loadView("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssuedTickets.fxml");
+            case "btnIssuedTickets" -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssuedTickets.fxml"
+                    ));
+
+                    Node view = loader.load();
+
+                    IssuedTicketsController controller = loader.getController();
+                    controller.loadTickets(currentEvent.getId());
+
+                    contentArea.getChildren().setAll(view);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
