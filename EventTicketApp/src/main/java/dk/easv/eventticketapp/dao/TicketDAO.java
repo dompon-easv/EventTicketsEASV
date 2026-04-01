@@ -29,7 +29,8 @@ public class TicketDAO implements ITicketDAO {
             c.name AS customerName,
             c.email,
             tt.name AS ticketType,
-            t.quantity
+            t.quantity,
+            (t.quantity * tt.price) AS totalPrice
         FROM Tickets t
         JOIN Customers c ON t.customerId = c.id
         JOIN TicketTypes tt ON t.ticketTypeId = tt.id
@@ -45,7 +46,8 @@ public class TicketDAO implements ITicketDAO {
                         rs.getString("customerName"),
                         rs.getString("email"),
                         rs.getString("ticketType"),
-                        rs.getInt("quantity")
+                        rs.getInt("quantity"),
+                        rs.getDouble("totalPrice")
                 ));
             }
         }
