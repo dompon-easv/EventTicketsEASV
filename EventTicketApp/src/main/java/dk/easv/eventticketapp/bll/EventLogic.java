@@ -23,6 +23,9 @@ public class EventLogic {
         if (event.getName().isEmpty())
             throw new Exception("Event name is required");
 
+        if (event.getMaxTickets() <= 0)
+            throw new Exception("Max tickets must be greater than 0");
+
         if (event.getLocation().isEmpty())
             throw new Exception("Location is required");
 

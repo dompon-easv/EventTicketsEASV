@@ -20,8 +20,8 @@ public class EventDAO implements IEventDAO {
     public Event createEvent(Event event) throws Exception {
 
         String sql = """
-            INSERT INTO Events (name, location, startDate, endDate, description, location_description)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO Events (name, location, startDate, endDate, description, location_description, maxTickets)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = connectionManager.getConnection();
@@ -38,6 +38,7 @@ public class EventDAO implements IEventDAO {
 
             stmt.setString(5, event.getDescription());
             stmt.setString(6, event.getLocationDescription());
+            stmt.setInt(7, event.getMaxTickets());
 
             stmt.executeUpdate();
 
@@ -51,7 +52,8 @@ public class EventDAO implements IEventDAO {
                         event.getStartDate(),
                         event.getEndDate(),
                         event.getDescription(),
-                        event.getLocationDescription()
+                        event.getLocationDescription(),
+                        event.getMaxTickets()
                 );
             }
         }
@@ -92,8 +94,9 @@ public class EventDAO implements IEventDAO {
                             startDate != null ? startDate.toLocalDateTime() : null,
                             endDate != null ? endDate.toLocalDateTime() : null,
                             rs.getString("description"),
-                            rs.getString("location_description")
-                    );
+                            rs.getString("location_description"),
+                            rs.getInt("maxTickets")
+                            );
 
                     events.add(event);
                 }
@@ -107,7 +110,7 @@ public class EventDAO implements IEventDAO {
 
         String sql = """
         UPDATE Events
-        SET name = ?, location = ?, startDate = ?, endDate = ?, description = ?, location_description = ?
+        SET name = ?, location = ?, startDate = ?, endDate = ?, description = ?, location_description = ?, maxTickets = ?
         WHERE id = ?
     """;
 
@@ -125,8 +128,8 @@ public class EventDAO implements IEventDAO {
 
             stmt.setString(5, event.getDescription());
             stmt.setString(6, event.getLocationDescription());
-
-            stmt.setInt(7, event.getId());
+            stmt.setInt(7, event.getMaxTickets());
+            stmt.setInt(8, event.getId());
 
             stmt.executeUpdate();
         }
@@ -157,7 +160,8 @@ public class EventDAO implements IEventDAO {
                         rs.getTimestamp("startDate") != null ? rs.getTimestamp("startDate").toLocalDateTime() : null,
                         rs.getTimestamp("endDate") != null ? rs.getTimestamp("endDate").toLocalDateTime() : null,
                         rs.getString("description"),
-                        rs.getString("location_description")
+                        rs.getString("location_description"),
+                        rs.getInt("maxTickets")
                 ));
             }
         }

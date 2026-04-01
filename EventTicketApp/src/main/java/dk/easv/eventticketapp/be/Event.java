@@ -11,22 +11,24 @@ public class Event {
     private LocalDateTime endDate;
     private String description;
     private String locationDescription;
+    private int maxTickets;
 
     // Constructor without ID (for insert)
     public Event(String name, String location, LocalDateTime startDate,
-                 LocalDateTime endDate, String description, String locationDescription) {
+                 LocalDateTime endDate, String description, String locationDescription, int maxTickets) {
         this.name = name;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
         this.locationDescription = locationDescription;
+        this.maxTickets = maxTickets;
     }
 
     // Constructor with ID (from DB)
     public Event(int id, String name, String location, LocalDateTime startDate,
-                 LocalDateTime endDate, String description, String locationDescription) {
-        this(name, location, startDate, endDate, description, locationDescription);
+                 LocalDateTime endDate, String description, String locationDescription, int maxTickets) {
+        this(name, location, startDate, endDate, description, locationDescription, maxTickets);
         this.id = id;
     }
 
@@ -89,5 +91,8 @@ public class Event {
     public void setLocationDescription(String locationDescription) {
         this.locationDescription = locationDescription;
     }
+
+    public int getMaxTickets() {return maxTickets;}
+    public void setMaxTickets(int maxTickets) {this.maxTickets = maxTickets;}
 }
 

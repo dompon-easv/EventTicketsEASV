@@ -36,6 +36,7 @@ public class AddEditEventController {
     private CoordinatorMainController coordinatorMainController;
 
     @FXML private TextField nameField;
+    @FXML private TextField maxTicketsField;
     @FXML private TextField locationField;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
@@ -104,6 +105,7 @@ public class AddEditEventController {
 
     private void fillForm(Event event) {
         nameField.setText(event.getName());
+        maxTicketsField.setText(String.valueOf(event.getMaxTickets()));
         locationField.setText(event.getLocation());
         notesField.setText(event.getDescription());
         locationDescriptionField.setText(event.getLocationDescription());
@@ -140,6 +142,7 @@ public class AddEditEventController {
         String location = locationField.getText().trim();
         String description = notesField.getText().trim();
         String locationDescription = locationDescriptionField.getText().trim();
+        int maxTickets = parseMaxTickets();
 
         LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
         LocalDateTime end = null;
@@ -158,10 +161,11 @@ public class AddEditEventController {
             currentEvent.setEndDate(end);
             currentEvent.setDescription(description);
             currentEvent.setLocationDescription(locationDescription);
+            currentEvent.setMaxTickets(maxTickets);
             return currentEvent;
         }
 
-        return new Event(name, location, start, end, description, locationDescription);
+        return new Event(name, location, start, end, description, locationDescription, maxTickets);
     }
 
     private void createEvent(Event event) throws Exception {
@@ -184,6 +188,26 @@ public class AddEditEventController {
         if (ticketTypeManager != null) {
             ticketTypeManager.setCurrentEvent(event);
         }
+    }
+
+    private int parseMaxTickets() throws Exception {
+        String text = maxTicketsField.getText().trim();
+        if (text.isEmpty()) {
+            throw new Exception("Max tickets is required");
+        }
+
+        int value;
+        try {
+            value = Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            throw new Exception("Max tickets must be a valid number");
+        }
+
+        if (value <= 0) {
+            throw new Exception("Max tickets must be greater than 0"); // friendly message
+        }
+
+        return value;
     }
 
     private List<Integer> getSelectedCoordinatorIds() {
