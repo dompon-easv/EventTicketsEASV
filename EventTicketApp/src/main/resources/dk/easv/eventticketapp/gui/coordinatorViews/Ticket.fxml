@@ -14,7 +14,7 @@
 
 <!-- Ticket FXML design with vertical barcode on the left -->
 
-<BorderPane prefHeight="300.0" prefWidth="700" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 2, 2);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="300.0" prefWidth="700" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 2, 2);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.TicketController">
 
     <!-- Main content of the ticket -->
     <center>
@@ -79,36 +79,36 @@
                                     <Image url="@../../../../../../../../../../../../../../Downloads/sea.png" />
                                 </image>
                             </ImageView>
-                            <Label prefHeight="40.0" prefWidth="516.0" style="-fx-font-weight: bold; -fx-font-size: 28px;" text="Insert Event Name here..." />
-                            <Label prefHeight="15.0" prefWidth="542.0" style="-fx-font-size: 10px; -fx-letter-spacing: 2px;" text="Ticket Type:" textFill="#888888" />
+                            <Label fx:id="lblEvent" prefHeight="40.0" prefWidth="516.0" style="-fx-font-weight: bold; -fx-font-size: 28px;" text="Insert Event Name here..." />
+                            <Label fx:id="lblTicketType" prefHeight="15.0" prefWidth="542.0" style="-fx-font-size: 10px; -fx-letter-spacing: 2px;" text="Ticket Type:" textFill="#888888" />
                         </VBox>
                     </children>
                 </HBox>
 
                 <Separator style="-fx-background-color: black;" />
-            <HBox alignment="CENTER_LEFT" spacing="12">
-               <children>
-                  <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="👤" />
-                  <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="NAME:">
-                     <font>
-                        <Font name="System Bold" size="12" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="17.0" prefWidth="379.0" text="Label" />
-               </children>
-            </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="👤" />
+                        <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="NAME:">
+                            <font>
+                                <Font name="System Bold" size="12" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblName" prefHeight="17.0" prefWidth="379.0" text="lblName" />
+                    </children>
+                </HBox>
                 <Separator style="-fx-background-color: black;" />
                 <VBox spacing="10" style="-fx-padding: 5 0 5 0;">
                     <children>
                         <HBox alignment="CENTER_LEFT" spacing="12">
                             <children>
                                 <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="📍" />
-                                <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="VENUE:">
+                                <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="LOCATION:">
                                     <font>
                                         <Font name="System Bold" size="12" />
                                     </font>
                                 </Label>
-                                <Label prefHeight="17.0" prefWidth="326.0" text="Label" />
+                                <Label fx:id="lblLocation" prefHeight="17.0" prefWidth="326.0" text="lblVenue" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="12">
@@ -119,18 +119,18 @@
                                         <Font name="System Bold" size="12" />
                                     </font>
                                 </Label>
-                                <Label prefHeight="17.0" prefWidth="107.0" text="Label" />
-                              <HBox alignment="CENTER_LEFT" spacing="12">
-                                  <children>
-                                      <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="🕓" />
-                                      <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="TIME:">
-                                          <font>
-                                              <Font name="System Bold" size="12" />
-                                          </font>
-                                      </Label>
-                                      <Label prefHeight="17.0" prefWidth="107.0" text="Label" />
-                                  </children>
-                              </HBox>
+                                <Label fx:id="lblDate" prefHeight="17.0" prefWidth="107.0" text="lblDate" />
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="🕓" />
+                                        <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="TIME:">
+                                            <font>
+                                                <Font name="System Bold" size="12" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="lblTime" prefHeight="17.0" prefWidth="107.0" text="lblTime" />
+                                    </children>
+                                </HBox>
                             </children>
                         </HBox>
                         <Separator style="-fx-background-color: black;" />
@@ -142,21 +142,21 @@
                                         <Font name="System Bold" size="12" />
                                     </font>
                                 </Label>
-                                <Label prefHeight="17.0" prefWidth="107.0" text="Label" />
-                              <HBox alignment="CENTER_LEFT" spacing="12">
-                                  <children>
-                                      <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="💲" />
-                                      <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="PRICE:">
-                                          <font>
-                                              <Font name="System Bold" size="12" />
-                                          </font>
-                                      </Label>
-                                      <Label prefHeight="17.0" prefWidth="107.0" text="Label" />
-                                  </children>
-                              </HBox>
+                                <Label fx:id="lblQuantity" prefHeight="17.0" prefWidth="107.0" text="lblQuantity" />
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label style="-fx-font-size: 16px; -fx-min-width: 32;" text="💲" />
+                                        <Label style="-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 12px; -fx-min-width: 65;" text="PRICE:">
+                                            <font>
+                                                <Font name="System Bold" size="12" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="lblPrice" prefHeight="17.0" prefWidth="107.0" text="lblPrice" />
+                                    </children>
+                                </HBox>
                             </children>
                         </HBox>
-                  <Separator style="-fx-background-color: black;" />
+                        <Separator style="-fx-background-color: black;" />
                     </children>
                 </VBox>
                 <Label style="-fx-text-fill: #aaa; -fx-font-size: 9px; -fx-padding: 8 0 0 0;" text="No refunds or exchanges • Valid ID required">

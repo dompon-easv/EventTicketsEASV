@@ -26,8 +26,7 @@ public class EventHeaderController {
     @FXML private Label locationLabel;
     @FXML private Label coordinatorLabel;
 
-    @FXML
-    public StackPane contentArea;
+    @FXML public StackPane contentArea;
     @FXML public Button btnOverview;
     @FXML public Button btnTicketTypes;
     @FXML public Button btnIssueTickets;
@@ -184,8 +183,8 @@ public class EventHeaderController {
     }
 
     @FXML
-    private void handleTabChange(ActionEvent event) {
-        Button clicked = (Button) event.getSource();
+    private void handleTabChange(ActionEvent actionEvent) {
+        Button clicked = (Button) actionEvent.getSource();
 
         resetTabStyles();
         clicked.getStyleClass().add("active");
@@ -256,6 +255,8 @@ public class EventHeaderController {
 
                     IssuedTicketsController controller = loader.getController();
                     controller.loadTickets(currentEvent.getId());
+                    controller.setContentArea(contentArea);
+                    controller.setEvent(currentEvent);
 
                     contentArea.getChildren().setAll(view);
 
