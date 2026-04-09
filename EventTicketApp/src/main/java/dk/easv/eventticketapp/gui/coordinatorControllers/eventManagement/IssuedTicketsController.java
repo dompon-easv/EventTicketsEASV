@@ -4,6 +4,7 @@ import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.bll.TicketManager;
 import dk.easv.eventticketapp.dao.TicketDAO;
+import dk.easv.eventticketapp.dao.TicketTypeDAO;
 import dk.easv.eventticketapp.gui.coordinatorControllers.TicketController;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -28,7 +29,8 @@ public class IssuedTicketsController {
     @FXML private TableColumn<IssuedTicket, Integer> columnQuantity;
     @FXML private TableColumn<IssuedTicket, Double> columnTotalPrice;
 
-    private final TicketManager ticketManager = new TicketManager(new TicketDAO());
+    private final TicketManager ticketManager =
+            new TicketManager(new TicketDAO(), new TicketTypeDAO());
 
     private StackPane contentArea;
     private Event currentEvent;

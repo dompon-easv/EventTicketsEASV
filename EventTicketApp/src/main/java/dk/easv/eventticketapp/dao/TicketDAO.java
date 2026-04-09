@@ -53,4 +53,19 @@ public class TicketDAO implements ITicketDAO {
         }
         return tickets;
     }
+
+    @Override
+    public int getTotalSoldForTicketType(int ticketTypeId) throws Exception {
+        String sql = "SELECT COALESCE(SUM(quantity), 0) AS totalSold FROM Tickets WHERE ticketTypeId = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, ticketTypeId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalSold");
+            }
+            return 0;
+        }
+    }
 }

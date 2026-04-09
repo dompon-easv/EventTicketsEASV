@@ -21,7 +21,6 @@ public class IssueTicketsController {
     private TicketManager ticketManager;
     private CustomerLogic customerLogic;
     private TicketTypeManager ticketTypeManager;
-
     private Event currentEvent;
 
     public void setManagers(TicketManager ticketManager,
@@ -91,6 +90,7 @@ public class IssueTicketsController {
 
             showSuccess("Success", "Ticket(s) issued successfully!");
             clearFields();
+            loadTicketTypes();
 
         } catch (NumberFormatException e) {
             showError("Invalid Input", "Quantity must be a valid number.");

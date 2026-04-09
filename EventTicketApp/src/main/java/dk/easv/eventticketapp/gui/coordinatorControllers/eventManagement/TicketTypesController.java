@@ -2,7 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.collections.ObservableList;
@@ -30,6 +30,12 @@ public class TicketTypesController {
     public TableColumn<TicketType, Integer> columnQuantity;
 
     private TicketTypeManager ticketTypeManager;
+    private TicketManager ticketManager;
+    private CustomerLogic customerLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
+    private EventLogic eventLogic;
+    private UserManager userManager;
+    private SessionManager sessionManager;
     private Event currentEvent;
 
     @FXML
@@ -37,7 +43,7 @@ public class TicketTypesController {
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        columnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantityAvailable"));
+        columnQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
 
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean isSelected = newSelection != null;
@@ -54,6 +60,54 @@ public class TicketTypesController {
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
         tryLoadData();
+    }
+
+    public void setTicketManager(TicketManager ticketManager) {
+        this.ticketManager = ticketManager;
+    }
+
+    public void setCustomerLogic(CustomerLogic customerLogic) {
+        this.customerLogic = customerLogic;
+    }
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
+    }
+
+    public void setEventLogic(EventLogic eventLogic) {
+        this.eventLogic = eventLogic;
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public TicketManager getTicketManager() {
+        return ticketManager;
+    }
+
+    public CustomerLogic getCustomerLogic() {
+        return customerLogic;
+    }
+
+    public EventCoordinatorLogic getEventCoordinatorLogic() {
+        return eventCoordinatorLogic;
+    }
+
+    public EventLogic getEventLogic() {
+        return eventLogic;
+    }
+
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+    public SessionManager getSessionManager() {
+        return sessionManager;
     }
 
     public void setEvent(Event event) {

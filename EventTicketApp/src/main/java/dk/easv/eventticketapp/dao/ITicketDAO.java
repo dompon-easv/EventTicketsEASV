@@ -8,4 +8,5 @@ import java.util.List;
 public interface ITicketDAO {
     void add(Ticket ticket) throws Exception;
     List<IssuedTicket> getIssuedTicketsByEvent(int eventId) throws Exception;
+    int getTotalSoldForTicketType(int ticketTypeId) throws Exception;
 }

@@ -2,7 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
+import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketTypesController;
 import javafx.event.ActionEvent;
@@ -35,7 +35,36 @@ public class AddEditTicketTypeController {
     private TicketTypesController parentController;
     private TicketType ticketTypeToEdit;
     private boolean isEditMode = false;
+    private TicketManager ticketManager;
+    private CustomerLogic customerLogic;
+    private EventCoordinatorLogic eventCoordinatorLogic;
+    private EventLogic eventLogic;
+    private UserManager userManager;
+    private SessionManager sessionManager;
 
+    public void setTicketManager(TicketManager ticketManager) {
+        this.ticketManager = ticketManager;
+    }
+
+    public void setCustomerLogic(CustomerLogic customerLogic) {
+        this.customerLogic = customerLogic;
+    }
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
+    }
+
+    public void setEventLogic(EventLogic eventLogic) {
+        this.eventLogic = eventLogic;
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
@@ -130,6 +159,15 @@ public class AddEditTicketTypeController {
 
             headerController.setEvent(currentEvent);
             headerController.setTicketTypeManager(ticketTypeManager);
+            if (parentController != null) {
+                headerController.setTicketManager(parentController.getTicketManager());
+                headerController.setCustomerLogic(parentController.getCustomerLogic());
+                headerController.setEventCoordinatorLogic(parentController.getEventCoordinatorLogic());
+                headerController.setEventLogic(parentController.getEventLogic());
+                headerController.setUserManager(parentController.getUserManager());
+                headerController.setSessionManager(parentController.getSessionManager());
+            }
+            headerController.setCoordinatorMainController(mainController);
 
             mainController.contentArea.getChildren().setAll(headerView);
 

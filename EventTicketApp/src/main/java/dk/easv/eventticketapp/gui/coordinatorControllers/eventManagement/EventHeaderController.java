@@ -219,6 +219,12 @@ public class EventHeaderController {
                     TicketTypesController controller = loader.getController();
                     controller.setEvent(currentEvent);
                     controller.setTicketTypeManager(ticketTypeManager);
+                    controller.setTicketManager(ticketManager);
+                    controller.setCustomerLogic(customerLogic);
+                    controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+                    controller.setEventLogic(eventLogic);
+                    controller.setUserManager(userManager);
+                    controller.setSessionManager(sessionManager);
 
                     contentArea.getChildren().setAll(view);
 

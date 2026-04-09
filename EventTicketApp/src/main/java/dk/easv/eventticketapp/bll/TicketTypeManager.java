@@ -3,7 +3,6 @@ package dk.easv.eventticketapp.bll;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.dao.ITicketTypeDAO;
-import dk.easv.eventticketapp.dao.TicketTypeDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,7 +25,7 @@ public class TicketTypeManager {
         return currentEvent;
     }
 
-    public TicketType addTicketType(String name, String description, double price, int quantity) throws Exception {
+    public void addTicketType(String name, String description, double price, int quantity) throws Exception {
         validateEventSelected();
         validateTicketType(name, description, price, quantity);
 
@@ -45,7 +44,6 @@ public class TicketTypeManager {
         );
 
         ticketTypeDAO.add(ticketType);
-        return ticketType;
     }
 
     public void updateTicketType(TicketType ticketType) throws Exception {

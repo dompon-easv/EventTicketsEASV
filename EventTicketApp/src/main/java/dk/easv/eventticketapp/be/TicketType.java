@@ -7,6 +7,7 @@ public class TicketType {
     private double price;
     private int eventId;
     private int maxQuantity;
+    private int ticketsSold;
 
     public TicketType(int id, String name, String description, double price, int eventId, int maxQuantity) {
         this.id = id;
@@ -15,6 +16,7 @@ public class TicketType {
         this.price = price;
         this.eventId = eventId;
         this.maxQuantity = maxQuantity;
+        this.ticketsSold = 0;
     }
 
     public TicketType(String name, String description, double price, int eventId, int maxQuantity) {
@@ -23,6 +25,7 @@ public class TicketType {
         this.price = price;
         this.eventId = eventId;
         this.maxQuantity = maxQuantity;
+        this.ticketsSold = 0;
     }
 
     public int getId() {return id;}
