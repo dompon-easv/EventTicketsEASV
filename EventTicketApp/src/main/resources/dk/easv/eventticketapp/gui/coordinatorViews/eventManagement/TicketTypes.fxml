@@ -38,8 +38,9 @@
             <TableColumn fx:id="columnName" prefWidth="151.0" text="Name" />
             <TableColumn fx:id="columnDescription" prefWidth="227.0" text="Description" />
             <TableColumn fx:id="columnPrice" prefWidth="116.0" text="Price (kr)" />
-            <TableColumn fx:id="columnQuantity" prefWidth="105.0" text="Max Tickets" />
-            <TableColumn fx:id="columnAvailability" prefWidth="105.0" text="Tickets Available" />
+            <TableColumn fx:id="columnQuantity" prefWidth="105.0" text="Ticket Quantity" />
+            <TableColumn fx:id="columnSold" prefWidth="105.0" text="Ticket(s) Sold" />
+            <TableColumn fx:id="columnAvailability" prefWidth="105.0" text="Ticket(s) Available" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

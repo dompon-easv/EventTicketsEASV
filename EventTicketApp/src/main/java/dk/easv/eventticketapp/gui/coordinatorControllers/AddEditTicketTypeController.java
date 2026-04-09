@@ -99,6 +99,19 @@ public class AddEditTicketTypeController {
             priceField.setText(String.valueOf(ticketType.getPrice()));
             quantityField.setText(String.valueOf(ticketType.getMaxQuantity()));
         }
+
+        try {
+            int soldCount = ticketTypeManager.getSoldTicketsCount(ticketType.getId());
+            if (soldCount > 0) {
+                showInfo("Note", String.format(
+                        "This ticket type already has %d ticket(s) sold.\n" +
+                                "You cannot reduce the quantity below this number.",
+                        soldCount
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -203,6 +216,14 @@ public class AddEditTicketTypeController {
     }
 
     private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

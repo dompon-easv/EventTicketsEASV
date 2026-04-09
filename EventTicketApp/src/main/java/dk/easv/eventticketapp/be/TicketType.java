@@ -46,4 +46,12 @@ public class TicketType {
     public int getMaxQuantity() {return maxQuantity;}
     public void setMaxQuantity(int maxQuantity) {this.maxQuantity = maxQuantity;}
 
+    public int getTicketsSold() {return ticketsSold;}
+    public void setTicketsSold(int ticketsSold) {this.ticketsSold = ticketsSold;}
+    public int getAvailableQuantity() {return maxQuantity - ticketsSold;}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

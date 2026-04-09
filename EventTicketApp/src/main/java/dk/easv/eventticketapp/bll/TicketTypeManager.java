@@ -36,6 +36,10 @@ public class TicketTypeManager {
         return total;
     }
 
+    public int getSoldTicketsCount(int ticketTypeId) throws Exception {
+        return ticketTypeDAO.getTicketCountForTicketType(ticketTypeId);
+    }
+
     private void validateCapacityLimit(int eventId, int newQuantity, Integer excludeTicketTypeId) throws Exception {
         int currentTotal = getTotalTicketQuantityForEvent(eventId);
 
@@ -47,7 +51,6 @@ public class TicketTypeManager {
         }
 
         int newTotal = currentTotal + newQuantity;
-
         Event event = getEventById(eventId);
         int maxCapacity = event.getMaxTickets();
 
@@ -61,12 +64,21 @@ public class TicketTypeManager {
                             "You're trying to add: %d tickets\n" +
                             "New total would be: %d tickets\n\n" +
                             "Please reduce the total ticket quantity or increase the event capacity.",
-                    maxCapacity,
-                    currentTotal,
-                    available,
-                    newQuantity,
-                    newTotal,
-                    available
+                    maxCapacity, currentTotal, available, newQuantity, newTotal, available
+            ));
+        }
+    }
+
+    private void validateSoldTicketsLimit(int ticketTypeId, int newQuantity) throws Exception {
+        int soldCount = getSoldTicketsCount(ticketTypeId);
+
+        if (newQuantity < soldCount) {
+            throw new IllegalArgumentException(String.format(
+                    "Cannot reduce ticket quantity to %d!\n\n" +
+                            "This ticket type already has %d ticket(s) sold.\n" +
+                            "The maximum quantity cannot be less than the number of tickets already issued.\n\n" +
+                            "Please set the quantity to at least %d or more.",
+                    newQuantity, soldCount, soldCount
             ));
         }
     }
@@ -114,6 +126,8 @@ public class TicketTypeManager {
                 ticketType.getPrice(),
                 ticketType.getMaxQuantity()
         );
+
+        validateSoldTicketsLimit(ticketType.getId(), ticketType.getMaxQuantity());
         validateCapacityLimit(ticketType.getEventId(), ticketType.getMaxQuantity(), ticketType.getId());
 
         String normalizedName = normalizeName(ticketType.getName());
@@ -179,6 +193,10 @@ public class TicketTypeManager {
 
     public ObservableList<TicketType> getTicketTypesForEvent(int eventId) throws Exception {
         List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
+        for (TicketType ticketType : ticketTypes) {
+            int soldCount = getSoldTicketsCount(ticketType.getId());
+            ticketType.setTicketsSold(soldCount);
+        }
         return FXCollections.observableArrayList(ticketTypes);
     }
 

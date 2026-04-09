@@ -27,6 +27,8 @@ public class TicketTypesController {
     public TableColumn<TicketType, String> columnDescription;
     public TableColumn<TicketType, Double> columnPrice;
     public TableColumn<TicketType, Integer> columnQuantity;
+    public TableColumn<TicketType, Integer> columnSold;
+    public TableColumn<TicketType, Integer> columnAvailability;
 
     private TicketTypeManager ticketTypeManager;
     private TicketManager ticketManager;
@@ -43,6 +45,8 @@ public class TicketTypesController {
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         columnQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
+        columnSold.setCellValueFactory(new PropertyValueFactory<>("ticketsSold"));
+        columnAvailability.setCellValueFactory(new PropertyValueFactory<>("availableQuantity"));
 
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean isSelected = newSelection != null;
@@ -132,13 +136,13 @@ public class TicketTypesController {
         }
     }
 
-    // Keep ONLY ONE loadTicketTypes() method - this is the main one
     private void loadTicketTypes() {
         try {
             if(currentEvent == null) return;
             ObservableList<TicketType> list = ticketTypeManager.getTicketTypesForEvent(currentEvent.getId());
             tableView.setItems(list);
-            checkCapacityStatus(); // Check and warn if capacity is exceeded
+            checkCapacityStatus();
+            tableView.refresh();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
