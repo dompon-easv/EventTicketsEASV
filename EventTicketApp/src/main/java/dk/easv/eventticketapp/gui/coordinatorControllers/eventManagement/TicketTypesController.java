@@ -12,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
 
@@ -133,12 +132,13 @@ public class TicketTypesController {
         }
     }
 
+    // Keep ONLY ONE loadTicketTypes() method - this is the main one
     private void loadTicketTypes() {
         try {
             if(currentEvent == null) return;
-            ObservableList<TicketType> list =
-                    ticketTypeManager.getTicketTypesForEvent(currentEvent.getId());
+            ObservableList<TicketType> list = ticketTypeManager.getTicketTypesForEvent(currentEvent.getId());
             tableView.setItems(list);
+            checkCapacityStatus(); // Check and warn if capacity is exceeded
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -203,8 +203,8 @@ public class TicketTypesController {
             AddEditTicketTypeController controller = loader.getController();
             controller.setEvent(currentEvent);
             controller.setTicketTypeManager(ticketTypeManager);
-            controller.setTicketTypeToEdit(selectedTicket); // Pass the ticket to edit
-            controller.setParentController(this); // Set parent to refresh after edit
+            controller.setTicketTypeToEdit(selectedTicket);
+            controller.setParentController(this);
 
             CoordinatorMainController.staticContentArea.getChildren().setAll(node);
 
@@ -235,7 +235,11 @@ public class TicketTypesController {
                     showSuccess("Success", "Ticket type '" + selectedTicket.getName() + "' has been deleted successfully.");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showError("Error", "Failed to delete ticket type: " + e.getMessage());
+                    if (e.getMessage().contains("ticket(s) have already been sold")) {
+                        showError("Cannot Delete", e.getMessage());
+                    } else {
+                        showError("Error", "Failed to delete ticket type: " + e.getMessage());
+                    }
                 }
             }
         });
@@ -247,6 +251,32 @@ public class TicketTypesController {
 
     public void refreshTicketTypes() {
         loadTicketTypes();
+    }
+
+    private void checkCapacityStatus() {
+        if (currentEvent == null || ticketTypeManager == null) return;
+
+        try {
+            if (!ticketTypeManager.isTotalCapacityValid(currentEvent.getId())) {
+                String summary = ticketTypeManager.getCapacitySummary(currentEvent.getId());
+                showWarning("Capacity Exceeded",
+                        "Warning: Total ticket type quantities exceed event capacity!\n\n" + summary +
+                                "\n\nYou should either:\n" +
+                                "• Reduce some ticket type quantities, or\n" +
+                                "• Increase the event capacity in event settings."
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showWarning(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void showError(String title, String message) {

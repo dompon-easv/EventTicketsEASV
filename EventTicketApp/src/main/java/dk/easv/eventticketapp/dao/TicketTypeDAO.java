@@ -161,4 +161,21 @@ public class TicketTypeDAO implements ITicketTypeDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public int getTicketCountForTicketType(int ticketTypeId) throws Exception {
+        String sql = "SELECT COUNT(*) as count FROM Tickets WHERE ticketTypeId = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ticketTypeId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("count");
+            }
+        }
+        return 0;
+    }
 }

@@ -144,6 +144,23 @@ public class AddEditEventController {
         String locationDescription = locationDescriptionField.getText().trim();
         int maxTickets = parseMaxTickets();
 
+        if (isEditMode && currentEvent != null) {
+            if (ticketTypeManager != null) {
+                int currentTotalTickets = ticketTypeManager.getTotalTicketQuantityForEvent(currentEvent.getId());
+                if (maxTickets < currentTotalTickets) {
+                    throw new Exception(String.format(
+                            "Cannot reduce event capacity to %d tickets!\n\n" +
+                                    "Current ticket types total: %d tickets\n" +
+                                    "You have two options:\n" +
+                                    "1. Increase the capacity to at least %d tickets, OR\n" +
+                                    "2. Delete or reduce some ticket types first.\n\n" +
+                                    "Current total from ticket types: %d tickets",
+                            maxTickets, currentTotalTickets, currentTotalTickets, currentTotalTickets
+                    ));
+                }
+            }
+        }
+
         LocalDateTime start = combineDateTime(startDatePicker, startTimeCombo);
         LocalDateTime end = null;
 
