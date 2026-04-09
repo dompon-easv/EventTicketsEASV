@@ -11,7 +11,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
 
     @Override
     public void add(TicketType ticketType) throws Exception {
-        String sql = "INSERT INTO TicketTypes (name, description, price, eventId, quantityAvailable) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TicketTypes (name, description, price, eventId, maxQuantity) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -20,7 +20,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
             stmt.setString(2, ticketType.getDescription());
             stmt.setDouble(3, ticketType.getPrice());
             stmt.setInt(4, ticketType.getEventId());
-            stmt.setInt(5, ticketType.getQuantityAvailable());
+            stmt.setInt(5, ticketType.getMaxQuantity());
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -33,7 +33,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
 
     @Override
     public void update(TicketType ticketType) throws Exception {
-        String sql = "UPDATE TicketTypes SET name=?, description=?, price=?, eventId=?, quantityAvailable=? WHERE id=?";
+        String sql = "UPDATE TicketTypes SET name=?, description=?, price=?, eventId=?, maxQuantity=? WHERE id=?";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -42,7 +42,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
             stmt.setString(2, ticketType.getDescription());
             stmt.setDouble(3, ticketType.getPrice());
             stmt.setInt(4, ticketType.getEventId());
-            stmt.setInt(5, ticketType.getQuantityAvailable());
+            stmt.setInt(5, ticketType.getMaxQuantity());
             stmt.setInt(6, ticketType.getId());
             stmt.executeUpdate();
         }
@@ -78,7 +78,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
                             rs.getString("description"),
                             rs.getDouble("price"),
                             rs.getInt("eventId"),
-                            rs.getInt("quantityAvailable")
+                            rs.getInt("maxQuantity")
                     ));
                 }
             }
@@ -103,7 +103,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
                             rs.getString("description"),
                             rs.getDouble("price"),
                             rs.getInt("eventId"),
-                            rs.getInt("quantityAvailable")
+                            rs.getInt("maxQuantity")
                     );
                 }
             }

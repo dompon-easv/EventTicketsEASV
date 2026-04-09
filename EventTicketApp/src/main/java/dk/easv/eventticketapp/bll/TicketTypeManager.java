@@ -57,7 +57,7 @@ public class TicketTypeManager {
                 ticketType.getName(),
                 ticketType.getDescription(),
                 ticketType.getPrice(),
-                ticketType.getQuantityAvailable()
+                ticketType.getMaxQuantity()
         );
 
         String normalizedName = normalizeName(ticketType.getName());

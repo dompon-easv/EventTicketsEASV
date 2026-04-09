@@ -68,7 +68,7 @@ public class AddEditTicketTypeController {
             nameField.setText(ticketType.getName());
             descriptionField.setText(ticketType.getDescription());
             priceField.setText(String.valueOf(ticketType.getPrice()));
-            quantityField.setText(String.valueOf(ticketType.getQuantityAvailable()));
+            quantityField.setText(String.valueOf(ticketType.getMaxQuantity()));
         }
     }
 
@@ -90,7 +90,7 @@ public class AddEditTicketTypeController {
                 ticketTypeToEdit.setName(name);
                 ticketTypeToEdit.setDescription(description);
                 ticketTypeToEdit.setPrice(price);
-                ticketTypeToEdit.setQuantityAvailable(quantity);
+                ticketTypeToEdit.setMaxQuantity(quantity);
 
                 ticketTypeManager.updateTicketType(ticketTypeToEdit);
                 showSuccess("Success", "Ticket type '" + name + "' has been updated successfully!");

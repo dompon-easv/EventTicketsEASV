@@ -6,22 +6,23 @@ public class TicketType {
     private String description;
     private double price;
     private int eventId;
-    private int quantityAvailable;
+    private int maxQuantity;
 
-    public TicketType(int id, String name, String description, double price, int eventId, int quantityAvailable) {
+    public TicketType(int id, String name, String description, double price, int eventId, int maxQuantity) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.eventId = eventId;
-        this.quantityAvailable = quantityAvailable;
+        this.maxQuantity = maxQuantity;
     }
 
-    public TicketType(String name, String description, double price, int eventId, int quantityAvailable) {
+    public TicketType(String name, String description, double price, int eventId, int maxQuantity) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.quantityAvailable = quantityAvailable;
+        this.eventId = eventId;
+        this.maxQuantity = maxQuantity;
     }
 
     public int getId() {return id;}
@@ -39,7 +40,7 @@ public class TicketType {
     public int getEventId() {return eventId;}
     public void setEventId(int eventId) {this.eventId = eventId;}
 
-    public int getQuantityAvailable() {return quantityAvailable;}
-    public void setQuantityAvailable(int quantityAvailable) {this.quantityAvailable = quantityAvailable;}
+    public int getMaxQuantity() {return maxQuantity;}
+    public void setMaxQuantity(int maxQuantity) {this.maxQuantity = maxQuantity;}
 
 }
