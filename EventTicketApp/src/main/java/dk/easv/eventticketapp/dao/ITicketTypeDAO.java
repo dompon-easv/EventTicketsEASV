@@ -11,4 +11,5 @@ public interface ITicketTypeDAO {
     TicketType getById(int id) throws Exception;
     boolean existsByNameAndEvent(String name, int eventId) throws Exception;
     boolean existsByNameAndEventExcludingId(String name, int eventId, int id) throws Exception;
+    void deleteEvent(int id) throws Exception;
 }

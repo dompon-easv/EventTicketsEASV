@@ -150,4 +150,15 @@ public class TicketTypeDAO implements ITicketTypeDAO {
             return false;
         }
     }
+
+    @Override
+    public void deleteEvent(int id) throws SQLException {
+        String sql = "DELETE FROM TicketTypes WHERE eventId = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
 }

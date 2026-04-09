@@ -18,4 +18,6 @@ public interface IEventCoordinatorDAO {
     void deleteEvent(int id) throws Exception;
 
     List<User> getUsersByEventId(int eventId) throws Exception;
+
+    void deleteUser(int userId) throws Exception;
 }

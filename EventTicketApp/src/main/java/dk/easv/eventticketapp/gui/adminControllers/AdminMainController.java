@@ -31,6 +31,7 @@ public class AdminMainController {
     private UserManager userManager;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
+    private TicketTypeManager ticketTypeManager;
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
@@ -48,6 +49,8 @@ public class AdminMainController {
         this.eventLogic = eventLogic;
     }
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) { this.ticketTypeManager = ticketTypeManager;}
+
 
     public void init()
     {
@@ -97,6 +100,7 @@ public class AdminMainController {
             loginController.setUserManager(userManager);
             loginController.setEventLogic(eventLogic);
             loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
+            loginController.setTicketTypeManager(ticketTypeManager);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,11 +121,13 @@ public class AdminMainController {
             Object controller = loader.getController();
             if (controller instanceof UserManagementController userManagementController) {
                 userManagementController.setUserManager(userManager);
+                userManagementController.setEventCoordinatorLogic(eventCoordinatorLogic);
             }
             if (controller instanceof EventsController eventsController) {
                 eventsController.setUserManager(userManager);
                 eventsController.setEventLogic(eventLogic);
                 eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                eventsController.setTicketTypeManager(ticketTypeManager);
                 eventsController.init();
             }
             contentArea.getChildren().setAll(node);

@@ -35,6 +35,7 @@ public class EventsController {
     private UserManager userManager;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
+    private TicketTypeManager ticketTypeManager;
 
     private ObservableList<Event> events;
     private SessionManager sessionManager;
@@ -53,8 +54,12 @@ public class EventsController {
     }
 
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        System.out.println("events controller got logic:"+eventCoordinatorLogic);
+
         this.eventCoordinatorLogic = eventCoordinatorLogic;
+    }
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
+        this.ticketTypeManager = ticketTypeManager;
+
     }
 
 
@@ -83,6 +88,7 @@ public class EventsController {
                EventCardController controller = loader.getController();
                controller.setEventLogic(eventLogic);
                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+               controller.setTicketTypeManager(ticketTypeManager);
                controller.setEvent(event);
                if (onCardClick != null) {
                    controller.setOnCardClick(onCardClick);

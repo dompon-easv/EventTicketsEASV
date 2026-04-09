@@ -3,6 +3,7 @@ package dk.easv.eventticketapp.gui.adminControllers;
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.UserManager;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.collections.FXCollections;
@@ -31,9 +32,15 @@ public class UserManagementController {
   //  @FXML private TableColumn<User, String> passwordColumn;
 
     private UserManager userManager;
+    private EventCoordinatorLogic eventCoordinatorLogic;
+
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
         loadUsers();
+    }
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
     }
     public void initialize() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -68,7 +75,8 @@ public class UserManagementController {
     public void handleDeleteUser(ActionEvent actionEvent) {
         User user = userTable.getSelectionModel().getSelectedItem();
         if (user != null) {
-            userManager.deleteUser(user.getUsername());
+            eventCoordinatorLogic.deleteUser(user.getId());
+            userManager.deleteUser(user.getId());
             loadUsers();
         }
     }

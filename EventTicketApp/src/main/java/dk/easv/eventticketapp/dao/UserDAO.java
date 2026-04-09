@@ -103,13 +103,13 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public void deleteUser(String username) throws SQLException {
-        String sql = "DELETE FROM Users WHERE username = ?";
+    public void deleteUser(int id) throws SQLException {
+        String sql = "DELETE FROM Users WHERE id = ?";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, username);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }

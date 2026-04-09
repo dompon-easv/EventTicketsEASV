@@ -79,6 +79,7 @@ public class CoordinatorMainController {
             loginController.setUserManager(userManager);
             loginController.setEventLogic(eventLogic);
             loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
+            loginController.setTicketTypeManager(ticketTypeManager);
 
         } catch (IOException e) {
             e.printStackTrace();

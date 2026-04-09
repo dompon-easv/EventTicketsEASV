@@ -87,4 +87,11 @@ public class EventCoordinatorLogic {
         return new ArrayList<>();
     }
 
+    public void deleteUser(int id) {
+        try{
+            dao.deleteUser(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

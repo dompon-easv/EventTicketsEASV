@@ -60,11 +60,11 @@ public class AddEditEventController {
 
     public void init()
     {
-        if(sessionManager.getCurrentUser().getRole() == UserRole.ADMIN)
+         if(sessionManager.getCurrentUser().getRole() == UserRole.ADMIN)
         {
             eventDetailsSection.setVisible(false);
             eventDetailsSection.setManaged(false);
-        }
+        } 
     }
 
     // Setter for dependency injection

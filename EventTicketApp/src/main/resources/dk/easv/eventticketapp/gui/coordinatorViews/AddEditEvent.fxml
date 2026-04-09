@@ -41,65 +41,72 @@
 
                         <Label fx:id="formTitle" styleClass="card-title" text="Create New Event" />
 
-                        <!-- Event Name -->
-                        <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Event Name *" />
-                            <TextField fx:id="nameField" promptText="Summer Music Festival" styleClass="modern-input" />
-                        </VBox>
-                  <VBox styleClass="input-group">
-                     <children>
-                        <Label styleClass="input-label" text="Number Of Tickets *" />
-                        <TextField fx:id="maxTicketsField" promptText="Insert number here" styleClass="modern-input" />
-                     </children>
-                  </VBox>
+                        <!-- Event Details Section -->
+                        <VBox fx:id="eventDetailsSection" spacing="20.0">
 
-                        <!-- Dates -->
-                        <HBox spacing="20.0">
                             <children>
 
-                                <!-- START -->
-                                <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="input-label" text="Start Date &amp; Time *" />
-                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                        <children>
-                                            <DatePicker fx:id="startDatePicker" promptText="dd/mm/yyyy" styleClass="modern-input" />
-
-                                            <ComboBox fx:id="startTimeCombo" maxWidth="Infinity" promptText="HH:mm" styleClass="modern-input" HBox.hgrow="ALWAYS" />
-                                        </children>
-                                    </HBox>
+                                <!-- Event Name -->
+                                <VBox styleClass="input-group">
+                                    <Label styleClass="input-label" text="Event Name *" />
+                                    <TextField fx:id="nameField" promptText="Summer Music Festival" styleClass="modern-input" />
                                 </VBox>
 
-                                <!-- END -->
-                                <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="input-label" text="End Date &amp; Time" />
-                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                        <children>
-                                            <DatePicker fx:id="endDatePicker" promptText="dd/mm/yyyy" styleClass="modern-input" />
+                                <VBox styleClass="input-group">
+                                    <children>
+                                        <Label styleClass="input-label" text="Number Of Tickets *" />
+                                        <TextField fx:id="maxTicketsField" promptText="Insert number here" styleClass="modern-input" />
+                                    </children>
+                                </VBox>
 
-                                            <ComboBox fx:id="endTimeCombo" maxWidth="Infinity" promptText="HH:mm" styleClass="modern-input" HBox.hgrow="ALWAYS" />
-                                        </children>
-                                    </HBox>
+                                <!-- Dates -->
+                                <HBox spacing="20.0">
+                                    <children>
+
+                                        <!-- START -->
+                                        <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="input-label" text="Start Date &amp; Time *" />
+                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                <children>
+                                                    <DatePicker fx:id="startDatePicker" promptText="dd/mm/yyyy" styleClass="modern-input" />
+                                                    <ComboBox fx:id="startTimeCombo" maxWidth="Infinity" promptText="HH:mm" styleClass="modern-input" HBox.hgrow="ALWAYS" />
+                                                </children>
+                                            </HBox>
+                                        </VBox>
+
+                                        <!-- END -->
+                                        <VBox styleClass="input-group" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="input-label" text="End Date &amp; Time" />
+                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                <children>
+                                                    <DatePicker fx:id="endDatePicker" promptText="dd/mm/yyyy" styleClass="modern-input" />
+                                                    <ComboBox fx:id="endTimeCombo" maxWidth="Infinity" promptText="HH:mm" styleClass="modern-input" HBox.hgrow="ALWAYS" />
+                                                </children>
+                                            </HBox>
+                                        </VBox>
+
+                                    </children>
+                                </HBox>
+
+                                <!-- Location -->
+                                <VBox styleClass="input-group">
+                                    <Label styleClass="input-label" text="Location *" />
+                                    <TextField fx:id="locationField" promptText="Central Park Amphitheater" styleClass="modern-input" />
+                                </VBox>
+
+                                <!-- Location Guidance -->
+                                <VBox styleClass="input-group">
+                                    <Label styleClass="input-label" text="Location Guidance (How to get there)" />
+                                    <TextArea fx:id="locationDescriptionField" prefHeight="80.0" promptText="Take subway line A to..." styleClass="modern-input, modern-text-area" wrapText="true" />
+                                </VBox>
+
+                                <!-- Notes -->
+                                <VBox styleClass="input-group">
+                                    <Label styleClass="input-label" text="Notes *" />
+                                    <TextArea fx:id="notesField" prefHeight="80.0" promptText="Important information about the event..." styleClass="modern-input, modern-text-area" wrapText="true" />
                                 </VBox>
 
                             </children>
-                        </HBox>
-
-                        <!-- Location -->
-                        <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Location *" />
-                            <TextField fx:id="locationField" promptText="Central Park Amphitheater" styleClass="modern-input" />
-                        </VBox>
-
-                        <!-- Location Guidance -->
-                        <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Location Guidance (How to get there)" />
-                            <TextArea fx:id="locationDescriptionField" prefHeight="80.0" promptText="Take subway line A to..." styleClass="modern-input, modern-text-area" wrapText="true" />
-                        </VBox>
-
-                        <!-- Notes -->
-                        <VBox styleClass="input-group">
-                            <Label styleClass="input-label" text="Notes *" />
-                            <TextArea fx:id="notesField" prefHeight="80.0" promptText="Important information about the event..." styleClass="modern-input, modern-text-area" wrapText="true" />
                         </VBox>
 
                         <!-- Coordinators (unchanged) -->

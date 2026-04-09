@@ -114,4 +114,13 @@ public class TicketTypeManager {
     private String normalizeName(String name) {
         return name.replaceAll("\\s+", "").toLowerCase();
     }
+
+    public void deleteEvent(int eventId)
+    {
+        try {
+            ticketTypeDAO.deleteEvent(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

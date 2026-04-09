@@ -82,6 +82,7 @@ public class LoginController {
             adminMainController.setUserManager(userManager);
             adminMainController.setEventLogic(eventLogic);
             adminMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
+            adminMainController.setTicketTypeManager(ticketTypeManager);
             adminMainController.init();
         }
         if(role == UserRole.COORDINATOR){

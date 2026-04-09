@@ -3,6 +3,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
+import dk.easv.eventticketapp.bll.TicketTypeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ public class EventCardController {
     private Event event;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
+    private TicketTypeManager ticketTypeManager;
     private Runnable onDeleteSuccess;
 
     // 🔥 NEW: callback for click
@@ -77,17 +79,23 @@ public class EventCardController {
         this.eventCoordinatorLogic = eventCoordinatorLogic;
     }
 
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
+        this.ticketTypeManager = ticketTypeManager;
+    }
+
     public void setOnDeleteSuccess(Runnable onDeleteSuccess) {
         this.onDeleteSuccess = onDeleteSuccess;
     }
 
     public void handleDelete(ActionEvent actionEvent) {
+
         if (event == null) {
             System.out.println("no event");
             return;
         }
 
         try {
+            ticketTypeManager.deleteEvent(event.getId());
             eventCoordinatorLogic.deleteEvent(event);
 
             if (onDeleteSuccess != null) {

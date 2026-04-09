@@ -31,9 +31,9 @@ public class UserManager {
         return null;
     }
 
-    public void deleteUser(String username) {
+    public void deleteUser(int id) {
         try {
-            userDAO.deleteUser(username);
+            userDAO.deleteUser(id);
 
         } catch (SQLException e) {
             e.printStackTrace();
