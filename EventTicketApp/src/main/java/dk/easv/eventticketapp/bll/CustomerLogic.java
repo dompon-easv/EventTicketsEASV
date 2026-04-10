@@ -13,12 +13,18 @@ public class CustomerLogic {
     }
 
     public Customer createCustomer(String name, String email) throws Exception {
+
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Customer name cannot be empty");
         }
 
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Customer email cannot be empty");
+        }
+
+        Customer existing = customerDAO.getByEmail(email.trim());
+        if (existing != null) {
+            return existing;
         }
 
         Customer customer = new Customer(name.trim(), email.trim());

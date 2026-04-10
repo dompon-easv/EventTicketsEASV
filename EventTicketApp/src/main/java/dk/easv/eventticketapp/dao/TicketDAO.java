@@ -21,11 +21,23 @@ public class TicketDAO implements ITicketDAO {
         }
     }
 
+    public void delete(int ticketId) throws Exception {
+        String sql = "DELETE FROM tickets WHERE id = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ticketId);
+            stmt.executeUpdate();
+        }
+    }
+
     public List<IssuedTicket> getIssuedTicketsByEvent(int eventId) throws Exception {
         List<IssuedTicket> tickets = new ArrayList<>();
 
         String sql = """
         SELECT 
+            t.id,
             c.name AS customerName,
             c.email,
             tt.name AS ticketType,
@@ -43,6 +55,7 @@ public class TicketDAO implements ITicketDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 tickets.add(new IssuedTicket(
+                        rs.getInt("id"),
                         rs.getString("customerName"),
                         rs.getString("email"),
                         rs.getString("ticketType"),
@@ -64,6 +77,47 @@ public class TicketDAO implements ITicketDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("totalSold");
+            }
+            return 0;
+        }
+    }
+
+    @Override
+    public Ticket getById(int ticketId) throws Exception {
+        String sql = "SELECT * FROM Tickets WHERE id = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ticketId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Ticket(
+                        rs.getInt("id"),
+                        rs.getInt("quantity"),
+                        rs.getInt("eventId"),
+                        rs.getInt("ticketTypeId"),
+                        rs.getInt("customerId")
+                );
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public int getTotalTicketsByCustomer(int customerId) throws Exception {
+        String sql = "SELECT COALESCE(SUM(quantity), 0) AS total FROM Tickets WHERE customerId = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, customerId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
             }
             return 0;
         }

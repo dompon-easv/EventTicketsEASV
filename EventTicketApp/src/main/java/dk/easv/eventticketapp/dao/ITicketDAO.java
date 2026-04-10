@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface ITicketDAO {
     void add(Ticket ticket) throws Exception;
+    void delete(int ticketId) throws Exception;
     List<IssuedTicket> getIssuedTicketsByEvent(int eventId) throws Exception;
     int getTotalSoldForTicketType(int ticketTypeId) throws Exception;
+    Ticket getById(int ticketId) throws Exception;
+    int getTotalTicketsByCustomer(int customerId) throws Exception;
 }

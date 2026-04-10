@@ -3,6 +3,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.bll.TicketManager;
+import dk.easv.eventticketapp.dao.CustomerDAO;
 import dk.easv.eventticketapp.dao.TicketDAO;
 import dk.easv.eventticketapp.dao.TicketTypeDAO;
 import dk.easv.eventticketapp.gui.coordinatorControllers.TicketController;
@@ -13,10 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
 
@@ -31,10 +29,11 @@ public class IssuedTicketsController {
     @FXML private TableColumn<IssuedTicket, Double> columnTotalPrice;
 
     private final TicketManager ticketManager =
-            new TicketManager(new TicketDAO(), new TicketTypeDAO());
+            new TicketManager(new TicketDAO(), new TicketTypeDAO(), new CustomerDAO());
 
     private StackPane contentArea;
     private Event currentEvent;
+    private IssuedTicket selectedTicket;
 
     public void setContentArea(StackPane contentArea) {
         this.contentArea = contentArea;
@@ -49,30 +48,28 @@ public class IssuedTicketsController {
 
         columnName.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getCustomerName()));
-
         columnEmail.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getEmail()));
-
         columnTicketType.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getTicketType()));
-
         columnQuantity.setCellValueFactory(data ->
                 new SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
-
         columnTotalPrice.setCellValueFactory(data ->
                 new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
-
         columnTotalPrice.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double value, boolean empty) {
                 super.updateItem(value, empty);
-
                 if (empty || value == null) {
                     setText(null);
                 } else {
                     setText(String.format("kr. %.2f", value));
                 }
             }
+        });
+
+        tblIssuedTickets.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            selectedTicket = newVal;
         });
     }
 
@@ -86,7 +83,7 @@ public class IssuedTicketsController {
     private void onSeeTicket() {
         IssuedTicket selected = tblIssuedTickets.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            System.out.println("No ticket selected");
+            showAlert(Alert.AlertType.ERROR, "No Ticket Selected", "Please select a ticket to open it.");
             return;
         }
         openTicketView(selected);
@@ -109,7 +106,51 @@ public class IssuedTicketsController {
         }
     }
 
+    @FXML
     public void onDeleteTicket(ActionEvent actionEvent) {
 
+        if (selectedTicket == null) {
+            showAlert(Alert.AlertType.ERROR,
+                    "No Selection",
+                    "Please select a ticket to delete.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText("Delete Ticket");
+        confirm.setContentText("Are you sure you want to delete this ticket for "
+                + selectedTicket.getCustomerName() + "?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    ticketManager.deleteTicket(selectedTicket.getId());
+
+                    loadTickets(currentEvent.getId());
+
+                    // reset after refresh
+                    selectedTicket = null;
+
+                    showAlert(Alert.AlertType.INFORMATION,
+                            "Success",
+                            "Ticket deleted successfully.");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR,
+                            "Error",
+                            "Failed to delete ticket.");
+                }
+            }
+        });
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

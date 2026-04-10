@@ -44,7 +44,6 @@ public class IssueTicketsController {
                     ticketTypeManager.getTicketTypesForEvent(currentEvent.getId())
             );
 
-            // show name and not tickettypeid
             ticketTypeSelection.setConverter(new StringConverter<>() {
                 @Override
                 public String toString(TicketType ticketType) {

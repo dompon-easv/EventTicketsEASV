@@ -16,13 +16,14 @@ public class Application extends javafx.application.Application {
         IUserDAO userDAO = new UserDAO();
         ITicketTypeDAO ticketTypeDAO = new TicketTypeDAO();
         ITicketDAO ticketDAO = new TicketDAO();
+        ICustomerDAO customerDAO = new CustomerDAO();
 
         AuthenticationLogic authenticationLogic = new AuthenticationLogic(userDAO);
         UserManager userManager = new UserManager(userDAO);
         EventLogic eventLogic = new EventLogic();
         EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
         TicketTypeManager ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
-        TicketManager ticketManager = new TicketManager(ticketDAO, ticketTypeDAO);
+        TicketManager ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO);
         CustomerLogic customerLogic = new CustomerLogic();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
