@@ -20,12 +20,12 @@
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin></Button>
-                  <Button fx:id="btnEditTicketType" onAction="#onEditTicketType" prefHeight="25.0" prefWidth="43.0" styleClass="icon-btn" text="Edit">
+                  <Button fx:id="btnEditTicketType" onAction="#onEditTicketType" prefHeight="25.0" prefWidth="74.0" styleClass="create-btn" text="Edit">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
             </Button>
-                  <Button fx:id="btnDeleteTicketType" onAction="#onDeleteTicketType" styleClass="icon-btn-delete" text="🗑">
+                  <Button fx:id="btnDeleteTicketType" onAction="#onDeleteTicketType" styleClass="create-btn" text="🗑">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>

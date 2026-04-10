@@ -51,13 +51,13 @@
                 <!-- TABS -->
                 <HBox spacing="10.0" styleClass="tab-nav-container">
                     <children>
-                        <Button fx:id="btnOverview" onAction="#handleTabChange" styleClass="tab-btn active" text="Overview" />
+                        <Button fx:id="btnOverview" onAction="#handleTabChange" styleClass="btn-edit-event" text="Overview" />
 
-                        <Button fx:id="btnTicketTypes" onAction="#handleTabChange" styleClass="tab-btn" text="Ticket Types" />
+                        <Button fx:id="btnTicketTypes" onAction="#handleTabChange" styleClass="btn-edit-event" text="Ticket Types" />
 
-                        <Button fx:id="btnIssueTickets" onAction="#handleTabChange" styleClass="tab-btn" text="Issue Tickets" />
+                        <Button fx:id="btnIssueTickets" onAction="#handleTabChange" styleClass="btn-edit-event" text="Issue Tickets" />
 
-                        <Button fx:id="btnIssuedTickets" onAction="#handleTabChange" styleClass="tab-btn" text="Issued Tickets" />
+                        <Button fx:id="btnIssuedTickets" onAction="#handleTabChange" styleClass="btn-edit-event" text="Issued Tickets" />
                     </children>
                 </HBox>
 

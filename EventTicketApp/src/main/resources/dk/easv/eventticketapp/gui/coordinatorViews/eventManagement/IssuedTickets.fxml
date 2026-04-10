@@ -15,7 +15,12 @@
          <children>
             <Label fx:id="titleLabel" styleClass="display-title" HBox.hgrow="ALWAYS" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnSeeTicket" onAction="#handleEditEvent" styleClass="btn-edit-event" text="See Ticket" />
+            <Button fx:id="btnDeleteTicket" mnemonicParsing="false" onAction="#onDeleteTicket" prefHeight="25.0" prefWidth="40.0" styleClass="create-btn" text="🗑">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btnSeeTicket" onAction="#onSeeTicket" prefHeight="25.0" prefWidth="110.0" styleClass="create-btn" text="See Ticket" />
          </children>
       </HBox>
         <VBox styleClass="main-card" VBox.vgrow="ALWAYS">

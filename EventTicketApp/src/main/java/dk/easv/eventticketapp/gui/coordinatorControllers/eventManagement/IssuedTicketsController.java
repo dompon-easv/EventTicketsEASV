@@ -9,6 +9,7 @@ import dk.easv.eventticketapp.gui.coordinatorControllers.TicketController;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -82,7 +83,7 @@ public class IssuedTicketsController {
     }
 
     @FXML
-    private void handleEditEvent() {
+    private void onSeeTicket() {
         IssuedTicket selected = tblIssuedTickets.getSelectionModel().getSelectedItem();
         if (selected == null) {
             System.out.println("No ticket selected");
@@ -106,5 +107,9 @@ public class IssuedTicketsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onDeleteTicket(ActionEvent actionEvent) {
+
     }
 }
