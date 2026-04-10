@@ -72,7 +72,7 @@
                                         <Circle fill="#F44336" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
                                         <Label text="AD" textFill="WHITE" fx:id="lblInitials">
                                             <font>
-                                                <Font name="System Bold" size="16.0" />
+                                                <Font name="System Bold" size="20.0" />
                                             </font>
                                         </Label>
                                     </children>
@@ -107,9 +107,9 @@
 
     <!-- ================= SIDEBAR ================= -->
     <left>
-        <VBox prefWidth="220.0" spacing="10.0" styleClass="sidebar">
+        <VBox prefWidth="145.0" minWidth="145.0" maxWidth="145.0" spacing="12.0" styleClass="sidebar">
             <padding>
-                <Insets left="15.0" right="15.0" top="20.0" />
+                <Insets left="12.0" right="12.0" top="18.0" bottom="18.0" />
             </padding>
             <children>
                 <Button maxWidth="Infinity" onAction="#showUsers" styleClass="nav-button" text="Users" />

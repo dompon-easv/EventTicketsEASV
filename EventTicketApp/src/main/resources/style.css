@@ -10,36 +10,42 @@
     -fx-color-white: #ffffff;
     -fx-color-border: #e5e7eb;
 }
-
 /* ================= TYPOGRAPHY ================= */
 /* Big Titles */
 .header-title, .display-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-color-primary;
 }
 
 /* Subtitles & Descriptions */
 .header-subtitle, .section-subtitle, .helper-text, .input-label {
-    -fx-font-size: 13px;
-    -fx-text-fill: #6b7280; /* Muted gray */
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
 }
 
 /* Section Headers */
 .section-title, .card-title, .card-title-small {
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-color-primary;
 }
 
 /* ================= CARDS & CONTAINERS ================= */
 /* All cards share this simple white look */
-.main-card, .table-card, .event-card, .stat-card, .sidebar {
+.main-card, .table-card, .event-card, .stat-card {
     -fx-background-color: -fx-color-white;
     -fx-background-radius: 8;
     -fx-border-color: -fx-color-border;
     -fx-border-radius: 8;
     /* No heavy drop shadows, just a clean flat look */
+}
+
+.sidebar {
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent #e5e7eb transparent transparent;
+    -fx-border-width: 0 1 0 0;
 }
 
 .content-scroll-pane, .content-scroll-pane > .viewport {
@@ -52,19 +58,25 @@
     -fx-background-color: -fx-color-primary;
     -fx-text-fill: white;
     -fx-background-radius: 6;
-    -fx-padding: 8 15;
+    -fx-padding: 10 18;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 .btn-primary:hover { -fx-background-color: #374151; }
 
-/* The white secondary button */
+.add-user-btn {
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+}
+
 .btn-secondary, .btn-back, .btn-edit-event {
     -fx-background-color: -fx-color-white;
     -fx-border-color: -fx-color-border;
     -fx-border-radius: 6;
     -fx-background-radius: 6;
-    -fx-padding: 8 15;
+    -fx-padding: 10 18;
+    -fx-font-size: 14px;
     -fx-cursor: hand;
 }
 .btn-secondary:hover { -fx-background-color: #f9fafb; }
@@ -72,11 +84,18 @@
 /* Sidebar Navigation Links */
 .nav-button {
     -fx-background-color: transparent;
-    -fx-padding: 10 15;
+    -fx-padding: 12 14;
     -fx-alignment: CENTER-LEFT;
     -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+    -fx-background-radius: 8;
 }
-.nav-button:hover { -fx-background-color: #f3f4f6; }
+
+.nav-button:hover {
+    -fx-background-color: #f3f4f6;
+}
 
 /* Icon Buttons (Delete/Close) */
 .icon-btn-delete { -fx-text-fill: #ef4444; -fx-background-color: transparent; -fx-cursor: hand; }
@@ -101,7 +120,8 @@
     -fx-border-color: -fx-color-border;
     -fx-border-radius: 6;
     -fx-background-radius: 6;
-    -fx-padding: 8;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
 }
 .modern-input:focused { -fx-border-color: -fx-color-accent; }
 
@@ -200,14 +220,13 @@
 
 /* Name */
 .item-primary {
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-color-primary;
 }
 
-/* Username + Email */
 .item-secondary {
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-text-fill: #6b7280;
 }
 

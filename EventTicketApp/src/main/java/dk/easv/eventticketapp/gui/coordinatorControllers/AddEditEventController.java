@@ -64,7 +64,7 @@ public class AddEditEventController {
         {
             eventDetailsSection.setVisible(false);
             eventDetailsSection.setManaged(false);
-        } 
+        }
     }
 
     // Setter for dependency injection
@@ -351,6 +351,7 @@ public class AddEditEventController {
                     eventsController.setUserManager(userManager);
                     eventsController.setEventLogic(eventLogic);
                     eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                    eventsController.setTicketTypeManager(ticketTypeManager);
                     eventsController.init();
                 }
 

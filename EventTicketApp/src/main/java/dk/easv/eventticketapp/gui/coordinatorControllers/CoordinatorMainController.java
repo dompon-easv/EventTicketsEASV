@@ -39,7 +39,7 @@ public class CoordinatorMainController {
 
         lblUser.setText(SessionManager.getCurrentUser().getName() + " " + SessionManager.getCurrentUser().getSurname());
         lblRole.setText(SessionManager.getCurrentUser().getRole().toString());
-        lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
+        lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + " " + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
     }
 
     public void init()

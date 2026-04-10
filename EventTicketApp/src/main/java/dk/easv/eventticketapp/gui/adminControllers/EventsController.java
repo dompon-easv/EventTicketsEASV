@@ -123,7 +123,7 @@ public class EventsController {
                 controller.setEventLogic(eventLogic);
                 controller.setUserManager(userManager);
                 controller.setSessionManager(sessionManager);
-                //controller.setTicketTypeManager(ticketTypeManager);
+                controller.setTicketTypeManager(ticketTypeManager);
                 controller.init();
 
                 AdminMainController.staticContentArea.getChildren().setAll(node);

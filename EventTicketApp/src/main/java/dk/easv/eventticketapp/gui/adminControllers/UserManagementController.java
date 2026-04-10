@@ -49,6 +49,41 @@ public class UserManagementController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
+        roleColumn.setCellFactory(column -> new javafx.scene.control.TableCell<User, UserRole>() {
+            private final javafx.scene.control.Label badge = new javafx.scene.control.Label();
+
+            @Override
+            protected void updateItem(UserRole role, boolean empty) {
+                super.updateItem(role, empty);
+
+                if (empty || role == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+
+                badge.getStyleClass().clear();
+                badge.getStyleClass().add("role-badge");
+
+                switch (role) {
+                    case ADMIN -> {
+                        badge.setText("Admin");
+                        badge.getStyleClass().add("role-admin");
+                    }
+                    case COORDINATOR -> {
+                        badge.setText("Coordinator");
+                        badge.getStyleClass().add("role-coordinator");
+                    }
+                    default -> {
+                        badge.setText(role.toString());
+                        badge.getStyleClass().add("role-user");
+                    }
+                }
+
+                setText(null);
+                setGraphic(badge);
+            }
+        });
     }
 
     public void loadUsers()

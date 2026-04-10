@@ -139,6 +139,7 @@ public class EventHeaderController {
                     eventsController.setUserManager(userManager);
                     eventsController.setEventLogic(eventLogic);
                     eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                    eventsController.setTicketTypeManager(ticketTypeManager);
                     eventsController.init();
                 }
 
@@ -165,6 +166,7 @@ public class EventHeaderController {
             controller.setSessionManager(sessionManager);
             controller.populateEvent(currentEvent);
             controller.setCoordinatorMainController(coordinatorMainController);
+            controller.setTicketTypeManager(ticketTypeManager);
             controller.init();
 
            /* var controller = loader.getController();
