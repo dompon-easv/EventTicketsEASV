@@ -38,7 +38,7 @@
                         <VBox styleClass="input-group" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <Label styleClass="input-label" text="Quantity *" />
                             <TextField fx:id="ticketQuantity" styleClass="modern-input" text="1" />
-                            <Label styleClass="helper-text" text="Maximum 10 tickets per customer" />
+                            <Label styleClass="helper-text" text="Maximum 5 tickets per customer" />
                         </VBox>
                     </children>
                <rowConstraints>

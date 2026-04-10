@@ -20,7 +20,6 @@ import javafx.scene.layout.StackPane;
 
 public class IssuedTicketsController {
 
-    @FXML private Button btnSeeTicket;
     @FXML private TableView<IssuedTicket> tblIssuedTickets;
     @FXML private TableColumn<IssuedTicket, String> columnName;
     @FXML private TableColumn<IssuedTicket, String> columnEmail;

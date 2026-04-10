@@ -11,5 +11,5 @@ public interface ITicketDAO {
     List<IssuedTicket> getIssuedTicketsByEvent(int eventId) throws Exception;
     int getTotalSoldForTicketType(int ticketTypeId) throws Exception;
     Ticket getById(int ticketId) throws Exception;
-    int getTotalTicketsByCustomer(int customerId) throws Exception;
+    int getTotalTicketsByCustomer(int customerId, int eventId) throws Exception;
 }

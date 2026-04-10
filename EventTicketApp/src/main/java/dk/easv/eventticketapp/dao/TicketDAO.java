@@ -106,13 +106,14 @@ public class TicketDAO implements ITicketDAO {
     }
 
     @Override
-    public int getTotalTicketsByCustomer(int customerId) throws Exception {
-        String sql = "SELECT COALESCE(SUM(quantity), 0) AS total FROM Tickets WHERE customerId = ?";
+    public int getTotalTicketsByCustomer(int customerId, int eventId) throws Exception {
+        String sql = "SELECT COALESCE(SUM(quantity), 0) AS total FROM Tickets WHERE customerId = ? AND eventId = ?";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, customerId);
+            stmt.setInt(2, eventId);
 
             ResultSet rs = stmt.executeQuery();
 

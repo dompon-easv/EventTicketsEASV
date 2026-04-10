@@ -17,13 +17,15 @@ public class TicketManager {
     private final ITicketTypeDAO ticketTypeDAO;
     private final ICustomerDAO customerDAO;
 
+    private static final int MAX_TICKETS_PER_CUSTOMER = 5;
+
     public TicketManager(ITicketDAO ticketDAO, ITicketTypeDAO ticketTypeDAO, ICustomerDAO customerDAO) {
         this.ticketDAO = ticketDAO;
         this.ticketTypeDAO = ticketTypeDAO;
         this.customerDAO = customerDAO;
     }
 
-    public void issueTicket(int quantity, int eventId, int ticketTypeId, int consumerId) throws Exception {
+    public void issueTicket(int quantity, int eventId, int ticketTypeId, int customerId) throws Exception {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
@@ -40,7 +42,15 @@ public class TicketManager {
                     + (ticketType.getMaxQuantity() - totalSold) + " left.");
         }
 
-        Ticket ticket = new Ticket(quantity, eventId, ticketTypeId, consumerId);
+        int alreadyBought = ticketDAO.getTotalTicketsByCustomer(customerId, eventId);
+        if (alreadyBought + quantity > MAX_TICKETS_PER_CUSTOMER) {
+            throw new IllegalArgumentException(
+                    "This customer has already bought " + alreadyBought +
+                            " tickets. Maximum allowed is " + MAX_TICKETS_PER_CUSTOMER + "."
+            );
+        }
+
+        Ticket ticket = new Ticket(quantity, eventId, ticketTypeId, customerId);
         ticketDAO.add(ticket);
     }
 
@@ -53,7 +63,7 @@ public class TicketManager {
 
         int customerId = ticket.getCustomerId();
         ticketDAO.delete(ticketId);
-        int remaining = ticketDAO.getTotalTicketsByCustomer(customerId);
+        int remaining = ticketDAO.getTotalTicketsByCustomer(customerId, ticket.getEventId());
 
         if (remaining == 0) {
             customerDAO.delete(customerId);
