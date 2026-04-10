@@ -30,7 +30,6 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnClearSelection" mnemonicParsing="false" onAction="#onClearSelection" text="Clear Selection" />
             </children>
         </HBox>
       <TableView fx:id="tableView" prefHeight="342.0" prefWidth="714.0" styleClass="modern-table">

@@ -17,18 +17,17 @@ import java.io.IOException;
 
 public class TicketTypesController {
 
-    public Button btnAddTicketType;
-    public Button btnEditTicketType;
-    public Button btnDeleteTicketType;
-    public Button btnClearSelection;
+    @FXML private Button btnAddTicketType;
+    @FXML private Button btnEditTicketType;
+    @FXML private Button btnDeleteTicketType;
 
-    public TableView<TicketType> tableView;
-    public TableColumn<TicketType, String> columnName;
-    public TableColumn<TicketType, String> columnDescription;
-    public TableColumn<TicketType, Double> columnPrice;
-    public TableColumn<TicketType, Integer> columnQuantity;
-    public TableColumn<TicketType, Integer> columnSold;
-    public TableColumn<TicketType, Integer> columnAvailability;
+    @FXML private TableView<TicketType> tableView;
+    @FXML private TableColumn<TicketType, String> columnName;
+    @FXML private TableColumn<TicketType, String> columnDescription;
+    @FXML private TableColumn<TicketType, Double> columnPrice;
+    @FXML private TableColumn<TicketType, Integer> columnQuantity;
+    @FXML private TableColumn<TicketType, Integer> columnSold;
+    @FXML private TableColumn<TicketType, Integer> columnAvailability;
 
     private TicketTypeManager ticketTypeManager;
     private TicketManager ticketManager;
@@ -41,30 +40,63 @@ public class TicketTypesController {
 
     @FXML
     public void initialize() {
+        setupTableColumns();
+        setupSelectionHandling();
+        disableActionButtons();
+    }
+
+    private void setupTableColumns() {
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         columnQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
         columnSold.setCellValueFactory(new PropertyValueFactory<>("ticketsSold"));
         columnAvailability.setCellValueFactory(new PropertyValueFactory<>("availableQuantity"));
+    }
 
-        /*tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            boolean isSelected = newSelection != null;
+    private void setupSelectionHandling() {
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            boolean isSelected = newSel != null;
             btnEditTicketType.setDisable(!isSelected);
             btnDeleteTicketType.setDisable(!isSelected);
-            btnClearSelection.setDisable(!isSelected);
-        });*/
-
-        tableView.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // newVal is false when focus is lost
-                tableView.getSelectionModel().clearSelection();
-            }
         });
 
+        tableView.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event -> {
+                    Object target = event.getTarget();
+                    if (target instanceof Node node) {
+                        if (!isInsideTable(node) && !isButton(node)) {
+                            tableView.getSelectionModel().clearSelection();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private boolean isInsideTable(Node node) {
+        while (node != null) {
+            if (node == tableView) return true;
+            node = node.getParent();
+        }
+        return false;
+    }
+
+    private boolean isButton(Node node) {
+        while (node != null) {
+            if (node instanceof Button) return true;
+            node = node.getParent();
+        }
+        return false;
+    }
+
+    private void disableActionButtons() {
         btnEditTicketType.setDisable(true);
         btnDeleteTicketType.setDisable(true);
-        btnClearSelection.setDisable(true);
     }
+
+    //------------Setters------------
 
     public void setTicketTypeManager(TicketTypeManager manager) {
         this.ticketTypeManager = manager;
@@ -95,30 +127,6 @@ public class TicketTypesController {
         this.sessionManager = sessionManager;
     }
 
-    public TicketManager getTicketManager() {
-        return ticketManager;
-    }
-
-    public CustomerLogic getCustomerLogic() {
-        return customerLogic;
-    }
-
-    public EventCoordinatorLogic getEventCoordinatorLogic() {
-        return eventCoordinatorLogic;
-    }
-
-    public EventLogic getEventLogic() {
-        return eventLogic;
-    }
-
-    public UserManager getUserManager() {
-        return userManager;
-    }
-
-    public SessionManager getSessionManager() {
-        return sessionManager;
-    }
-
     public void setEvent(Event event) {
         this.currentEvent = event;
         tryLoadData();
@@ -128,6 +136,15 @@ public class TicketTypesController {
             loadTicketTypes();
         }
     }
+
+    public TicketManager getTicketManager() {return ticketManager;}
+    public CustomerLogic getCustomerLogic() {return customerLogic;}
+    public EventCoordinatorLogic getEventCoordinatorLogic() {return eventCoordinatorLogic;}
+    public EventLogic getEventLogic() {return eventLogic;}
+    public UserManager getUserManager() {return userManager;}
+    public SessionManager getSessionManager() {return sessionManager;}
+
+    //-------------Data Loading-----------
 
     private void tryLoadData() {
         if (ticketTypeManager != null && currentEvent != null) {
@@ -153,6 +170,8 @@ public class TicketTypesController {
             ex.printStackTrace();
         }
     }
+
+    //-----------Actions-----------
 
     public void onAddTicketType(ActionEvent actionEvent) {
         try {
@@ -255,6 +274,8 @@ public class TicketTypesController {
         });
     }
 
+    //--------Helpers--------
+
     public void onClearSelection(ActionEvent actionEvent) {
         tableView.getSelectionModel().clearSelection();
     }
@@ -280,6 +301,8 @@ public class TicketTypesController {
             e.printStackTrace();
         }
     }
+
+    //------------Alerts-----------
 
     private void showWarning(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
