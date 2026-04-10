@@ -48,11 +48,17 @@ public class TicketTypesController {
         columnSold.setCellValueFactory(new PropertyValueFactory<>("ticketsSold"));
         columnAvailability.setCellValueFactory(new PropertyValueFactory<>("availableQuantity"));
 
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        /*tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean isSelected = newSelection != null;
             btnEditTicketType.setDisable(!isSelected);
             btnDeleteTicketType.setDisable(!isSelected);
             btnClearSelection.setDisable(!isSelected);
+        });*/
+
+        tableView.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) { // newVal is false when focus is lost
+                tableView.getSelectionModel().clearSelection();
+            }
         });
 
         btnEditTicketType.setDisable(true);
