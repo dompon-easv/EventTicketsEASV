@@ -217,7 +217,6 @@ public class EventHeaderController {
                     ));
                     Node view = loader.load();
 
-                    // Pass the current event to the TicketTypesController
                     TicketTypesController controller = loader.getController();
                     controller.setEvent(currentEvent);
                     controller.setTicketTypeManager(ticketTypeManager);
@@ -227,6 +226,7 @@ public class EventHeaderController {
                     controller.setEventLogic(eventLogic);
                     controller.setUserManager(userManager);
                     controller.setSessionManager(sessionManager);
+                    controller.setContentArea(contentArea);
 
                     contentArea.getChildren().setAll(view);
 

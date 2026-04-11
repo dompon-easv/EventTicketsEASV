@@ -12,11 +12,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 
 public class TicketTypesController {
 
+    @FXML private StackPane contentArea;
     @FXML private Button btnAddTicketType;
     @FXML private Button btnEditTicketType;
     @FXML private Button btnDeleteTicketType;
@@ -137,6 +139,14 @@ public class TicketTypesController {
         }
     }
 
+    public void setContentArea(StackPane contentArea) {
+        this.contentArea = contentArea;
+    }
+
+    public StackPane getContentArea() {
+        return contentArea;
+    }
+
     public TicketManager getTicketManager() {return ticketManager;}
     public CustomerLogic getCustomerLogic() {return customerLogic;}
     public EventCoordinatorLogic getEventCoordinatorLogic() {return eventCoordinatorLogic;}
@@ -196,7 +206,9 @@ public class TicketTypesController {
             controller.setEvent(currentEvent);
             controller.setTicketTypeManager(ticketTypeManager);
             controller.setParentController(this);
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+            controller.setContentArea(contentArea);
+
+            contentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -234,8 +246,9 @@ public class TicketTypesController {
             controller.setTicketTypeManager(ticketTypeManager);
             controller.setTicketTypeToEdit(selectedTicket);
             controller.setParentController(this);
+            controller.setContentArea(contentArea);
 
-            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+            contentArea.getChildren().setAll(node);
 
         } catch (IOException e) {
             e.printStackTrace();

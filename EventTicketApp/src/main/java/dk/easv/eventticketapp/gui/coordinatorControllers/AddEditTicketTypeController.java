@@ -15,12 +15,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class AddEditTicketTypeController {
 
+    @FXML private StackPane contentArea;
     @FXML private Label formTitle;
     @FXML private Button saveButton;
 
@@ -48,6 +50,10 @@ public class AddEditTicketTypeController {
 
     public void setCustomerLogic(CustomerLogic customerLogic) {
         this.customerLogic = customerLogic;
+    }
+
+    public void setContentArea(StackPane contentArea) {
+        this.contentArea = contentArea;
     }
 
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
@@ -159,60 +165,44 @@ public class AddEditTicketTypeController {
 
     @FXML
     public void closeBtn(ActionEvent actionEvent) {
+        System.out.println("Close button clicked");
+
         try {
-            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorMain.fxml"));
+            if (parentController != null && parentController.getContentArea() != null) {
 
-            Parent mainRoot = mainLoader.load();
-            CoordinatorMainController mainController = mainLoader.getController();
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"
+                        )
+                );
 
-            FXMLLoader headerLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventHeader.fxml"));
+                Node view = loader.load();
+                TicketTypesController controller = loader.getController();
+                controller.setEvent(currentEvent);
+                controller.setTicketTypeManager(ticketTypeManager);
+                controller.setTicketManager(parentController.getTicketManager());
+                controller.setCustomerLogic(parentController.getCustomerLogic());
+                controller.setEventCoordinatorLogic(parentController.getEventCoordinatorLogic());
+                controller.setEventLogic(parentController.getEventLogic());
+                controller.setUserManager(parentController.getUserManager());
+                controller.setSessionManager(parentController.getSessionManager());
+                controller.setContentArea(parentController.getContentArea());
 
-            Node headerView = headerLoader.load();
-            EventHeaderController headerController = headerLoader.getController();
+                parentController.getContentArea().getChildren().setAll(view);
 
-            headerController.setEvent(currentEvent);
-            headerController.setTicketTypeManager(ticketTypeManager);
-            if (parentController != null) {
-                headerController.setTicketManager(parentController.getTicketManager());
-                headerController.setCustomerLogic(parentController.getCustomerLogic());
-                headerController.setEventCoordinatorLogic(parentController.getEventCoordinatorLogic());
-                headerController.setEventLogic(parentController.getEventLogic());
-                headerController.setUserManager(parentController.getUserManager());
-                headerController.setSessionManager(parentController.getSessionManager());
+            } else {
+                System.out.println("Fallback navigation");
+
+                CoordinatorMainController mainController =
+                        (CoordinatorMainController) nameField.getScene().getWindow().getUserData();
+
+                mainController.loadView("CoordinatorHome.fxml");
             }
-            headerController.setCoordinatorMainController(mainController);
-
-            mainController.contentArea.getChildren().setAll(headerView);
-
-            FXMLLoader ticketTypesLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"));
-
-            Node ticketTypesView = ticketTypesLoader.load();
-            TicketTypesController ticketTypesController = ticketTypesLoader.getController();
-            ticketTypesController.setTicketTypeManager(ticketTypeManager);
-            ticketTypesController.setEvent(currentEvent);
-
-            headerController.contentArea.getChildren().setAll(ticketTypesView);
-            headerController.btnTicketTypes.getStyleClass().add("active");
-            headerController.btnOverview.getStyleClass().remove("active");
-            headerController.btnIssueTickets.getStyleClass().remove("active");
-            headerController.btnIssuedTickets.getStyleClass().remove("active");
-
-            Stage stage = (Stage) nameField.getScene().getWindow();
-            Scene scene = stage.getScene();
-            scene.setRoot(mainRoot);
 
         } catch (IOException e) {
             e.printStackTrace();
-            showError("Navigation Error", "Could not return to event details: " + e.getMessage());
+            showError("Navigation Error", "Could not return to ticket types.");
         }
-    }
-
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void showSuccess(String title, String message) {
@@ -225,6 +215,14 @@ public class AddEditTicketTypeController {
 
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
