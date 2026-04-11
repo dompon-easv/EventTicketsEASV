@@ -1,7 +1,7 @@
 package dk.easv.eventticketapp.bll;
 
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.dao.IUserDAO;
 
 import java.sql.SQLException;

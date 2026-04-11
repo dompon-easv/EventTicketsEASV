@@ -2,7 +2,7 @@ package dk.easv.eventticketapp.gui.adminControllers;
 
 
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

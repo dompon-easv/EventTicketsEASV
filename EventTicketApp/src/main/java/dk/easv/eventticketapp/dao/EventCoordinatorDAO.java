@@ -1,7 +1,7 @@
 package dk.easv.eventticketapp.dao;
 
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 
 import java.sql.*;
 import java.util.ArrayList;

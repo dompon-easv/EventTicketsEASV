@@ -2,7 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.dao.UserDAO;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;

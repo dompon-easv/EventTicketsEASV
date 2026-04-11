@@ -1,4 +1,4 @@
-package dk.easv.eventticketapp.be;
+package dk.easv.eventticketapp.be.enums;
 
 public enum UserRole {
     ADMIN,

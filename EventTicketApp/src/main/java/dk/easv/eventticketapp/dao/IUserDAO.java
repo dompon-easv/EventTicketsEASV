@@ -1,7 +1,6 @@
 package dk.easv.eventticketapp.dao;
 
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
 
 import java.sql.SQLException;
 import java.util.List;

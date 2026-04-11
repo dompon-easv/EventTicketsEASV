@@ -1,7 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.be.Event;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.adminControllers.EventsController;
@@ -15,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
-import javax.management.relation.Role;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 

@@ -1,7 +1,7 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.UserManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.sql.SQLException;
 
 public class AddEditUserController {
     @FXML Label lblAddEditInfo;

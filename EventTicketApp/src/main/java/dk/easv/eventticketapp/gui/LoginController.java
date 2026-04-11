@@ -1,9 +1,8 @@
 package dk.easv.eventticketapp.gui;
 
 import dk.easv.eventticketapp.Application;
-import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
@@ -14,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 

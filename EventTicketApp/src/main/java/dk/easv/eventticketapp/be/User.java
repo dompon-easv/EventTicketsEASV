@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.be;
 
+import dk.easv.eventticketapp.be.enums.UserRole;
+
 public class User {
 
     private int id;

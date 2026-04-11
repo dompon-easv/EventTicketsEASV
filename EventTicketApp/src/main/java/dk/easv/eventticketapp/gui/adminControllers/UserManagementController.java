@@ -2,16 +2,14 @@ package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.be.UserRole;
+import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.UserManager;
-import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,7 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class UserManagementController {
 

@@ -25,7 +25,8 @@ public class VouchersOverviewController {
     }
 
     public void onCreateVoucher(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml"));
+
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         Stage stage = new Stage();
