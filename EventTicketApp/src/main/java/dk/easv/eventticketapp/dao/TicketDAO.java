@@ -9,7 +9,7 @@ import java.util.List;
 public class TicketDAO implements ITicketDAO {
 
     public void add(Ticket ticket) throws Exception {
-        String sql = "INSERT INTO Tickets (quantity, eventId, ticketTypeId, customerId) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Tickets (quantity, eventId, ticketTypeId, customerId, barcode) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -17,7 +17,11 @@ public class TicketDAO implements ITicketDAO {
             stmt.setInt(2, ticket.getEventId());
             stmt.setInt(3, ticket.getTicketTypeId());
             stmt.setInt(4, ticket.getCustomerId());
+            stmt.setString(5, ticket.getBarcode());
             stmt.executeUpdate();
+        }
+        catch (SQLIntegrityConstraintViolationException e) {
+            throw new Exception("Barcode already exists. Please try again.");
         }
     }
 
@@ -42,7 +46,8 @@ public class TicketDAO implements ITicketDAO {
             c.email,
             tt.name AS ticketType,
             t.quantity,
-            (t.quantity * tt.price) AS totalPrice
+            (t.quantity * tt.price) AS totalPrice,
+            t.barcode
         FROM Tickets t
         JOIN Customers c ON t.customerId = c.id
         JOIN TicketTypes tt ON t.ticketTypeId = tt.id
@@ -60,7 +65,8 @@ public class TicketDAO implements ITicketDAO {
                         rs.getString("email"),
                         rs.getString("ticketType"),
                         rs.getInt("quantity"),
-                        rs.getDouble("totalPrice")
+                        rs.getDouble("totalPrice"),
+                        rs.getString("barcode")
                 ));
             }
         }
@@ -93,13 +99,15 @@ public class TicketDAO implements ITicketDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new Ticket(
+                Ticket ticket = new Ticket(
                         rs.getInt("id"),
                         rs.getInt("quantity"),
                         rs.getInt("eventId"),
                         rs.getInt("ticketTypeId"),
                         rs.getInt("customerId")
                 );
+                ticket.setBarcode(rs.getString("barcode"));
+                return ticket;
             }
             return null;
         }

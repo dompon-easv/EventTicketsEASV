@@ -3,13 +3,13 @@ package dk.easv.eventticketapp.bll;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.be.Ticket;
 import dk.easv.eventticketapp.be.TicketType;
-import dk.easv.eventticketapp.dao.CustomerDAO;
 import dk.easv.eventticketapp.dao.ICustomerDAO;
 import dk.easv.eventticketapp.dao.ITicketDAO;
 import dk.easv.eventticketapp.dao.ITicketTypeDAO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TicketManager {
 
@@ -50,7 +50,10 @@ public class TicketManager {
             );
         }
 
+        String barcode = generateBarcodeValue(customerId, eventId);
+
         Ticket ticket = new Ticket(quantity, eventId, ticketTypeId, customerId);
+        ticket.setBarcode(barcode);
         ticketDAO.add(ticket);
     }
 
@@ -77,5 +80,9 @@ public class TicketManager {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    private String generateBarcodeValue(int customerId, int eventId) {
+        return "T-" + eventId + "-" + UUID.randomUUID();
     }
 }

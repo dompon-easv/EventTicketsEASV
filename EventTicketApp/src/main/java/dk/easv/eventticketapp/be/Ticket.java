@@ -6,6 +6,7 @@ public class Ticket {
     private int eventId;
     private int ticketTypeId;
     private int consumerId;
+    private String barcode;
 
     public Ticket(int id, int quantity, int eventId, int ticketTypeId, int consumerId) {
         this.id = id;
@@ -27,4 +28,6 @@ public class Ticket {
     public int getEventId() { return eventId; }
     public int getTicketTypeId() { return ticketTypeId; }
     public int getCustomerId() { return consumerId; }
+    public String getBarcode() { return barcode; }
+    public void setBarcode(String barcode) { this.barcode = barcode; }
 }
