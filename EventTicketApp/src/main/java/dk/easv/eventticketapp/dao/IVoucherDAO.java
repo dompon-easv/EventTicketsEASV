@@ -9,5 +9,6 @@ import java.util.List;
 public interface IVoucherDAO {
     Voucher createVoucher(Voucher voucher) throws SQLException;
     VoucherType createVoucherType(VoucherType voucherType)  throws SQLException;
+    Voucher createSpecialVoucherTransaction(VoucherType newType, int eventId, String uuid) throws Exception;
     List<Voucher> getAllVouchers() throws SQLException;
 }

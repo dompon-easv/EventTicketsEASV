@@ -2,16 +2,24 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.User;
+import dk.easv.eventticketapp.be.Voucher;
 import dk.easv.eventticketapp.bll.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class VouchersOverviewController {
+
+
 
     private EventCoordinatorLogic eventCoordinatorLogic;
     private SessionManager sessionManager;
@@ -19,9 +27,43 @@ public class VouchersOverviewController {
     private TicketTypeManager ticketTypeManager;
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
+    private VoucherManager voucherManager = new VoucherManager();
+
+    @FXML private TableView<Voucher> voucherTable;
+    @FXML private TableColumn<Voucher, String> voucherColumn;
+    @FXML private TableColumn<Voucher, String> eventColumn;
+    @FXML private TableColumn<Voucher, String> createdColumn;
+    @FXML private TableColumn<Voucher, String> statusColumn;
+
+
 
     public void showEvents(ActionEvent actionEvent) {
        coordinatorMainController.loadView("CoordinatorHome.fxml");
+    }
+
+    public void initialize() {
+        // Map the BE properties to the columns
+        voucherColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getVoucherName()));
+
+        eventColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEventId() == 0 ? "All Events" : "ID: " + cellData.getValue().getEventId()));
+
+        createdColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCreatedDate().toString()));
+
+        statusColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStatus().name()));
+
+        loadVoucherData();
+    }
+
+    private void loadVoucherData() {
+        try {
+            voucherTable.setItems(FXCollections.observableArrayList(voucherManager.getAllVouchers()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onCreateVoucher(ActionEvent actionEvent) throws IOException {
