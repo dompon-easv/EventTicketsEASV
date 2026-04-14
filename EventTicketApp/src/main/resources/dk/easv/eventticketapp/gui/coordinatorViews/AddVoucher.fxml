@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="450.0" spacing="20.0" styleClass="main-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddVoucherController">
+<VBox prefWidth="450.0" spacing="20.0" styleClass="main-card" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.AddVoucherController">
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
     </padding>
@@ -67,6 +67,6 @@
 
     <HBox alignment="CENTER_RIGHT" spacing="15.0">
         <Button mnemonicParsing="false" styleClass="btn-secondary" text="Cancel" />
-        <Button mnemonicParsing="false" styleClass="btn-primary" text="Create Voucher" />
+        <Button mnemonicParsing="false" onAction="#onCreateVoucher" styleClass="btn-primary" text="Create Voucher" />
     </HBox>
 </VBox>

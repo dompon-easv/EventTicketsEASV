@@ -27,7 +27,7 @@ public class VouchersOverviewController {
     private TicketTypeManager ticketTypeManager;
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
-    private VoucherManager voucherManager = new VoucherManager();
+    private VoucherLogic voucherLogic = new VoucherLogic();
 
     @FXML private TableView<Voucher> voucherTable;
     @FXML private TableColumn<Voucher, String> voucherColumn;
@@ -60,7 +60,7 @@ public class VouchersOverviewController {
 
     private void loadVoucherData() {
         try {
-            voucherTable.setItems(FXCollections.observableArrayList(voucherManager.getAllVouchers()));
+            voucherTable.setItems(FXCollections.observableArrayList(voucherLogic.getAllVouchers()));
         } catch (Exception e) {
             e.printStackTrace();
         }

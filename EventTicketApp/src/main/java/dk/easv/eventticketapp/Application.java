@@ -24,7 +24,7 @@ public class Application extends javafx.application.Application {
         EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
         TicketTypeManager ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
         TicketManager ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO);
-        VoucherManager voucherManager = new VoucherManager();
+        VoucherLogic voucherLogic = new VoucherLogic();
         CustomerLogic customerLogic = new CustomerLogic();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
