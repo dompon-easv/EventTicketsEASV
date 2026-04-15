@@ -36,9 +36,7 @@ public class EventCardController {
         titleLabel.setText(event.getName());
         locationLabel.setText("📍 " + event.getLocation());
 
-        String formattedDate = event.getStartDate()
-                .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy • HH:mm"));
-        dateLabel.setText("📅 " + formattedDate);
+        dateLabel.setText("📅 " + EventDateTimeFormatter.formatEventRange(event));
 
         // ✅ FIX coordinator count
         try {

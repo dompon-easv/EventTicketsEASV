@@ -275,10 +275,23 @@
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
+/* ================= EVENT CARD TITLE ================= */
+
+.event-card-title {
+    -fx-font-size: 18px;   /* slightly bigger than item-primary */
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-color-primary;
+}
 
 /* 🔥 OPTIONAL: subtle focus highlight (keyboard / accessibility) */
 .event-card:focused,
 .user-card:focused {
     -fx-border-color: -fx-color-accent;
     -fx-border-width: 1.5;
+}
+
+/* ================= DETAIL GROUP ================= */
+
+.detail-group {
+    -fx-spacing: 4;
 }
