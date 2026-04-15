@@ -22,12 +22,12 @@ fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement
             <children>
 
                 <!-- CLICKABLE CONTENT -->
-                <VBox fx:id="clickArea" spacing="8" HBox.hgrow="ALWAYS">
+                <VBox fx:id="clickArea" spacing="10" HBox.hgrow="ALWAYS">
 
                     <children>
 
                         <!-- TITLE + BADGE -->
-                        <HBox alignment="CENTER_LEFT" spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
                             <children>
                                 <Label fx:id="titleLabel" styleClass="event-card-title" />
 

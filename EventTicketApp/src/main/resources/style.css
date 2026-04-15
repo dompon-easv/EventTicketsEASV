@@ -38,6 +38,7 @@
     -fx-background-radius: 8;
     -fx-border-color: -fx-color-border;
     -fx-border-radius: 8;
+    -fx-padding: 16;
     /* No heavy drop shadows, just a clean flat look */
 }
 
@@ -50,6 +51,9 @@
 
 .content-scroll-pane, .content-scroll-pane > .viewport {
     -fx-background-color: transparent;
+}
+.card-separator {
+    -fx-padding: 6 0 6 0;
 }
 
 /* ================= BUTTONS ================= */
@@ -230,6 +234,10 @@
     -fx-text-fill: #6b7280;
 }
 
+.issued-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
 /* ================= ROLE BADGE ================= */
 
 .role-badge {
@@ -290,8 +298,14 @@
     -fx-border-width: 1.5;
 }
 
+
 /* ================= DETAIL GROUP ================= */
 
 .detail-group {
     -fx-spacing: 4;
+}
+
+.event-detail-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
 }
