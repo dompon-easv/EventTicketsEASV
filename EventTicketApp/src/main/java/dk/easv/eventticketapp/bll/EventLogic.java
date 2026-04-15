@@ -17,6 +17,10 @@ public class EventLogic {
         eventDAO = new EventDAO();
     }
 
+    public EventLogic(IEventDAO eventDAO) {
+        this.eventDAO = eventDAO;
+    }
+
     public Event createEvent(Event event) throws Exception {
 
         // Basic validation
