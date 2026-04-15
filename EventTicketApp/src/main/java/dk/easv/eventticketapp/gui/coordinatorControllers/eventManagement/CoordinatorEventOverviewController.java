@@ -13,7 +13,8 @@ import java.util.List;
 
 public class CoordinatorEventOverviewController {
 
-    @FXML private Label lblDescription;
+    @FXML private Label lblNotes;
+    @FXML private Label lblLocationDescription;
     @FXML private VBox coordinatorContainer;
 
     private Event currentEvent;
@@ -26,10 +27,16 @@ public class CoordinatorEventOverviewController {
             return;
         }
 
-        // ✅ Set description
-        lblDescription.setText(event.getDescription());
+        //  Set description
+        lblNotes.setText(
+                event.getDescription() != null ? event.getDescription() : "No notes"
+        );
 
-        // ✅ Load coordinators
+        lblLocationDescription.setText(
+                event.getLocationDescription() != null ? event.getLocationDescription() : "No guidance"
+        );
+
+        //  Load coordinators
         loadCoordinators();
     }
 

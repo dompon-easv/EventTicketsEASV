@@ -33,12 +33,23 @@
 
                         <Label styleClass="card-title-small" text="Event Details"/>
 
-                        <VBox spacing="10.0">
+                        <VBox spacing="14.0">
 
+                            <!-- NOTES -->
                             <VBox styleClass="detail-group">
-                                <Label styleClass="detail-label" text="Description"/>
-                                <Label fx:id="lblDescription"
-                                       styleClass="detail-value"
+                                <Label styleClass="item-primary"
+                                       text="📝 Notes"/>
+                                <Label fx:id="lblNotes"
+                                       styleClass="item-secondary"
+                                       wrapText="true"/>
+                            </VBox>
+
+                            <!-- LOCATION GUIDANCE -->
+                            <VBox styleClass="detail-group">
+                                <Label styleClass="item-primary"
+                                       text="📍 Location guidance"/>
+                                <Label fx:id="lblLocationDescription"
+                                       styleClass="item-secondary"
                                        wrapText="true"/>
                             </VBox>
 

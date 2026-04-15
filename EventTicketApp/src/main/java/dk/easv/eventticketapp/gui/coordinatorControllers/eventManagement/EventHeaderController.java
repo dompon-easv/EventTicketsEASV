@@ -78,10 +78,7 @@ public class EventHeaderController {
 
         titleLabel.setText(event.getName());
 
-        String formattedDate = event.getStartDate()
-                .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy • HH:mm"));
-
-        dateLabel.setText("📅 " + formattedDate);
+        dateLabel.setText("📅 " + EventDateTimeFormatter.formatEventRange(event));
         locationLabel.setText("📍 " + event.getLocation());
 
         try {
