@@ -1,6 +1,5 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
-import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.Voucher;
@@ -10,11 +9,12 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +29,7 @@ public class VouchersOverviewController {
     private TicketTypeManager ticketTypeManager;
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
-    private VoucherLogic voucherLogic = new VoucherLogic();
+    private final VoucherLogic voucherLogic = new VoucherLogic();
     User currentUser = SessionManager.getCurrentUser();
 
     @FXML private TableView<Voucher> voucherTable;
@@ -116,23 +116,79 @@ public class VouchersOverviewController {
         coordinatorMainController.loadView("CoordinatorHome.fxml");
     }
 
-    public void onCreateVoucher(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(
+    public void onCreateVoucher(ActionEvent e) throws IOException {
+        openVoucherWindow(null);
+    }
+
+    public void onEditVoucher(ActionEvent e) throws IOException {
+        Voucher selected = voucherTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("Select a voucher to edit.");
+            return;
+        }
+
+        openVoucherWindow(selected);
+    }
+
+    public void onDeleteVoucher(ActionEvent e) {
+
+        Voucher selected = voucherTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("Select a voucher to delete.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setHeaderText("Delete voucher?");
+        confirm.setContentText("This cannot be undone.");
+
+        confirm.showAndWait().ifPresent(result -> {
+            if (result == ButtonType.OK) {
+                try {
+                    voucherLogic.deleteVoucher(selected.getId());
+                    loadVoucherData();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    showAlert("Delete failed.");
+                }
+            }
+        });
+    }
+
+    private void openVoucherWindow(Voucher voucher) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml")
         );
-        Scene scene = new Scene(fxmlLoader.load());
 
-        AddVoucherController controller = fxmlLoader.getController();
-        controller.setEventLogic(eventLogic);
-        controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-        controller.init(sessionManager.getCurrentUser(), eventCoordinatorLogic);
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(
+                getClass().getResource("/style.css").toExternalForm()
+        );
 
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        AddVoucherController controller = loader.getController();
+
+        User user = SessionManager.getCurrentUser();
+
+        if (voucher == null) {
+            controller.init(user, eventCoordinatorLogic);
+        } else {
+            controller.initEdit(user, eventCoordinatorLogic, voucher);
+        }
 
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.show();
+        stage.showAndWait();
+
+        loadVoucherData();
     }
+
+    private void showAlert(String msg) {
+        new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
+    }
+
 
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
         this.eventCoordinatorLogic = eventCoordinatorLogic;

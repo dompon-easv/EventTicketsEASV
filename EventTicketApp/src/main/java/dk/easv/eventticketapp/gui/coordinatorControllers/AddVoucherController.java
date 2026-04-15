@@ -1,26 +1,21 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
-import dk.easv.eventticketapp.be.EventCoordinator;
 import dk.easv.eventticketapp.be.User;
+import dk.easv.eventticketapp.be.Voucher;
+import dk.easv.eventticketapp.be.VoucherType;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.enums.DiscountType;
 import dk.easv.eventticketapp.bll.VoucherLogic;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.util.List;
 
 public class AddVoucherController {
-
-    private EventLogic eventLogic;
 
     @FXML private TextField txtName;
     @FXML private TextArea txtDescription;
@@ -28,10 +23,14 @@ public class AddVoucherController {
     @FXML private TextField txtDiscountValue;
     @FXML private ToggleButton toggleAllEvents;
     @FXML private ComboBox<Event> comboEvents;
+    @FXML private Button btnCreate;
 
+    private EventLogic eventLogic;
     private VoucherLogic voucherLogic = new VoucherLogic();
     private EventCoordinatorLogic eventCoordinatorLogic;
     private User currentUser;
+    private Voucher voucherToEdit;
+    private boolean isEditMode = false;
 
     public void setEvents(List<Event> events) {
         comboEvents.getItems().setAll(events);
@@ -63,6 +62,18 @@ public class AddVoucherController {
         loadEvents();
     }
 
+    public void initEdit(User user, EventCoordinatorLogic logic, Voucher voucher) {
+        this.currentUser = user;
+        this.eventCoordinatorLogic = logic;
+        this.voucherToEdit = voucher;
+        this.isEditMode = true;
+
+        loadEvents();
+        populateFields();
+
+        btnCreate.setText("Update Voucher");
+    }
+
     private void loadEvents() {
         try {
             List<Event> events =
@@ -86,6 +97,25 @@ public class AddVoucherController {
         }
     }
 
+    private void populateFields() {
+        txtName.setText(voucherToEdit.getVoucherType().getName());
+        txtDescription.setText(voucherToEdit.getVoucherType().getDescription());
+        comboDiscountType.setValue(voucherToEdit.getVoucherType().getDiscountType());
+        txtDiscountValue.setText(
+                String.valueOf(voucherToEdit.getVoucherType().getDiscountValue())
+        );
+
+        if (voucherToEdit.getEventId() == 0) {
+            toggleAllEvents.setSelected(true);
+            comboEvents.setDisable(true);
+        } else {
+            comboEvents.getItems().stream()
+                    .filter(e -> e.getId() == voucherToEdit.getEventId())
+                    .findFirst()
+                    .ifPresent(comboEvents::setValue);
+        }
+    }
+
     @FXML
     private void onCreateVoucher(ActionEvent event) {
 
@@ -106,39 +136,55 @@ public class AddVoucherController {
                     showAlert("Enter discount value");
                     return;
                 }
-
                 value = Double.parseDouble(txtDiscountValue.getText());
             }
 
             int eventId = 0;
 
             if (!toggleAllEvents.isSelected()) {
-
                 Event selectedEvent = comboEvents.getValue();
 
                 if (selectedEvent == null) {
                     showAlert("Select an event or enable 'All Events'");
                     return;
                 }
-
                 eventId = selectedEvent.getId();
             }
 
-            voucherLogic.createVoucher(name, desc, value, type, eventId);
+            if (isEditMode) {
 
-            showAlert("Voucher created successfully!");
+                VoucherType voucherType = voucherToEdit.getVoucherType();
+                voucherType.setName(name);
+                voucherType.setDescription(desc);
+                voucherType.setDiscountType(type);
+                voucherType.setDiscountValue(value);
 
-        } catch (NumberFormatException e) {
-            showAlert("Discount value must be a number");
+                voucherToEdit.setEventId(eventId);
+                voucherLogic.updateVoucher(voucherToEdit);
+                showAlert("Voucher updated!");
+
+            } else {
+                voucherLogic.createVoucher(name, desc, value, type, eventId);
+                showAlert("Voucher created!");
+            }
+
+            closeWindow();
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error: " + e.getMessage());
         }
     }
 
+    private void closeWindow() {
+        ((Stage) txtName.getScene().getWindow()).close();
+    }
+
     private void showAlert(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(msg);
-        alert.showAndWait();
+        new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
+    }
+
+    public void onCloseWindow(ActionEvent actionEvent) {
+        closeWindow();
     }
 }

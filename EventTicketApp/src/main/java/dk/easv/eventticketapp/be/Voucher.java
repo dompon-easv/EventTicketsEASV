@@ -42,4 +42,6 @@ public class Voucher {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+
+    public void setEventId(int eventId) { this.eventId = eventId;}
 }

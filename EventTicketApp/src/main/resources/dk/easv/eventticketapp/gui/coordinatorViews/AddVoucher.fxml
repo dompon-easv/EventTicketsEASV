@@ -19,7 +19,6 @@
     <HBox alignment="CENTER_LEFT">
         <Label styleClass="header-title" text="Create Special Voucher" />
         <Region HBox.hgrow="ALWAYS" />
-        <Button mnemonicParsing="false" styleClass="icon-btn-close" text="✕" />
     </HBox>
 
     <VBox spacing="8.0">
@@ -41,7 +40,7 @@
                   <Insets />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="comboDiscountType" prefHeight="26.0" prefWidth="100.0">
+            <ComboBox fx:id="comboDiscountType" prefHeight="25.0" prefWidth="162.0" styleClass="modern-input">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -66,7 +65,7 @@
     </VBox>
 
     <HBox alignment="CENTER_RIGHT" spacing="15.0">
-        <Button mnemonicParsing="false" styleClass="btn-secondary" text="Cancel" />
-        <Button mnemonicParsing="false" onAction="#onCreateVoucher" styleClass="btn-primary" text="Create Voucher" />
+        <Button mnemonicParsing="false" onAction="#onCloseWindow" styleClass="btn-secondary" text="Cancel" />
+        <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onCreateVoucher" styleClass="btn-primary" text="Create Voucher" />
     </HBox>
 </VBox>

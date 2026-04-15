@@ -42,6 +42,12 @@
                             </children>
                         </VBox>
                         <Button onAction="#onCreateVoucher" styleClass="btn-primary" text="+ Create Voucher" />
+                  <Button onAction="#onEditVoucher" styleClass="btn-primary" text="Edit">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button onAction="#onDeleteVoucher" styleClass="btn-primary" text="🗑" />
                     </children>
                 </HBox>
 

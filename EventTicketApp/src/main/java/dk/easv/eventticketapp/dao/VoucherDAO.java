@@ -74,8 +74,100 @@ public class VoucherDAO implements IVoucherDAO {
                 return voucher;
             }
         }
-
         throw new SQLException("Creating Voucher failed");
+    }
+
+    @Override
+    public void updateVoucher(Voucher voucher) throws Exception {
+
+        String updateTypeSql =
+                "UPDATE VoucherTypes SET name = ?, discountValue = ?, description = ?, discountType = ? WHERE id = ?";
+
+        String updateVoucherSql =
+                "UPDATE Vouchers SET eventId = ? WHERE id = ?";
+
+        try (Connection conn = ConnectionManager.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement stmt = conn.prepareStatement(updateTypeSql)) {
+                stmt.setString(1, voucher.getVoucherType().getName());
+                stmt.setDouble(2, voucher.getVoucherType().getDiscountValue());
+                stmt.setString(3, voucher.getVoucherType().getDescription());
+                stmt.setString(4, voucher.getVoucherType().getDiscountType().name());
+                stmt.setInt(5, voucher.getVoucherType().getId());
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(updateVoucherSql)) {
+                if (voucher.getEventId() <= 0) {
+                    stmt.setNull(1, Types.INTEGER);
+                } else {
+                    stmt.setInt(1, voucher.getEventId());
+                }
+                stmt.setInt(2, voucher.getId());
+                stmt.executeUpdate();
+            }
+            conn.commit();
+        } catch (Exception e) {
+            throw new Exception("Failed to update voucher", e);
+        }
+    }
+
+    @Override
+    public void deleteVoucher(int voucherId) throws Exception {
+
+        String getTypeSql = "SELECT voucherTypeId FROM Vouchers WHERE id = ?";
+        String deleteVoucherSql = "DELETE FROM Vouchers WHERE id = ?";
+        String deleteTypeSql = "DELETE FROM VoucherTypes WHERE id = ?";
+
+        try (Connection conn = ConnectionManager.getConnection()) {
+            conn.setAutoCommit(false);
+
+            int voucherTypeId;
+
+            // 1. Get voucherTypeId
+            try (PreparedStatement stmt = conn.prepareStatement(getTypeSql)) {
+                stmt.setInt(1, voucherId);
+                ResultSet rs = stmt.executeQuery();
+
+                if (!rs.next()) {
+                    conn.rollback();
+                    throw new Exception("Voucher not found");
+                }
+
+                voucherTypeId = rs.getInt("voucherTypeId");
+            }
+
+            // 2. Delete voucher
+            try (PreparedStatement stmt = conn.prepareStatement(deleteVoucherSql)) {
+                stmt.setInt(1, voucherId);
+                stmt.executeUpdate();
+            }
+
+            // 3. Check if voucherType is still used
+            boolean stillUsed;
+            try (PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT COUNT(*) FROM Vouchers WHERE voucherTypeId = ?")) {
+
+                stmt.setInt(1, voucherTypeId);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+
+                stillUsed = rs.getInt(1) > 0;
+            }
+
+            // 4. If not used → delete VoucherType
+            if (!stillUsed) {
+                try (PreparedStatement stmt = conn.prepareStatement(deleteTypeSql)) {
+                    stmt.setInt(1, voucherTypeId);
+                    stmt.executeUpdate();
+                }
+            }
+
+            conn.commit();
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete voucher", e);
+        }
     }
 
     @Override
@@ -153,7 +245,6 @@ public class VoucherDAO implements IVoucherDAO {
                 list.add(voucher);
             }
         }
-
         return list;
     }
 
@@ -226,7 +317,6 @@ public class VoucherDAO implements IVoucherDAO {
                 list.add(voucher);
             }
         }
-
         return list;
     }
 
@@ -252,7 +342,23 @@ public class VoucherDAO implements IVoucherDAO {
                 );
             }
         }
-
         return null;
+    }
+
+    private boolean voucherTypeIsUsed(int voucherTypeId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Vouchers WHERE voucherTypeId = ?";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, voucherTypeId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
     }
 }

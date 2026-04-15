@@ -12,4 +12,6 @@ public interface IVoucherDAO {
     Voucher createSpecialVoucherTransaction(VoucherType newType, int eventId, String uuid) throws Exception;
     List<Voucher> getAllVouchers() throws SQLException;
     List<Voucher> getVouchersByEventIds(List<Integer> eventIds) throws SQLException;
+    void updateVoucher(Voucher voucher) throws Exception;
+    void deleteVoucher(int voucherId) throws Exception;
 }

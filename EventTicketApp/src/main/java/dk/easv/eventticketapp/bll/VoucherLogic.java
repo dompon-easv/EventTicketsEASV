@@ -36,12 +36,10 @@ public class VoucherLogic {
                                  DiscountType type,
                                  int eventId) throws Exception {
 
-        // 🔥 FIX: handle FREE properly
         if (type == DiscountType.FREE) {
             value = 0;
         }
 
-        // VALIDATION
         validateVoucher(value, type);
 
         VoucherType voucherType = new VoucherType(
@@ -59,6 +57,18 @@ public class VoucherLogic {
                 eventId,
                 uuid
         );
+    }
+
+    public void updateVoucher(Voucher voucher) throws Exception {
+        validateVoucher(
+                voucher.getVoucherType().getDiscountValue(),
+                voucher.getVoucherType().getDiscountType()
+        );
+        voucherDAO.updateVoucher(voucher);
+    }
+
+    public void deleteVoucher(int voucherId) throws Exception {
+        voucherDAO.deleteVoucher(voucherId);
     }
 
     private void validateVoucher(double value, DiscountType type) {
