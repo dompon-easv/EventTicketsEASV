@@ -35,6 +35,7 @@ public class VouchersOverviewController {
     @FXML private TableView<Voucher> voucherTable;
     @FXML private TableColumn<Voucher, String> voucherColumn;
     @FXML private TableColumn<Voucher, String> voucherTypeColumn;
+    @FXML private TableColumn<Voucher, String> discountValueColumn;
     @FXML private TableColumn<Voucher, String> eventColumn;
     @FXML private TableColumn<Voucher, String> createdColumn;
     @FXML private TableColumn<Voucher, String> statusColumn;
@@ -55,6 +56,15 @@ public class VouchersOverviewController {
                 new SimpleStringProperty(
                         cellData.getValue().getVoucherType() != null
                                 ? cellData.getValue().getVoucherType().getDiscountType().name()
+                                : ""
+                )
+        );
+
+        discountValueColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getVoucherType() != null
+                                ? String.format(java.util.Locale.US, "%.2f",
+                                cellData.getValue().getVoucherType().getDiscountValue())
                                 : ""
                 )
         );

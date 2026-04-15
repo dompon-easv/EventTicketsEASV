@@ -59,8 +59,9 @@
                         <TableView fx:id="voucherTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="voucherColumn" prefWidth="250.0" text="Voucher" />
-                        <TableColumn fx:id="voucherTypeColumn" prefWidth="245.0" text="VoucherType" />
-                                <TableColumn fx:id="eventColumn" prefWidth="250.0" text="Event" />
+                        <TableColumn fx:id="voucherTypeColumn" prefWidth="213.0" text="VoucherType" />
+                        <TableColumn fx:id="discountValueColumn" prefWidth="196.0" text="Discount Value" />
+                                <TableColumn fx:id="eventColumn" prefWidth="331.0" text="Event" />
                                 <TableColumn fx:id="createdColumn" prefWidth="125.0" text="Created" />
                                 <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
                             </columns>

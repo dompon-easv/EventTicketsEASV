@@ -124,6 +124,16 @@ public class AddVoucherController {
             String desc = txtDescription.getText();
             DiscountType type = comboDiscountType.getValue();
 
+            if (name == null || name.isBlank()) {
+                showAlert("Name is required");
+                return;
+            }
+
+            if (desc == null || desc.isBlank()) {
+                showAlert("Description is required");
+                return;
+            }
+
             if (type == null) {
                 showAlert("Select discount type");
                 return;
@@ -153,16 +163,15 @@ public class AddVoucherController {
 
             if (isEditMode) {
 
-                VoucherType voucherType = voucherToEdit.getVoucherType();
-                voucherType.setName(name);
-                voucherType.setDescription(desc);
-                voucherType.setDiscountType(type);
-                voucherType.setDiscountValue(value);
-
+                voucherToEdit.getVoucherType().setName(name);
+                voucherToEdit.getVoucherType().setDescription(desc);
+                voucherToEdit.getVoucherType().setDiscountType(type);
+                voucherToEdit.getVoucherType().setDiscountValue(value);
                 voucherToEdit.setEventId(eventId);
-                voucherLogic.updateVoucher(voucherToEdit);
-                showAlert("Voucher updated!");
 
+                voucherLogic.updateVoucher(voucherToEdit);
+
+                showAlert("Voucher updated!");
             } else {
                 voucherLogic.createVoucher(name, desc, value, type, eventId);
                 showAlert("Voucher created!");

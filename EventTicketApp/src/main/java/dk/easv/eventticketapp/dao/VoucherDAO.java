@@ -118,13 +118,14 @@ public class VoucherDAO implements IVoucherDAO {
         String getTypeSql = "SELECT voucherTypeId FROM Vouchers WHERE id = ?";
         String deleteVoucherSql = "DELETE FROM Vouchers WHERE id = ?";
         String deleteTypeSql = "DELETE FROM VoucherTypes WHERE id = ?";
+        String checkTypeSql = "SELECT COUNT(*) FROM Vouchers WHERE voucherTypeId = ? AND id <> ?";
 
         try (Connection conn = ConnectionManager.getConnection()) {
             conn.setAutoCommit(false);
 
             int voucherTypeId;
 
-            // 1. Get voucherTypeId
+            // 1. get voucherTypeId
             try (PreparedStatement stmt = conn.prepareStatement(getTypeSql)) {
                 stmt.setInt(1, voucherId);
                 ResultSet rs = stmt.executeQuery();
@@ -137,25 +138,26 @@ public class VoucherDAO implements IVoucherDAO {
                 voucherTypeId = rs.getInt("voucherTypeId");
             }
 
-            // 2. Delete voucher
+            // 2. delete voucher
             try (PreparedStatement stmt = conn.prepareStatement(deleteVoucherSql)) {
                 stmt.setInt(1, voucherId);
                 stmt.executeUpdate();
             }
 
-            // 3. Check if voucherType is still used
+            // 3. check if voucherType still used (IMPORTANT FIX: SAME CONNECTION)
             boolean stillUsed;
-            try (PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT COUNT(*) FROM Vouchers WHERE voucherTypeId = ?")) {
 
+            try (PreparedStatement stmt = conn.prepareStatement(checkTypeSql)) {
                 stmt.setInt(1, voucherTypeId);
+                stmt.setInt(2, voucherId);
+
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
 
                 stillUsed = rs.getInt(1) > 0;
             }
 
-            // 4. If not used → delete VoucherType
+            // 4. delete type if unused
             if (!stillUsed) {
                 try (PreparedStatement stmt = conn.prepareStatement(deleteTypeSql)) {
                     stmt.setInt(1, voucherTypeId);
@@ -213,8 +215,7 @@ public class VoucherDAO implements IVoucherDAO {
                 "SELECT v.id AS v_id, v.uuid, v.eventId, v.status, v.createDate, " +
                         "vt.id AS vt_id, vt.name, vt.discountValue, vt.description, vt.discountType " +
                         "FROM Vouchers v " +
-                        "JOIN VoucherTypes vt ON v.voucherTypeId = vt.id " +
-                        "WHERE v.eventId IS NULL OR v.eventId IN (";
+                        "JOIN VoucherTypes vt ON v.voucherTypeId = vt.id";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -245,6 +246,7 @@ public class VoucherDAO implements IVoucherDAO {
                 list.add(voucher);
             }
         }
+
         return list;
     }
 
