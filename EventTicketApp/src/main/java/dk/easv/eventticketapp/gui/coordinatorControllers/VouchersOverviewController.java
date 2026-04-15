@@ -1,6 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.Voucher;
 import dk.easv.eventticketapp.bll.*;
@@ -16,10 +17,11 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VouchersOverviewController {
-
-
 
     private EventCoordinatorLogic eventCoordinatorLogic;
     private SessionManager sessionManager;
@@ -28,49 +30,105 @@ public class VouchersOverviewController {
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
     private VoucherLogic voucherLogic = new VoucherLogic();
+    User currentUser = SessionManager.getCurrentUser();
 
     @FXML private TableView<Voucher> voucherTable;
     @FXML private TableColumn<Voucher, String> voucherColumn;
+    @FXML private TableColumn<Voucher, String> voucherTypeColumn;
     @FXML private TableColumn<Voucher, String> eventColumn;
     @FXML private TableColumn<Voucher, String> createdColumn;
     @FXML private TableColumn<Voucher, String> statusColumn;
 
+    private Map<Integer, String> eventNameMap;
 
-
-    public void showEvents(ActionEvent actionEvent) {
-       coordinatorMainController.loadView("CoordinatorHome.fxml");
-    }
-
-    public void initialize() {
-        // Map the BE properties to the columns
-        voucherColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getVoucherName()));
-
-        eventColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEventId() == 0 ? "All Events" : "ID: " + cellData.getValue().getEventId()));
-
-        createdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCreatedDate().toString()));
-
-        statusColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getStatus().name()));
-
+    public void initData() {
+        loadEvents();
         loadVoucherData();
     }
 
-    private void loadVoucherData() {
+    public void initialize() {
+
+        voucherColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getVoucherName()));
+
+        voucherTypeColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getVoucherType() != null
+                                ? cellData.getValue().getVoucherType().getDiscountType().name()
+                                : ""
+                )
+        );
+
+        eventColumn.setCellValueFactory(cellData -> {
+            String name = cellData.getValue().getEventName();
+            return new SimpleStringProperty(
+                    name == null ? "All Events" : name
+            );
+        });
+
+        createdColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getCreatedDate() != null
+                                ? cellData.getValue().getCreatedDate().toString()
+                                : ""
+                )
+        );
+
+        statusColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getStatus() != null
+                                ? cellData.getValue().getStatus().name()
+                                : ""
+                )
+        );
+    }
+
+    private void loadEvents() {
         try {
-            voucherTable.setItems(FXCollections.observableArrayList(voucherLogic.getAllVouchers()));
+            User currentUser = SessionManager.getCurrentUser();
+
+            List<Event> events = eventCoordinatorLogic.getEventsForUser(currentUser.getId());
+
+            eventNameMap = events.stream()
+                    .collect(Collectors.toMap(Event::getId, Event::getName));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onCreateVoucher(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml"));
+    private void loadVoucherData() {
+        try {
+            User currentUser = SessionManager.getCurrentUser();
 
+            voucherTable.setItems(
+                    FXCollections.observableArrayList(
+                            voucherLogic.getVouchersForCoordinator(currentUser.getId())
+                    )
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showEvents(ActionEvent actionEvent) {
+        coordinatorMainController.loadView("CoordinatorHome.fxml");
+    }
+
+    public void onCreateVoucher(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml")
+        );
         Scene scene = new Scene(fxmlLoader.load());
+
+        AddVoucherController controller = fxmlLoader.getController();
+        controller.setEventLogic(eventLogic);
+        controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+        controller.init(sessionManager.getCurrentUser(), eventCoordinatorLogic);
+
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();

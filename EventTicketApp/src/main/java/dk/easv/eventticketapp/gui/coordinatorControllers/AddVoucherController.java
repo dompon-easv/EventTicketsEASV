@@ -1,6 +1,10 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
+import dk.easv.eventticketapp.be.EventCoordinator;
+import dk.easv.eventticketapp.be.User;
+import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
+import dk.easv.eventticketapp.bll.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import dk.easv.eventticketapp.be.Event;
@@ -26,14 +30,23 @@ public class AddVoucherController {
     @FXML private ComboBox<Event> comboEvents;
 
     private VoucherLogic voucherLogic = new VoucherLogic();
+    private EventCoordinatorLogic eventCoordinatorLogic;
+    private User currentUser;
+
+    public void setEvents(List<Event> events) {
+        comboEvents.getItems().setAll(events);
+    }
 
     public void setEventLogic(EventLogic eventLogic) {
         this.eventLogic = eventLogic;
     }
 
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
+    }
+
     @FXML
     public void initialize() {
-
         comboDiscountType.getItems().setAll(DiscountType.values());
         comboDiscountType.setOnAction(e -> handleDiscountTypeChange());
         toggleAllEvents.setOnAction(e -> {
@@ -41,20 +54,24 @@ public class AddVoucherController {
             comboEvents.setDisable(all);
             toggleAllEvents.setText(all ? "ON" : "OFF");
         });
+    }
+
+    public void init(User user, EventCoordinatorLogic eventCoordinatorLogic) {
+        this.currentUser = user;
+        this.eventCoordinatorLogic = eventCoordinatorLogic;
+        
         loadEvents();
     }
 
     private void loadEvents() {
-        if (eventLogic == null) {
-            eventLogic = new EventLogic(); // fallback (safe for now)
-        }
-
         try {
-            List<Event> events = eventLogic.getAllEvents();
+            List<Event> events =
+                    eventCoordinatorLogic.getEventsForUser(currentUser.getId());
+
             comboEvents.getItems().setAll(events);
+
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Failed to load events");
         }
     }
 

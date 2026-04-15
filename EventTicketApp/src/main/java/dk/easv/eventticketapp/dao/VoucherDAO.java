@@ -118,9 +118,11 @@ public class VoucherDAO implements IVoucherDAO {
         List<Voucher> list = new ArrayList<>();
 
         String sql =
-                "SELECT v.id AS v_id, v.uuid, v.eventId, v.status, " +
+                "SELECT v.id AS v_id, v.uuid, v.eventId, v.status, v.createDate, " +
                         "vt.id AS vt_id, vt.name, vt.discountValue, vt.description, vt.discountType " +
-                        "FROM Vouchers v JOIN VoucherTypes vt ON v.voucherTypeId = vt.id";
+                        "FROM Vouchers v " +
+                        "JOIN VoucherTypes vt ON v.voucherTypeId = vt.id " +
+                        "WHERE v.eventId IS NULL OR v.eventId IN (";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -144,10 +146,83 @@ public class VoucherDAO implements IVoucherDAO {
                         rs.getString("uuid"),
                         eventId,
                         VoucherStatus.valueOf(rs.getString("status")),
-                        null, // no createdDate in DB → FIXED
+                        rs.getDate("createDate").toLocalDate(),
                         type
                 );
 
+                list.add(voucher);
+            }
+        }
+
+        return list;
+    }
+
+    public List<Voucher> getVouchersByEventIds(List<Integer> eventIds) throws SQLException {
+
+        List<Voucher> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT v.id AS v_id, " +
+                        "v.uuid, " +
+                        "v.eventId, " +
+                        "e.name AS eventName, " +
+                        "v.status, " +
+                        "v.createDate, " +
+                        "vt.id AS vt_id, " +
+                        "vt.name, " +
+                        "vt.discountValue, " +
+                        "vt.description, " +
+                        "vt.discountType " +
+                        "FROM Vouchers v " +
+                        "JOIN VoucherTypes vt ON v.voucherTypeId = vt.id " +
+                        "LEFT JOIN Events e ON v.eventId = e.id " +
+                        "WHERE v.eventId IS NULL OR v.eventId IN ("
+        );
+
+        for (int i = 0; i < eventIds.size(); i++) {
+            sql.append("?");
+            if (i < eventIds.size() - 1) sql.append(",");
+        }
+        sql.append(")");
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            int i = 1;
+            for (Integer id : eventIds) {
+                stmt.setInt(i++, id);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                LocalDate date = null;
+                Date sqlDate = rs.getDate("createDate");
+                if (sqlDate != null) {
+                    date = sqlDate.toLocalDate();
+                }
+
+                VoucherType type = new VoucherType(
+                        rs.getInt("vt_id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getDouble("discountValue"),
+                        DiscountType.valueOf(rs.getString("discountType"))
+                );
+
+                int eventId = rs.getInt("eventId");
+                if (rs.wasNull()) eventId = 0;
+
+                Voucher voucher = new Voucher(
+                        rs.getInt("v_id"),
+                        rs.getString("uuid"),
+                        eventId,
+                        VoucherStatus.valueOf(rs.getString("status")),
+                        date,
+                        type
+                );
+                voucher.setEventName(rs.getString("eventName"));
                 list.add(voucher);
             }
         }

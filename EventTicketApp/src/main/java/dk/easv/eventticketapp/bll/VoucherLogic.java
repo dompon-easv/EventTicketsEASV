@@ -3,16 +3,31 @@ package dk.easv.eventticketapp.bll;
 import dk.easv.eventticketapp.be.Voucher;
 import dk.easv.eventticketapp.be.VoucherType;
 import dk.easv.eventticketapp.be.enums.DiscountType;
+import dk.easv.eventticketapp.dao.EventCoordinatorDAO;
 import dk.easv.eventticketapp.dao.VoucherDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherLogic {
 
     private final VoucherDAO voucherDAO;
+    private final EventCoordinatorDAO eventCoordinatorDAO;
 
     public VoucherLogic() {
         this.voucherDAO = new VoucherDAO();
+        this.eventCoordinatorDAO = new EventCoordinatorDAO();
+    }
+
+    public List<Voucher> getVouchersForCoordinator(int userId) throws Exception {
+
+        List<Integer> eventIds = eventCoordinatorDAO.getEventIdsByUser(userId);
+
+        if (eventIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return voucherDAO.getVouchersByEventIds(eventIds);
     }
 
     public Voucher createVoucher(String name,
@@ -66,9 +81,5 @@ public class VoucherLogic {
                 value = 0;
                 break;
         }
-    }
-
-    public List<Voucher> getAllVouchers() throws Exception {
-        return voucherDAO.getAllVouchers();
     }
 }

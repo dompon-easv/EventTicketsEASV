@@ -178,7 +178,26 @@ public class CoordinatorHomeController {
     }
 
     public void showVouchers(ActionEvent actionEvent) {
-        coordinatorMainController.loadView("VouchersOverview.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/VouchersOverview.fxml")
+            );
+            Node node = loader.load();
+
+            VouchersOverviewController controller = loader.getController();
+            controller.setEventLogic(eventLogic);
+            controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+            controller.setSessionManager(sessionManager);
+            controller.setUserManager(userManager);
+            controller.setTicketTypeManager(ticketTypeManager);
+            controller.setMainCoordinatorController(coordinatorMainController);
+            controller.initData();
+
+            CoordinatorMainController.staticContentArea.getChildren().setAll(node);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void showEvents(ActionEvent actionEvent) {

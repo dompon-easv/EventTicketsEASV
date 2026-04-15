@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VouchersOverviewController">
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VouchersOverviewController">
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
             <padding>
@@ -53,10 +53,10 @@
                         <TableView fx:id="voucherTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="voucherColumn" prefWidth="250.0" text="Voucher" />
-                                <TableColumn fx:id="eventColumn" prefWidth="200.0" text="Event" />
-                                <TableColumn fx:id="createdColumn" prefWidth="150.0" text="Created" />
-                                <TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status" />
-                                <TableColumn fx:id="actionsColumn" prefWidth="100.0" style="-fx-alignment: CENTER-RIGHT;" text="Actions" />
+                        <TableColumn fx:id="voucherTypeColumn" prefWidth="245.0" text="VoucherType" />
+                                <TableColumn fx:id="eventColumn" prefWidth="250.0" text="Event" />
+                                <TableColumn fx:id="createdColumn" prefWidth="125.0" text="Created" />
+                                <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
                             </columns>
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
