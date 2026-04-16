@@ -5,11 +5,9 @@ import dk.easv.eventticketapp.be.Event;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.print.PrinterJob;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
@@ -20,11 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.common.BitMatrix;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.image.PixelWriter;
 import javafx.stage.Window;
 
@@ -40,20 +36,19 @@ public class TicketController {
     @FXML private HBox ticketContent;
     @FXML private Label lblEvent;
     @FXML private Label lblTicketType;
-    @FXML private Label lblName;
     @FXML private Label lblLocation;
     @FXML private Label lblDate;
     @FXML private Label lblTime;
     @FXML private Label lblQuantity;
     @FXML private Label lblPrice;
     @FXML private ImageView imgBarcode;
+    @FXML private ImageView imgQRCode;
 
     private IssuedTicket currentTicket;
 
     public void setTicket(IssuedTicket ticket, Event event) {
         this.currentTicket = ticket;
 
-        lblName.setText(ticket.getCustomerName());
         lblTicketType.setText(ticket.getTicketType());
         lblQuantity.setText(String.valueOf(ticket.getQuantity()));
         lblPrice.setText(String.format("kr. %.2f", ticket.getPrice()));
@@ -64,7 +59,9 @@ public class TicketController {
         lblTime.setText(event.getStartDate().toLocalTime().toString());
 
         if (ticket.getBarcode() != null) {
+            String code = ticket.getBarcode();
             imgBarcode.setImage(generateBarcode(ticket.getBarcode()));
+            imgQRCode.setImage(generateQRCode(code));
         }
     }
 
@@ -78,6 +75,31 @@ public class TicketController {
 
             for (int x = 0; x < 300; x++) {
                 for (int y = 0; y < 80; y++) {
+                    boolean bit = bitMatrix.get(x, y);
+                    pixelWriter.setArgb(x, y, bit ? 0xFF000000 : 0xFFFFFFFF);
+                }
+            }
+
+            return image;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Image generateQRCode(String text) {
+        try {
+            com.google.zxing.qrcode.QRCodeWriter writer =
+                    new com.google.zxing.qrcode.QRCodeWriter();
+
+            BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 200, 200);
+
+            WritableImage image = new WritableImage(200, 200);
+            PixelWriter pixelWriter = image.getPixelWriter();
+
+            for (int x = 0; x < 200; x++) {
+                for (int y = 0; y < 200; y++) {
                     boolean bit = bitMatrix.get(x, y);
                     pixelWriter.setArgb(x, y, bit ? 0xFF000000 : 0xFFFFFFFF);
                 }

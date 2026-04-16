@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" styleClass="main-bg" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.LoginController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" styleClass="main-bg" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.LoginController">
 
     <stylesheets>
         <URL value="@../../../../style.css" />
@@ -51,7 +51,7 @@
                     </children>
                 </VBox>
 
-                <Button maxWidth="Infinity" onAction="#onLoginAction" styleClass="add-button" text="Login" />
+                <Button maxWidth="Infinity" onAction="#onLoginAction" styleClass="btn-primary" text="Login" />
             </children>
         </VBox>
     </children>

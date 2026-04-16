@@ -324,3 +324,13 @@
 .tickets-progress .bar {
     -fx-background-radius: 6;
 }
+
+/* Ticket Type Badge */
+.ticket-type-badge {
+    -fx-background-color: #2563eb;  /* Blue background */
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
