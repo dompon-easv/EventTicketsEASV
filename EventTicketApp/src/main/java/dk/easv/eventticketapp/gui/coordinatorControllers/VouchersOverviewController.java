@@ -55,7 +55,7 @@ public class VouchersOverviewController {
         voucherTypeColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
                         cellData.getValue().getVoucherType() != null
-                                ? cellData.getValue().getVoucherType().getDiscountType().name()
+                                ? cellData.getValue().getVoucherType().getDiscountType().toString()
                                 : ""
                 )
         );

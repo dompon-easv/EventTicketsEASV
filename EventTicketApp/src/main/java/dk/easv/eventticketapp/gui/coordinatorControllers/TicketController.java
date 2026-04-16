@@ -2,8 +2,10 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.be.Event;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.print.PrinterJob;
@@ -24,6 +26,7 @@ import com.google.zxing.common.BitMatrix;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.PixelWriter;
+import javafx.stage.Window;
 
 import java.net.URI;
 import java.awt.Desktop;
@@ -100,6 +103,7 @@ public class TicketController {
 
     public void onPrintTicket(ActionEvent actionEvent) {
 
+
         ImageView preview = createPreview();
 
         Button printBtn = new Button("Confirm Print");
@@ -115,14 +119,22 @@ public class TicketController {
     }
 
     private void printNode() {
-        PrinterJob job = PrinterJob.createPrinterJob();
+        Platform.runLater(() -> {
+            PrinterJob job = PrinterJob.createPrinterJob();
 
-        if (job != null && job.showPrintDialog(rootPane.getScene().getWindow())) {
-            boolean success = job.printPage(ticketContent); // 👈 IMPORTANT CHANGE
-            if (success) {
-                job.endJob();
+            if (job != null) {
+                Window owner = rootPane.getScene().getWindow();
+                boolean proceed = job.showPrintDialog(owner);
+                if (proceed) {
+                    boolean success = job.printPage(ticketContent);
+                    if (success) {
+                        job.endJob();
+                    }
+                }
+            } else {
+                System.out.println("Could not create print job");
             }
-        }
+        });
     }
 
     public void onSendViaEmail(ActionEvent actionEvent) {

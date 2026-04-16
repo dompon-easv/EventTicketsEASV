@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VouchersOverviewController">
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VouchersOverviewController">
     <content>
         <VBox spacing="25.0" styleClass="main-content-container">
             <padding>
@@ -59,7 +59,7 @@
                         <TableView fx:id="voucherTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="voucherColumn" prefWidth="250.0" text="Voucher" />
-                        <TableColumn fx:id="voucherTypeColumn" prefWidth="213.0" text="VoucherType" />
+                        <TableColumn fx:id="voucherTypeColumn" prefWidth="213.0" text="Voucher Type" />
                         <TableColumn fx:id="discountValueColumn" prefWidth="196.0" text="Discount Value" />
                                 <TableColumn fx:id="eventColumn" prefWidth="331.0" text="Event" />
                                 <TableColumn fx:id="createdColumn" prefWidth="125.0" text="Created" />
