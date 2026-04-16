@@ -7,8 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ProgressBar?>
 <VBox spacing="12" styleClass="event-card" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController">
+      fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController">
 
     <padding>
         <Insets bottom="18" left="18" right="18" top="18" />
@@ -57,7 +58,17 @@ fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement
         <Separator styleClass="card-separator" />
 
         <!-- FOOTER -->
-        <Label fx:id="ticketsLabel" styleClass="issued-text" text="0 tickets issued" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
 
+            <Label fx:id="ticketsLabel"
+                   styleClass="item-secondary"
+                   HBox.hgrow="ALWAYS"/>
+
+            <ProgressBar fx:id="ticketsProgressBar"
+                         prefWidth="120"
+                         progress="0.0"
+                         styleClass="tickets-progress"/>
+
+        </HBox>
     </children>
 </VBox>

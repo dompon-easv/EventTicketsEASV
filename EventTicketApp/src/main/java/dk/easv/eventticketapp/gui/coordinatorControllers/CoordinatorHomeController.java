@@ -141,7 +141,9 @@ public class CoordinatorHomeController {
 
                 controller.setEventCoordinatorLogic(eventCoordinatorLogic);
                 controller.setEventLogic(eventLogic);
+                controller.setTicketManager(ticketManager);
                 controller.setEvent(event);
+
 
                 // ✅ Delegate click behavior (NO hardcoding)
                 if (onCardClick != null) {

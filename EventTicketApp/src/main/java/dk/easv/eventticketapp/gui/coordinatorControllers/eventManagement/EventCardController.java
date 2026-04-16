@@ -3,10 +3,12 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
+import dk.easv.eventticketapp.bll.TicketManager;
 import dk.easv.eventticketapp.bll.TicketTypeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 
 import java.time.format.DateTimeFormatter;
@@ -19,13 +21,15 @@ public class EventCardController {
     @FXML private Label locationLabel;
     @FXML private Label coordinatorLabel;
     @FXML private Label ticketsLabel;
-    @FXML private VBox clickArea; // 🔥 IMPORTANT (was missing)
+    @FXML private VBox clickArea;
+    @FXML private ProgressBar ticketsProgressBar;
 
     private Event event;
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
     private TicketTypeManager ticketTypeManager;
     private Runnable onDeleteSuccess;
+    private TicketManager ticketManager;
 
     // 🔥 NEW: callback for click
     private Consumer<Event> onCardClick;
@@ -53,7 +57,36 @@ public class EventCardController {
             coordinatorLabel.setText("👤 error");
         }
 
-        ticketsLabel.setText("0 tickets issued");
+        try {
+            if (ticketManager != null) {
+
+                int sold = ticketManager.getTotalTicketsSoldForEvent(event.getId());
+                int max = ticketManager.getTotalMaxTicketsForEvent(event.getId());
+
+                if (max > 0) {
+                    double progress = (double) sold / max;
+
+                    ticketsLabel.setText(
+                            sold + " / " + max + " tickets (" + (int)(progress * 100) + "%)"
+                    );
+
+                    ticketsProgressBar.setProgress(progress);
+
+                } else {
+                    ticketsLabel.setText(sold + " tickets issued");
+                    ticketsProgressBar.setProgress(0);
+                }
+
+            } else {
+                ticketsLabel.setText("0 tickets issued");
+                ticketsProgressBar.setProgress(0);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ticketsLabel.setText("Error loading tickets");
+            ticketsProgressBar.setProgress(0);
+        }
 
         // ✅ FIX click behavior
         if (clickArea != null) {
@@ -79,6 +112,9 @@ public class EventCardController {
 
     public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
         this.ticketTypeManager = ticketTypeManager;
+    }
+    public void setTicketManager(TicketManager ticketManager) {
+        this.ticketManager = ticketManager;
     }
 
     public void setOnDeleteSuccess(Runnable onDeleteSuccess) {

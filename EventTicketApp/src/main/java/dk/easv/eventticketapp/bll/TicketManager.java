@@ -93,4 +93,31 @@ public class TicketManager {
 
         return tt.getMaxQuantity() - sold;
     }
+    public int getTotalTicketsSoldForEvent(int eventId) throws Exception {
+
+        int total = 0;
+
+        // 🔥 use YOUR existing method name
+        List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
+
+        for (TicketType type : ticketTypes) {
+            int sold = ticketTypeDAO.getTicketCountForTicketType(type.getId());
+            total += sold;
+        }
+
+        return total;
+    }
+
+    public int getTotalMaxTicketsForEvent(int eventId) throws Exception {
+
+        int total = 0;
+
+        List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
+
+        for (TicketType type : ticketTypes) {
+            total += type.getMaxQuantity();
+        }
+
+        return total;
+    }
 }

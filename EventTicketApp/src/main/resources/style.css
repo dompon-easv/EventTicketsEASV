@@ -309,3 +309,18 @@
     -fx-font-size: 13px;
     -fx-text-fill: #6b7280;
 }
+/* ================= TICKET PROGRESS BAR ================= */
+
+.tickets-progress {
+    -fx-accent:#1f2937; /* your accent blue */
+    -fx-background-radius: 6;
+}
+
+.tickets-progress .track {
+    -fx-background-color: #e5e7eb;
+    -fx-background-radius: 6;
+}
+
+.tickets-progress .bar {
+    -fx-background-radius: 6;
+}
