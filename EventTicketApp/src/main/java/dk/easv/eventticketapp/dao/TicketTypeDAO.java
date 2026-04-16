@@ -164,7 +164,7 @@ public class TicketTypeDAO implements ITicketTypeDAO {
 
     @Override
     public int getTicketCountForTicketType(int ticketTypeId) throws Exception {
-        String sql = "SELECT COUNT(*) as count FROM Tickets WHERE ticketTypeId = ?";
+        String sql = "SELECT COALESCE(SUM(quantity), 0) AS count FROM Tickets WHERE ticketTypeId = ?";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

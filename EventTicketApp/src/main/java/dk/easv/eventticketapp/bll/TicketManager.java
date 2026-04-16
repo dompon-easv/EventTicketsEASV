@@ -85,4 +85,12 @@ public class TicketManager {
     private String generateBarcodeValue(int customerId, int eventId) {
         return "T-" + eventId + "-" + UUID.randomUUID();
     }
+
+    public int getAvailableTickets(int ticketTypeId) throws Exception {
+        TicketType tt = ticketTypeDAO.getById(ticketTypeId);
+
+        int sold = ticketDAO.getTotalSoldForTicketType(ticketTypeId);
+
+        return tt.getMaxQuantity() - sold;
+    }
 }

@@ -16,7 +16,6 @@ public class TicketType {
         this.price = price;
         this.eventId = eventId;
         this.maxQuantity = maxQuantity;
-        this.ticketsSold = 0;
     }
 
     public TicketType(String name, String description, double price, int eventId, int maxQuantity) {
@@ -25,7 +24,6 @@ public class TicketType {
         this.price = price;
         this.eventId = eventId;
         this.maxQuantity = maxQuantity;
-        this.ticketsSold = 0;
     }
 
     public int getId() {return id;}
@@ -48,7 +46,6 @@ public class TicketType {
 
     public int getTicketsSold() {return ticketsSold;}
     public void setTicketsSold(int ticketsSold) {this.ticketsSold = ticketsSold;}
-    public int getAvailableQuantity() {return maxQuantity - ticketsSold;}
 
     @Override
     public String toString() {

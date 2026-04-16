@@ -195,7 +195,6 @@ public class TicketTypeManager {
         List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
         for (TicketType ticketType : ticketTypes) {
             int soldCount = getSoldTicketsCount(ticketType.getId());
-            ticketType.setTicketsSold(soldCount);
         }
         return FXCollections.observableArrayList(ticketTypes);
     }

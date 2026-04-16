@@ -5,6 +5,7 @@ import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,8 +53,28 @@ public class TicketTypesController {
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         columnQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
-        columnSold.setCellValueFactory(new PropertyValueFactory<>("ticketsSold"));
-        columnAvailability.setCellValueFactory(new PropertyValueFactory<>("availableQuantity"));
+        columnSold.setCellValueFactory(cellData -> {
+            try {
+                int sold = ticketTypeManager.getSoldTicketsCount(cellData.getValue().getId());
+                return new SimpleIntegerProperty(sold).asObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new SimpleIntegerProperty(0).asObject();
+            }
+        });
+        columnAvailability.setCellValueFactory(cellData -> {
+            TicketType tt = cellData.getValue();
+
+            try {
+                int sold = ticketTypeManager.getSoldTicketsCount(tt.getId());
+                int remaining = tt.getMaxQuantity() - sold;
+
+                return new SimpleIntegerProperty(remaining).asObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new SimpleIntegerProperty(0).asObject();
+            }
+        });
     }
 
     private void setupSelectionHandling() {
