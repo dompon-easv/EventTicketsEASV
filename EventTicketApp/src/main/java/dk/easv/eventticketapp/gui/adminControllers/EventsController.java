@@ -36,6 +36,7 @@ public class EventsController {
     private EventLogic eventLogic;
     private EventCoordinatorLogic eventCoordinatorLogic;
     private TicketTypeManager ticketTypeManager;
+    private TicketManager ticketManager;
 
     private ObservableList<Event> events;
     private SessionManager sessionManager;
@@ -60,6 +61,9 @@ public class EventsController {
     public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
         this.ticketTypeManager = ticketTypeManager;
 
+    }
+    public void setTicketManager(TicketManager ticketManager) {
+        this.ticketManager = ticketManager;
     }
 
 
@@ -89,6 +93,7 @@ public class EventsController {
                controller.setEventLogic(eventLogic);
                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
                controller.setTicketTypeManager(ticketTypeManager);
+               controller.setTicketManager(ticketManager);
                controller.setEvent(event);
                if (onCardClick != null) {
                    controller.setOnCardClick(onCardClick);
@@ -98,7 +103,9 @@ public class EventsController {
 
 
 
-            eventContainer.getChildren().add(card); }
+            eventContainer.getChildren().add(card);
+               }
+
         catch(Exception e) {e.printStackTrace();}
         }
 
@@ -124,6 +131,7 @@ public class EventsController {
                 controller.setUserManager(userManager);
                 controller.setSessionManager(sessionManager);
                 controller.setTicketTypeManager(ticketTypeManager);
+                controller.setTicketManager(ticketManager);
                 controller.init();
 
                 AdminMainController.staticContentArea.getChildren().setAll(node);

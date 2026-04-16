@@ -84,8 +84,6 @@ public class CoordinatorHomeController {
                 );
 
                 Node node = loader.load();
-
-                // 🔥 PASS EVENT DATA
                 EventHeaderController controller = loader.getController();
                 controller.setEvent(event);
                 controller.setTicketTypeManager(ticketTypeManager);
@@ -144,13 +142,9 @@ public class CoordinatorHomeController {
                 controller.setTicketManager(ticketManager);
                 controller.setEvent(event);
 
-
-                // ✅ Delegate click behavior (NO hardcoding)
                 if (onCardClick != null) {
                     controller.setOnCardClick(onCardClick);
                 }
-
-                // ✅ Refresh after delete
                 controller.setOnDeleteSuccess(this::loadMyEvents);
 
                 eventContainer.getChildren().add(card);

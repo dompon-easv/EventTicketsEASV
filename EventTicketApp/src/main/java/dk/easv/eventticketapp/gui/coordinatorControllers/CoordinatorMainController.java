@@ -80,6 +80,8 @@ public class CoordinatorMainController {
             loginController.setEventLogic(eventLogic);
             loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
             loginController.setTicketTypeManager(ticketTypeManager);
+            loginController.setTicketManager(ticketManager);     
+            loginController.setCustomerLogic(customerLogic);
 
         } catch (IOException e) {
             e.printStackTrace();

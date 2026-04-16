@@ -31,7 +31,6 @@ public class EventCardController {
     private Runnable onDeleteSuccess;
     private TicketManager ticketManager;
 
-    // 🔥 NEW: callback for click
     private Consumer<Event> onCardClick;
 
     public void setEvent(Event event) {
@@ -42,7 +41,6 @@ public class EventCardController {
 
         dateLabel.setText("📅 " + EventDateTimeFormatter.formatEventRange(event));
 
-        // ✅ FIX coordinator count
         try {
             if (eventCoordinatorLogic != null) {
                 int count = eventCoordinatorLogic
@@ -88,7 +86,6 @@ public class EventCardController {
             ticketsProgressBar.setProgress(0);
         }
 
-        // ✅ FIX click behavior
         if (clickArea != null) {
             clickArea.setOnMouseClicked(e -> {
                 if (onCardClick != null) {

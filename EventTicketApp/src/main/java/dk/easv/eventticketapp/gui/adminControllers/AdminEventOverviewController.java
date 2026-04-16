@@ -2,10 +2,7 @@ package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.SessionManager;
-import dk.easv.eventticketapp.bll.UserManager;
+import dk.easv.eventticketapp.bll.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,6 +31,8 @@ public class AdminEventOverviewController {
     private EventCoordinatorLogic eventCoordinatorLogic;
     private EventLogic eventLogic;
     private SessionManager sessionManager;
+    private TicketManager ticketManager;
+    private TicketTypeManager ticketTypeManager;
     private ObservableList<User> coordinatorList = FXCollections.observableArrayList();
 
     public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
@@ -49,7 +48,8 @@ public class AdminEventOverviewController {
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
-
+    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
     public void populateEvent(Event selectedEvent) {
         lblName.setText(selectedEvent.getName());
         lblTime.setText("📅 " + selectedEvent.getStartDate().toString());
@@ -83,6 +83,8 @@ public class AdminEventOverviewController {
             controller.setUserManager(userManager);
             controller.setEventLogic(eventLogic);
             controller.setEventCoordinatorLogic(eventCoordinatorLogic);
+            controller.setTicketTypeManager(ticketTypeManager);
+            controller.setTicketManager(ticketManager);
             controller.setSessionManager(sessionManager);
             controller.init();
             AdminMainController.staticContentArea.getChildren().setAll(node);
