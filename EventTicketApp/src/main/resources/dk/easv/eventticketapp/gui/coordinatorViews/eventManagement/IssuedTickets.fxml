@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.IssuedTicketsController">
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.IssuedTicketsController">
     <children>
       <HBox alignment="CENTER_LEFT">
          <children>
             <Label fx:id="titleLabel" styleClass="display-title" HBox.hgrow="ALWAYS" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnDeleteTicket" mnemonicParsing="false" onAction="#onDeleteTicket" prefHeight="25.0" prefWidth="53.0" styleClass="create-btn" text="🗑">
+            <Button fx:id="btnDeleteTicket" mnemonicParsing="false" onAction="#onDeleteTicket" styleClass="create-btn" text="🗑">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>

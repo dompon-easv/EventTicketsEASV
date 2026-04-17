@@ -25,7 +25,6 @@ public class VoucherTicketController {
     @FXML private VBox ticketPaper;
 
     @FXML private Label lblVoucherName;
-    @FXML private Label lblVoucherType;
     @FXML private Label lblDiscount;
     @FXML private Label lblEvents;
 
@@ -41,17 +40,22 @@ public class VoucherTicketController {
 
         lblVoucherName.setText(voucher.getVoucherName());
 
-        lblVoucherType.setText(
-                voucher.getVoucherType() != null
-                        ? voucher.getVoucherType().getDiscountType().toString()
-                        : "N/A"
-        );
 
-        lblDiscount.setText(
-                voucher.getVoucherType() != null
-                        ? voucher.getVoucherType().getDiscountValue() + "%"
-                        : "N/A"
-        );
+        String discountText = "N/A";
+
+        if (voucher.getVoucherType() != null) {
+            var type = voucher.getVoucherType().getDiscountType(); // This is your Enum
+            double value = voucher.getVoucherType().getDiscountValue();
+
+            discountText = switch (type) {
+                case PERCENTAGE -> value + "%";
+                case FIXED_AMOUNT -> value + " DKK";
+                case FREE -> "FREE";
+                default -> String.valueOf(value);
+            };
+        }
+
+        lblDiscount.setText(discountText);
 
         lblEvents.setText(
                 voucher.getEventName() != null
@@ -130,7 +134,6 @@ public class VoucherTicketController {
 
     @FXML
     public void onSendViaEmail(ActionEvent event) {
-
         if (currentVoucher == null) {
             showAlert("No voucher selected");
             return;
@@ -138,22 +141,20 @@ public class VoucherTicketController {
 
         try {
             String subject = "Your Voucher - " + currentVoucher.getVoucherName();
+            String eventName = currentVoucher.getEventName() != null ? currentVoucher.getEventName() : "All";
+            String body = String.format(
+                    "Voucher: %s\nType: %s\nDiscount: %s\nEvent: %s",
+                    currentVoucher.getVoucherName(),
+                    (currentVoucher.getVoucherType() != null ? currentVoucher.getVoucherType().getDiscountType() : "N/A"),
+                    (currentVoucher.getVoucherType() != null ? currentVoucher.getVoucherType().getDiscountValue() + "%" : "N/A"),
+                    eventName
+            );
 
-            String body =
-                    "Voucher: " + currentVoucher.getVoucherName() + "\n" +
-                            "Type: " +
-                            (currentVoucher.getVoucherType() != null
-                                    ? currentVoucher.getVoucherType().getDiscountType()
-                                    : "N/A") + "\n" +
-                            "Discount: " +
-                            (currentVoucher.getVoucherType() != null
-                                    ? currentVoucher.getVoucherType().getDiscountValue() + "%"
-                                    : "N/A") + "\n" +
-                            "Event: " + currentVoucher.getEventName();
+            // Encode and replace '+' with '%20' for proper mailto formatting
+            String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8).replace("+", "%20");
+            String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8).replace("+", "%20");
 
-            String mailto = "mailto:" +
-                    "?subject=" + URLEncoder.encode(subject, StandardCharsets.UTF_8) +
-                    "&body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
+            String mailto = "mailto:?subject=" + encodedSubject + "&body=" + encodedBody;
 
             Desktop.getDesktop().mail(new URI(mailto));
 

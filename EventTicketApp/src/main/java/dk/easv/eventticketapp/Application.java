@@ -24,7 +24,7 @@ public class Application extends javafx.application.Application {
 
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
-        stage.setTitle("Hello!");
+        stage.setTitle("Event Ticket App");
         stage.setScene(scene);
         stage.show();
     }
