@@ -1,30 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" spacing="20.0" styleClass="ticket-window-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VoucherTicketController">
-    <padding>
-        <Insets bottom="40.0" left="40.0" right="40.0" top="20.0" />
-    </padding>
-    <children>
-        <HBox alignment="CENTER_LEFT">
-            <children>
-                <Button styleClass="btn-primary" text="⎙ Print Ticket" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button styleClass="icon-btn-close" text="✕" />
-            </children>
-        </HBox>
+<VBox fx:id="ticketPaper"
+      alignment="CENTER"
+      spacing="15"
+      style="-fx-padding: 25; -fx-background-color: #f4f4f4;"
+      xmlns="http://javafx.com/javafx/24.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="dk.easv.eventticketapp.gui.coordinatorControllers.VoucherTicketController">
 
-        <VBox fx:id="ticketPaper" maxWidth="500.0" prefHeight="700.0" styleClass="ticket-paper">
-            <children>
-                <StackPane VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label styleClass="placeholder-text" text="[ Ticket Content Placeholder ]" />
-                    </children>
-                </StackPane>
-            </children>
+    <!-- ================= VOUCHER CARD ================= -->
+    <HBox spacing="25"
+          style="-fx-background-color: white;
+                 -fx-padding: 20;
+                 -fx-border-color: #ddd;
+                 -fx-border-radius: 10;
+                 -fx-background-radius: 10;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.2, 0, 3);">
+
+        <!-- LEFT: STACKED INFO -->
+        <VBox spacing="12" HBox.hgrow="ALWAYS">
+
+            <Label text="🎟 VOUCHER"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+            <!-- STACKED FIELDS -->
+            <VBox spacing="8">
+
+                <VBox>
+                    <Label text="Name" style="-fx-font-size: 11px; -fx-text-fill: #888;" />
+                    <Label fx:id="lblVoucherName" style="-fx-font-size: 15px; -fx-font-weight: bold;" />
+                </VBox>
+
+                <VBox>
+                    <Label text="Type" style="-fx-font-size: 11px; -fx-text-fill: #888;" />
+                    <Label fx:id="lblVoucherType" style="-fx-font-size: 14px;" />
+                </VBox>
+
+                <VBox>
+                    <Label text="Discount" style="-fx-font-size: 11px; -fx-text-fill: #888;" />
+                    <Label fx:id="lblDiscount" style="-fx-font-size: 14px;" />
+                </VBox>
+
+                <VBox>
+                    <Label text="Event" style="-fx-font-size: 11px; -fx-text-fill: #888;" />
+                    <Label fx:id="lblEvents" style="-fx-font-size: 14px;" />
+                </VBox>
+
+            </VBox>
+
         </VBox>
-    </children>
+
+        <!-- RIGHT: QR + BARCODE -->
+        <VBox alignment="CENTER" spacing="10">
+
+            <ImageView fx:id="imgQRCode"
+                       fitWidth="120"
+                       fitHeight="120"
+                       preserveRatio="true"/>
+
+            <ImageView fx:id="imgBarcode"
+                       fitWidth="180"
+                       fitHeight="70"
+                       preserveRatio="true"/>
+
+        </VBox>
+
+    </HBox>
+
+    <!-- ================= BUTTONS ================= -->
+    <HBox spacing="15" alignment="CENTER">
+
+        <Button text="Print"
+                onAction="#onPrintTicket"
+                style="-fx-font-size: 14px;" />
+
+        <Button text="Send via Email"
+                onAction="#onSendViaEmail"
+                style="-fx-font-size: 14px;" />
+
+    </HBox>
+
 </VBox>

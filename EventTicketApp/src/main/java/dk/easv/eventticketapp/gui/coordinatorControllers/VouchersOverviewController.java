@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonType;
 
@@ -30,7 +32,6 @@ public class VouchersOverviewController {
     private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
     private final VoucherLogic voucherLogic = new VoucherLogic();
-    User currentUser = SessionManager.getCurrentUser();
 
     @FXML private TableView<Voucher> voucherTable;
     @FXML private TableColumn<Voucher, String> voucherColumn;
@@ -41,6 +42,13 @@ public class VouchersOverviewController {
     @FXML private TableColumn<Voucher, String> statusColumn;
 
     private Map<Integer, String> eventNameMap;
+
+    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
+    public void setEventLogic(EventLogic eventLogic) {this.eventLogic = eventLogic;}
+    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
+    public void setUserManager(UserManager userManager) {this.userManager = userManager;}
+    public void setSessionManager(SessionManager sessionManager) {this.sessionManager = sessionManager;}
+    public void setMainCoordinatorController(CoordinatorMainController coordinatorMainController) {this.coordinatorMainController = coordinatorMainController;}
 
     public void initData() {
         loadEvents();
@@ -96,12 +104,9 @@ public class VouchersOverviewController {
     private void loadEvents() {
         try {
             User currentUser = SessionManager.getCurrentUser();
-
             List<Event> events = eventCoordinatorLogic.getEventsForUser(currentUser.getId());
-
             eventNameMap = events.stream()
                     .collect(Collectors.toMap(Event::getId, Event::getName));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,13 +115,11 @@ public class VouchersOverviewController {
     private void loadVoucherData() {
         try {
             User currentUser = SessionManager.getCurrentUser();
-
             voucherTable.setItems(
                     FXCollections.observableArrayList(
                             voucherLogic.getVouchersForCoordinator(currentUser.getId())
                     )
             );
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,9 +145,7 @@ public class VouchersOverviewController {
     }
 
     public void onDeleteVoucher(ActionEvent e) {
-
         Voucher selected = voucherTable.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
             showAlert("Select a voucher to delete.");
             return;
@@ -153,7 +154,6 @@ public class VouchersOverviewController {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setHeaderText("Delete voucher?");
         confirm.setContentText("This cannot be undone.");
-
         confirm.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
                 try {
@@ -179,7 +179,6 @@ public class VouchersOverviewController {
         );
 
         AddVoucherController controller = loader.getController();
-
         User user = SessionManager.getCurrentUser();
 
         if (voucher == null) {
@@ -191,7 +190,6 @@ public class VouchersOverviewController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
-
         loadVoucherData();
     }
 
@@ -199,28 +197,35 @@ public class VouchersOverviewController {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
     }
 
+    @FXML
+    private void onSeeVoucher() {
+        Voucher selectedVoucher = voucherTable.getSelectionModel().getSelectedItem();
 
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
+        if (selectedVoucher == null) {
+            showAlert("Please select a voucher first.");
+            return;
+        }
 
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/VoucherTicket.fxml")
+            );
 
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
-        this.ticketTypeManager = ticketTypeManager;
-    }
+            VBox view = loader.load();
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
+            VoucherTicketController controller = loader.getController();
+            controller.setVoucher(selectedVoucher);
 
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
+            Stage stage = new Stage();
+            stage.setTitle("Voucher");
+            stage.setScene(new Scene(view));
+            stage.initOwner(voucherTable.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
 
-    public void setMainCoordinatorController(CoordinatorMainController coordinatorMainController) {
-        this.coordinatorMainController = coordinatorMainController;
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Could not open voucher.");
+        }
     }
 }
