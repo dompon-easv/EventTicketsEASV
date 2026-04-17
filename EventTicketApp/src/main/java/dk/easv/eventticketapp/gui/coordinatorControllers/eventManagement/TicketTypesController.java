@@ -2,6 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
 import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
@@ -187,10 +188,7 @@ public class TicketTypesController implements ApplicationServicesAware {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditTicketTypes.fxml")
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/AddEditTicketTypes.fxml");
 
             Node node = loader.load();
 
@@ -225,10 +223,7 @@ public class TicketTypesController implements ApplicationServicesAware {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditTicketTypes.fxml")
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/AddEditTicketTypes.fxml");
 
             Node node = loader.load();
 
