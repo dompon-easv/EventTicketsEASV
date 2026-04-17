@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.bll.TicketManager;
@@ -18,7 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
 
-public class IssuedTicketsController {
+public class IssuedTicketsController implements ApplicationServicesAware {
 
     @FXML private TableView<IssuedTicket> tblIssuedTickets;
     @FXML private TableColumn<IssuedTicket, String> columnName;
@@ -27,12 +29,16 @@ public class IssuedTicketsController {
     @FXML private TableColumn<IssuedTicket, Integer> columnQuantity;
     @FXML private TableColumn<IssuedTicket, Double> columnTotalPrice;
 
-    private final TicketManager ticketManager =
-            new TicketManager(new TicketDAO(), new TicketTypeDAO(), new CustomerDAO());
 
     private StackPane contentArea;
     private Event currentEvent;
     private IssuedTicket selectedTicket;
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
 
     public void setContentArea(StackPane contentArea) {
         this.contentArea = contentArea;
@@ -74,7 +80,7 @@ public class IssuedTicketsController {
 
     public void loadTickets(int eventId) {
         tblIssuedTickets.getItems().setAll(
-                ticketManager.getIssuedTickets(eventId)
+                services.getTicketManager().getIssuedTickets(eventId)
         );
     }
 
@@ -124,7 +130,7 @@ public class IssuedTicketsController {
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    ticketManager.deleteTicket(selectedTicket.getId());
+                    services.getTicketManager().deleteTicket(selectedTicket.getId());
 
                     loadTickets(currentEvent.getId());
 

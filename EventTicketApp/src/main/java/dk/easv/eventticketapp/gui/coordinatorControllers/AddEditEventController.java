@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.enums.UserRole;
@@ -22,17 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AddEditEventController {
+public class AddEditEventController implements ApplicationServicesAware {
 
-    private final EventLogic eventLogic = new EventLogic();
-    private final EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
-    private final UserManager userManager = new UserManager(new UserDAO());
 
-    private TicketTypeManager ticketTypeManager; // Instance variable for dependency injection
 
     private boolean isEditMode = false;
     private Event currentEvent;
-    private SessionManager sessionManager;
     private CoordinatorMainController coordinatorMainController;
 
     @FXML private TextField nameField;
@@ -52,6 +49,13 @@ public class AddEditEventController {
 
     private List<User> coordinators = new ArrayList<>();
 
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
+
     @FXML
     public void initialize() {
         setupTimeInputs();
@@ -60,20 +64,13 @@ public class AddEditEventController {
 
     public void init()
     {
-         if(sessionManager.getCurrentUser().getRole() == UserRole.ADMIN)
+         if(SessionManager.getCurrentUser().getRole() == UserRole.ADMIN)
         {
             eventDetailsSection.setVisible(false);
             eventDetailsSection.setManaged(false);
         }
     }
 
-    // Setter for dependency injection
-    public void setTicketTypeManager(TicketTypeManager manager) {
-        this.ticketTypeManager = manager;
-    }
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
     public void setCoordinatorMainController(CoordinatorMainController coordinatorMainController) {
         this.coordinatorMainController = coordinatorMainController;
     }
@@ -145,8 +142,8 @@ public class AddEditEventController {
         int maxTickets = parseMaxTickets();
 
         if (isEditMode && currentEvent != null) {
-            if (ticketTypeManager != null) {
-                int currentTotalTickets = ticketTypeManager.getTotalTicketQuantityForEvent(currentEvent.getId());
+            if (services.getTicketTypeManager() != null) {
+                int currentTotalTickets = services.getTicketTypeManager().getTotalTicketQuantityForEvent(currentEvent.getId());
                 if (maxTickets < currentTotalTickets) {
                     throw new Exception(String.format(
                             "Cannot reduce event capacity to %d tickets!\n\n" +
@@ -186,24 +183,24 @@ public class AddEditEventController {
     }
 
     private void createEvent(Event event) throws Exception {
-        Event createdEvent = eventLogic.createEvent(event);
+        Event createdEvent = services.getEventLogic().createEvent(event);
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
-        eventCoordinatorLogic.assignCoordinators(createdEvent.getId(), selectedUsers);
+        services.getEventCoordinatorLogic().assignCoordinators(createdEvent.getId(), selectedUsers);
 
         // Set the current event in the injected TicketTypeManager
-        if (ticketTypeManager != null) {
-            ticketTypeManager.setCurrentEvent(createdEvent);
+        if (services.getTicketTypeManager() != null) {
+            services.getTicketTypeManager().setCurrentEvent(createdEvent);
         }
     }
 
     private void updateEvent(Event event) throws Exception {
-        eventLogic.updateEvent(event);
+        services.getEventLogic().updateEvent(event);
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
-        eventCoordinatorLogic.updateCoordinators(event.getId(), selectedUsers);
+        services.getEventCoordinatorLogic().updateCoordinators(event.getId(), selectedUsers);
 
         // Update the current event in TicketTypeManager
-        if (ticketTypeManager != null) {
-            ticketTypeManager.setCurrentEvent(event);
+        if (services.getTicketTypeManager() != null) {
+            services.getTicketTypeManager().setCurrentEvent(event);
         }
     }
 
@@ -241,7 +238,7 @@ public class AddEditEventController {
 
     private void loadCoordinators() {
         try {
-            coordinators = userManager.getAllUsers().stream()
+            coordinators = services.getUserManager().getAllUsers().stream()
                     .filter(u -> u.getRole() == UserRole.COORDINATOR)
                     .toList();
 
@@ -270,7 +267,7 @@ public class AddEditEventController {
 
     private void preselectCoordinators(int eventId) {
         try {
-            List<Integer> assignedIds = eventCoordinatorLogic.getCoordinatorIdsForEvent(eventId);
+            List<Integer> assignedIds = services.getEventCoordinatorLogic().getCoordinatorIdsForEvent(eventId);
 
             for (Node node : coordinatorContainer.getChildren()) {
                 if (node instanceof CheckBox cb) {
@@ -334,7 +331,7 @@ public class AddEditEventController {
     }
 
     public void closeBtn(ActionEvent actionEvent) {
-        if (sessionManager.getCurrentUser().getRole() == UserRole.COORDINATOR) {
+        if (SessionManager.getCurrentUser().getRole() == UserRole.COORDINATOR) {
             coordinatorMainController.loadView("CoordinatorHome.fxml");
         } else {
             try {
@@ -348,10 +345,6 @@ public class AddEditEventController {
                 AdminMainController.staticContentArea.getChildren().setAll(node);
                 Object controller = loader.getController();
                 if (controller instanceof EventsController eventsController) {
-                    eventsController.setUserManager(userManager);
-                    eventsController.setEventLogic(eventLogic);
-                    eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
-                    eventsController.setTicketTypeManager(ticketTypeManager);
                     eventsController.init();
                 }
 

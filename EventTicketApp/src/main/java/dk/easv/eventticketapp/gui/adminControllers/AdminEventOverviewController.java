@@ -1,5 +1,8 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.bll.*;
@@ -16,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class AdminEventOverviewController {
+public class AdminEventOverviewController implements ApplicationServicesAware {
     public ListView lstCoordinators;
     @FXML Label lblGuidance;
     @FXML
@@ -27,38 +30,23 @@ public class AdminEventOverviewController {
     Label lblCoordinators;
     @FXML Label lblName;
 
-    private UserManager userManager;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private EventLogic eventLogic;
-    private SessionManager sessionManager;
-    private TicketManager ticketManager;
-    private TicketTypeManager ticketTypeManager;
     private ObservableList<User> coordinatorList = FXCollections.observableArrayList();
 
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-        System.out.println("overview is setting" +  eventCoordinatorLogic);
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
     public void populateEvent(Event selectedEvent) {
         lblName.setText(selectedEvent.getName());
         lblTime.setText("📅 " + selectedEvent.getStartDate().toString());
         lblLocation.setText("📍 "+selectedEvent.getLocation());
-        lblCoordinators.setText("👥 " + eventCoordinatorLogic.getCoordinatorIdsForEvent(selectedEvent.getId()).size() + " coordinators assigned");
+        lblCoordinators.setText("👥 " + services.getEventCoordinatorLogic().getCoordinatorIdsForEvent(selectedEvent.getId()).size() + " coordinators assigned");
         lblGuidance.setText(selectedEvent.getLocationDescription());
         lblNotes.setText(selectedEvent.getDescription());
 
-        List<User> coordinators = eventCoordinatorLogic.getCoordinatorsForEvent(selectedEvent.getId());
+        List<User> coordinators = services.getEventCoordinatorLogic().getCoordinatorsForEvent(selectedEvent.getId());
         ObservableList<String> coordinatorNames = FXCollections.observableArrayList();
 
         for (User coordinator : coordinators) {
@@ -70,22 +58,13 @@ public class AdminEventOverviewController {
 
     public void handleBackToEvents(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(
-                            getClass().getResource(
-                                    "/dk/easv/eventticketapp/gui/adminViews/Events.fxml"
-                            )
-                    )
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/adminViews/Events.fxml"
+
+
             );
 
             Node node = loader.load();
             EventsController controller = loader.getController();
-            controller.setUserManager(userManager);
-            controller.setEventLogic(eventLogic);
-            controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-            controller.setTicketTypeManager(ticketTypeManager);
-            controller.setTicketManager(ticketManager);
-            controller.setSessionManager(sessionManager);
             controller.init();
             AdminMainController.staticContentArea.getChildren().setAll(node);
 

@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
@@ -17,7 +19,7 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 
-public class TicketTypesController {
+public class TicketTypesController implements ApplicationServicesAware {
 
     @FXML private StackPane contentArea;
     @FXML private Button btnAddTicketType;
@@ -32,14 +34,14 @@ public class TicketTypesController {
     @FXML private TableColumn<TicketType, Integer> columnSold;
     @FXML private TableColumn<TicketType, Integer> columnAvailability;
 
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private EventLogic eventLogic;
-    private UserManager userManager;
-    private SessionManager sessionManager;
     private Event currentEvent;
+
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
 
     @FXML
     public void initialize() {
@@ -55,7 +57,7 @@ public class TicketTypesController {
         columnQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
         columnSold.setCellValueFactory(cellData -> {
             try {
-                int sold = ticketTypeManager.getSoldTicketsCount(cellData.getValue().getId());
+                int sold = services.getTicketTypeManager().getSoldTicketsCount(cellData.getValue().getId());
                 return new SimpleIntegerProperty(sold).asObject();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -66,7 +68,7 @@ public class TicketTypesController {
             TicketType tt = cellData.getValue();
 
             try {
-                int sold = ticketTypeManager.getSoldTicketsCount(tt.getId());
+                int sold = services.getTicketTypeManager().getSoldTicketsCount(tt.getId());
                 int remaining = tt.getMaxQuantity() - sold;
 
                 return new SimpleIntegerProperty(remaining).asObject();
@@ -122,40 +124,15 @@ public class TicketTypesController {
     //------------Setters------------
 
     public void setTicketTypeManager(TicketTypeManager manager) {
-        this.ticketTypeManager = manager;
         tryLoadData();
-    }
-
-    public void setTicketManager(TicketManager ticketManager) {
-        this.ticketManager = ticketManager;
-    }
-
-    public void setCustomerLogic(CustomerLogic customerLogic) {
-        this.customerLogic = customerLogic;
-    }
-
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
-
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
     }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
         tryLoadData();
 
-        if (ticketTypeManager != null && currentEvent != null) {
-            ticketTypeManager.setCurrentEvent(currentEvent);
+        if (services.getTicketTypeManager() != null && currentEvent != null) {
+            services.getTicketTypeManager().setCurrentEvent(currentEvent);
             loadTicketTypes();
         }
     }
@@ -168,21 +145,15 @@ public class TicketTypesController {
         return contentArea;
     }
 
-    public TicketManager getTicketManager() {return ticketManager;}
-    public CustomerLogic getCustomerLogic() {return customerLogic;}
-    public EventCoordinatorLogic getEventCoordinatorLogic() {return eventCoordinatorLogic;}
-    public EventLogic getEventLogic() {return eventLogic;}
-    public UserManager getUserManager() {return userManager;}
-    public SessionManager getSessionManager() {return sessionManager;}
 
     //-------------Data Loading-----------
 
     private void tryLoadData() {
-        if (ticketTypeManager != null && currentEvent != null) {
+        if (services.getTicketTypeManager() != null && currentEvent != null) {
             try {
-                ticketTypeManager.setCurrentEvent(currentEvent);
+                services.getTicketTypeManager().setCurrentEvent(currentEvent);
                 tableView.setItems(
-                        ticketTypeManager.getTicketTypesForEvent(currentEvent.getId())
+                        services.getTicketTypeManager().getTicketTypesForEvent(currentEvent.getId())
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -193,7 +164,7 @@ public class TicketTypesController {
     private void loadTicketTypes() {
         try {
             if(currentEvent == null) return;
-            ObservableList<TicketType> list = ticketTypeManager.getTicketTypesForEvent(currentEvent.getId());
+            ObservableList<TicketType> list = services.getTicketTypeManager().getTicketTypesForEvent(currentEvent.getId());
             tableView.setItems(list);
             checkCapacityStatus();
             tableView.refresh();
@@ -211,7 +182,7 @@ public class TicketTypesController {
                 return;
             }
 
-            if (ticketTypeManager == null) {
+            if (services.getTicketTypeManager() == null) {
                 System.err.println("ERROR: TicketTypeManager not initialized!");
                 return;
             }
@@ -225,7 +196,6 @@ public class TicketTypesController {
 
             AddEditTicketTypeController controller = loader.getController();
             controller.setEvent(currentEvent);
-            controller.setTicketTypeManager(ticketTypeManager);
             controller.setParentController(this);
             controller.setContentArea(contentArea);
 
@@ -250,7 +220,7 @@ public class TicketTypesController {
                 return;
             }
 
-            if (ticketTypeManager == null) {
+            if (services.getTicketTypeManager() == null) {
                 System.err.println("ERROR: TicketTypeManager not initialized!");
                 return;
             }
@@ -264,7 +234,6 @@ public class TicketTypesController {
 
             AddEditTicketTypeController controller = loader.getController();
             controller.setEvent(currentEvent);
-            controller.setTicketTypeManager(ticketTypeManager);
             controller.setTicketTypeToEdit(selectedTicket);
             controller.setParentController(this);
             controller.setContentArea(contentArea);
@@ -293,7 +262,7 @@ public class TicketTypesController {
         confirmDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    ticketTypeManager.deleteTicketType(selectedTicket.getId());
+                    services.getTicketTypeManager().deleteTicketType(selectedTicket.getId());
                     loadTicketTypes();
                     showSuccess("Success", "Ticket type '" + selectedTicket.getName() + "' has been deleted successfully.");
                 } catch (Exception e) {
@@ -319,11 +288,11 @@ public class TicketTypesController {
     }
 
     private void checkCapacityStatus() {
-        if (currentEvent == null || ticketTypeManager == null) return;
+        if (currentEvent == null || services.getTicketTypeManager() == null) return;
 
         try {
-            if (!ticketTypeManager.isTotalCapacityValid(currentEvent.getId())) {
-                String summary = ticketTypeManager.getCapacitySummary(currentEvent.getId());
+            if (!services.getTicketTypeManager().isTotalCapacityValid(currentEvent.getId())) {
+                String summary = services.getTicketTypeManager().getCapacitySummary(currentEvent.getId());
                 showWarning("Capacity Exceeded",
                         "Warning: Total ticket type quantities exceed event capacity!\n\n" + summary +
                                 "\n\nYou should either:\n" +

@@ -1,6 +1,9 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.LoginController;
 import dk.easv.eventticketapp.gui.adminControllers.EventsController;
@@ -16,23 +19,25 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class CoordinatorMainController {
+public class CoordinatorMainController implements ApplicationServicesAware {
 
-    @FXML Label lblUser;
-    @FXML Label lblRole;
-    @FXML Label lblInitials;
-    @FXML StackPane contentArea;
+    @FXML
+    Label lblUser;
+    @FXML
+    Label lblRole;
+    @FXML
+    Label lblInitials;
+    @FXML
+    StackPane contentArea;
 
     public static StackPane staticContentArea;
 
-    private AuthenticationLogic authenticationLogic;
-    private SessionManager sessionManager;
-    private UserManager userManager;
-    private EventLogic eventLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
 
     public void initialize() {
         staticContentArea = contentArea;
@@ -42,8 +47,7 @@ public class CoordinatorMainController {
         lblInitials.setText(String.valueOf(SessionManager.getCurrentUser().getName().charAt(0)) + " " + String.valueOf(SessionManager.getCurrentUser().getSurname().charAt(0)));
     }
 
-    public void init()
-    {
+    public void init() {
         loadView("CoordinatorHome.fxml");
     }
 
@@ -55,9 +59,7 @@ public class CoordinatorMainController {
     private void handleLogout(ActionEvent actionEvent) {
         SessionManager.clearSession();
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    Application.class.getResource("gui/Login.fxml")
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/Login.fxml");
             Scene scene = new Scene(loader.load());
 
             scene.getStylesheets().add(
@@ -74,15 +76,6 @@ public class CoordinatorMainController {
             stage.show();
             stage.centerOnScreen();
 
-            LoginController loginController = loader.getController();
-            loginController.setAuthenticationLogic(authenticationLogic);
-            loginController.setUserManager(userManager);
-            loginController.setEventLogic(eventLogic);
-            loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
-            loginController.setTicketTypeManager(ticketTypeManager);
-            loginController.setTicketManager(ticketManager);     
-            loginController.setCustomerLogic(customerLogic);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,57 +83,26 @@ public class CoordinatorMainController {
 
     public void loadView(String fxml) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(
-                            getClass().getResource(
-                                    "/dk/easv/eventticketapp/gui/coordinatorViews/" + fxml
-                            )
-                    )
-            );
+            ViewFactory viewFactory = new ViewFactory(services);
+            FXMLLoader loader = viewFactory.createLoader("gui/coordinatorViews/" + fxml);
+
             Node node = loader.load();
             Object controller = loader.getController();
+
             if (controller instanceof CoordinatorHomeController coordinatorHomeController) {
-                coordinatorHomeController.setEventCoordinatorLogic(eventCoordinatorLogic);
-                coordinatorHomeController.setEventLogic(eventLogic);
-                coordinatorHomeController.setTicketTypeManager(ticketTypeManager);
-                coordinatorHomeController.setTicketManager(ticketManager);
-                coordinatorHomeController.setCustomerLogic(customerLogic);
-                coordinatorHomeController.setUserManager(userManager);
-                coordinatorHomeController.setSessionManager(sessionManager);
                 coordinatorHomeController.setMainCoordinatorController(this);
                 coordinatorHomeController.init();
             }
+
             if (controller instanceof VouchersOverviewController vouchersOverviewController) {
-                vouchersOverviewController.setEventCoordinatorLogic(eventCoordinatorLogic);
-                vouchersOverviewController.setEventLogic(eventLogic);
-                vouchersOverviewController.setTicketTypeManager(ticketTypeManager);
-                vouchersOverviewController.setUserManager(userManager);
-                vouchersOverviewController.setSessionManager(sessionManager);
                 vouchersOverviewController.setMainCoordinatorController(this);
             }
+
             contentArea.getChildren().setAll(node);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void setAuthenticationLogic(AuthenticationLogic authenticationLogic) {
-        this.authenticationLogic = authenticationLogic;
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic =eventCoordinatorLogic;
-    }
-
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
-    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
-    public void setCustomerLogic(CustomerLogic customerLogic) {this.customerLogic = customerLogic;}
-}

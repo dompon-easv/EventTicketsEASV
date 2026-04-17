@@ -1,5 +1,8 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.*;
@@ -18,7 +21,7 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
-public class EventHeaderController {
+public class EventHeaderController implements ApplicationServicesAware {
 
     @FXML private Label titleLabel;
     @FXML private Label dateLabel;
@@ -32,48 +35,24 @@ public class EventHeaderController {
     @FXML public Button btnIssuedTickets;
 
     private Event currentEvent;
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
-    private SessionManager sessionManager;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private UserManager userManager;
-    private EventLogic eventLogic;
+
     private CoordinatorMainController coordinatorMainController;
 
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
     public void setCoordinatorMainController(CoordinatorMainController coordinatorMainController) {
         this.coordinatorMainController = coordinatorMainController;
     }
 
-    public void setTicketTypeManager(TicketTypeManager manager) {
-        this.ticketTypeManager = manager;
-    }
-
-    public void setTicketManager(TicketManager manager) {
-        this.ticketManager = manager;
-    }
-
-    public void setCustomerLogic(CustomerLogic logic) {
-        this.customerLogic = logic;
-    }
-
-    public void setSessionManager(SessionManager manager) {
-        this.sessionManager = manager;
-    }
-    public void setEventCoordinatorLogic(EventCoordinatorLogic logic) {
-        this.eventCoordinatorLogic = logic;
-    }
-    public void setUserManager(UserManager manager) {
-        this.userManager = manager;
-    }
-    public void setEventLogic(EventLogic logic) {
-        this.eventLogic = logic;
-    }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
-        if (ticketTypeManager != null) {
-            ticketTypeManager.setCurrentEvent(event);
+        if (services.getTicketTypeManager() != null) {
+            services.getTicketTypeManager().setCurrentEvent(event);
         }
 
         titleLabel.setText(event.getName());
@@ -91,9 +70,8 @@ public class EventHeaderController {
 
         // Load default tab
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
-            ));
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
+            );
 
             Node view = loader.load();
 
@@ -108,8 +86,7 @@ public class EventHeaderController {
     }
 
     public void init() {
-        System.out.println(eventCoordinatorLogic.getCoordinatorsForEvent(currentEvent.getId()));
-        if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+        if (SessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
             btnOverview.setVisible(false);
             btnTicketTypes.setVisible(false);
             btnIssueTickets.setVisible(false);
@@ -120,22 +97,15 @@ public class EventHeaderController {
 
     @FXML
     private void handleBack() {
-        if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+        if (SessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
             try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/adminViews/Events.fxml"
-                        )
+                FXMLLoader loader = new ViewFactory(services).createLoader("gui/adminViews/Events.fxml"
                 );
 
                 Node node = loader.load();
                 AdminMainController.staticContentArea.getChildren().setAll(node);
                 Object controller = loader.getController();
                 if (controller instanceof EventsController eventsController) {
-                    eventsController.setUserManager(userManager);
-                    eventsController.setEventLogic(eventLogic);
-                    eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
-                    eventsController.setTicketTypeManager(ticketTypeManager);
                     eventsController.init();
                 }
 
@@ -151,18 +121,14 @@ public class EventHeaderController {
     @FXML
     private void handleEditEvent() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/AddEditEvent.fxml"
-                    )
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/AddEditEvent.fxml"
+
             );
 
             Node node = loader.load();
             AddEditEventController controller = loader.getController();
-            controller.setSessionManager(sessionManager);
             controller.populateEvent(currentEvent);
             controller.setCoordinatorMainController(coordinatorMainController);
-            controller.setTicketTypeManager(ticketTypeManager);
             controller.init();
 
            /* var controller = loader.getController();
@@ -170,7 +136,7 @@ public class EventHeaderController {
                     .getMethod("populateEvent", Event.class)
                     .invoke(controller, currentEvent);*/
 
-            if (sessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
+            if (SessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
                 AdminMainController.staticContentArea.getChildren().setAll(node);
             } else {
             CoordinatorMainController.staticContentArea.getChildren().setAll(node); }
@@ -190,9 +156,8 @@ public class EventHeaderController {
         switch (clicked.getId()) {
             case "btnOverview" -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
-                    ));
+                    FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/CoordinatorEventOverview.fxml"
+                    );
 
                     Node view = loader.load();
 
@@ -208,20 +173,12 @@ public class EventHeaderController {
 
             case "btnTicketTypes" -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"
-                    ));
+                    FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/TicketTypes.fxml"
+                    );
                     Node view = loader.load();
 
                     TicketTypesController controller = loader.getController();
                     controller.setEvent(currentEvent);
-                    controller.setTicketTypeManager(ticketTypeManager);
-                    controller.setTicketManager(ticketManager);
-                    controller.setCustomerLogic(customerLogic);
-                    controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-                    controller.setEventLogic(eventLogic);
-                    controller.setUserManager(userManager);
-                    controller.setSessionManager(sessionManager);
                     controller.setContentArea(contentArea);
 
                     contentArea.getChildren().setAll(view);
@@ -233,13 +190,11 @@ public class EventHeaderController {
 
             case "btnIssueTickets" -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssueTickets.fxml"
-                    ));
+                    FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/IssueTickets.fxml"
+                    );
                     Node view = loader.load();
 
                     IssueTicketsController controller = loader.getController();
-                    controller.setManagers(ticketManager, customerLogic, ticketTypeManager);
                     controller.setEvent(currentEvent);
 
                     contentArea.getChildren().setAll(view);
@@ -251,9 +206,8 @@ public class EventHeaderController {
 
             case "btnIssuedTickets" -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/IssuedTickets.fxml"
-                    ));
+                    FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/IssuedTickets.fxml"
+                    );
 
                     Node view = loader.load();
 

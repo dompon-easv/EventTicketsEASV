@@ -1,6 +1,8 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
@@ -18,7 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class UserManagementController {
+public class UserManagementController implements ApplicationServicesAware {
 
    @FXML private TableView<User> userTable;
    @FXML private TableColumn<User, String> nameColumn;
@@ -28,17 +30,13 @@ public class UserManagementController {
     @FXML private TableColumn<User, UserRole> roleColumn;
   //  @FXML private TableColumn<User, String> passwordColumn;
 
-    private UserManager userManager;
-    private EventCoordinatorLogic eventCoordinatorLogic;
+    private ApplicationServices services;
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-        loadUsers();
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
 
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
     public void initialize() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         surnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
@@ -85,7 +83,7 @@ public class UserManagementController {
 
     public void loadUsers()
     {
-        ObservableList<User> userList = FXCollections.observableArrayList(userManager.getAllUsers());
+        ObservableList<User> userList = FXCollections.observableArrayList(services.getUserManager().getAllUsers());
         userTable.setItems(userList);
     }
 
@@ -95,7 +93,7 @@ public class UserManagementController {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AddEditUser.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         AddEditUserController controller = fxmlLoader.getController();
-        controller.init(userManager);
+        controller.init(services.getUserManager());
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -107,8 +105,8 @@ public class UserManagementController {
     public void handleDeleteUser(ActionEvent actionEvent) {
         User user = userTable.getSelectionModel().getSelectedItem();
         if (user != null) {
-            eventCoordinatorLogic.deleteUser(user.getId());
-            userManager.deleteUser(user.getId());
+            services.getEventCoordinatorLogic().deleteUser(user.getId());
+            services.getUserManager().deleteUser(user.getId());
             loadUsers();
         }
     }
@@ -126,7 +124,7 @@ public class UserManagementController {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/adminViews/AddEditUser.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         AddEditUserController controller = fxmlLoader.getController();
-        controller.init(userManager);
+        controller.init(services.getUserManager());
         controller.setUser(user);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         Stage stage = new Stage();

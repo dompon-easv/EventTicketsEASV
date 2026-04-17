@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
@@ -8,6 +10,7 @@ import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.TicketT
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,7 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AddEditTicketTypeController {
+public class AddEditTicketTypeController implements ApplicationServicesAware{
 
     @FXML private StackPane contentArea;
     @FXML private Label formTitle;
@@ -32,49 +35,21 @@ public class AddEditTicketTypeController {
     @FXML private TextField quantityField;
     @FXML private TextField eventNameField;
 
-    private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
     private TicketTypesController parentController;
     private TicketType ticketTypeToEdit;
     private boolean isEditMode = false;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private EventLogic eventLogic;
-    private UserManager userManager;
-    private SessionManager sessionManager;
-
-    public void setTicketManager(TicketManager ticketManager) {
-        this.ticketManager = ticketManager;
-    }
-
-    public void setCustomerLogic(CustomerLogic customerLogic) {
-        this.customerLogic = customerLogic;
-    }
 
     public void setContentArea(StackPane contentArea) {
         this.contentArea = contentArea;
     }
 
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
+private ApplicationServices services;
 
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
-    public void setTicketTypeManager(TicketTypeManager manager) {
-        this.ticketTypeManager = manager;
-    }
+@Override
+public void setApplicationServices(ApplicationServices services) {
+    this.services = services;
+}
 
     public void setEvent(Event event) {
         this.currentEvent = event;
@@ -82,8 +57,8 @@ public class AddEditTicketTypeController {
             eventNameField.setText(event.getName());
             eventNameField.setDisable(true);
 
-            if (ticketTypeManager != null) {
-                ticketTypeManager.setCurrentEvent(event);
+            if (services.getTicketTypeManager() != null) {
+                services.getTicketTypeManager().setCurrentEvent(event);
             }
         }
     }
@@ -107,7 +82,7 @@ public class AddEditTicketTypeController {
         }
 
         try {
-            int soldCount = ticketTypeManager.getSoldTicketsCount(ticketType.getId());
+            int soldCount = services.getTicketTypeManager().getSoldTicketsCount(ticketType.getId());
             if (soldCount > 0) {
                 showInfo("Note", String.format(
                         "This ticket type already has %d ticket(s) sold.\n" +
@@ -123,7 +98,7 @@ public class AddEditTicketTypeController {
     @FXML
     public void onSaveTicketType(ActionEvent actionEvent) {
         try {
-            if (ticketTypeManager == null) {
+            if (services.getTicketTypeManager() == null) {
                 throw new Exception("TicketTypeManager not initialized! Please restart the application.");
             }
 
@@ -132,7 +107,7 @@ public class AddEditTicketTypeController {
             double price = Double.parseDouble(priceField.getText().trim());
             int quantity = Integer.parseInt(quantityField.getText().trim());
 
-            ticketTypeManager.setCurrentEvent(currentEvent);
+            services.getTicketTypeManager().setCurrentEvent(currentEvent);
 
             if (isEditMode) {
                 ticketTypeToEdit.setName(name);
@@ -140,10 +115,10 @@ public class AddEditTicketTypeController {
                 ticketTypeToEdit.setPrice(price);
                 ticketTypeToEdit.setMaxQuantity(quantity);
 
-                ticketTypeManager.updateTicketType(ticketTypeToEdit);
+                services.getTicketTypeManager().updateTicketType(ticketTypeToEdit);
                 showSuccess("Success", "Ticket type '" + name + "' has been updated successfully!");
             } else {
-                ticketTypeManager.addTicketType(name, description, price, quantity);
+                services.getTicketTypeManager().addTicketType(name, description, price, quantity);
                 showSuccess("Success", "Ticket type '" + name + "' has been created successfully!");
             }
 
@@ -179,13 +154,6 @@ public class AddEditTicketTypeController {
                 Node view = loader.load();
                 TicketTypesController controller = loader.getController();
                 controller.setEvent(currentEvent);
-                controller.setTicketTypeManager(ticketTypeManager);
-                controller.setTicketManager(parentController.getTicketManager());
-                controller.setCustomerLogic(parentController.getCustomerLogic());
-                controller.setEventCoordinatorLogic(parentController.getEventCoordinatorLogic());
-                controller.setEventLogic(parentController.getEventLogic());
-                controller.setUserManager(parentController.getUserManager());
-                controller.setSessionManager(parentController.getSessionManager());
                 controller.setContentArea(parentController.getContentArea());
 
                 parentController.getContentArea().getChildren().setAll(view);

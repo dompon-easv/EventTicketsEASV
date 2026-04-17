@@ -1,8 +1,9 @@
 package dk.easv.eventticketapp;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.dao.*;
-import dk.easv.eventticketapp.gui.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -10,33 +11,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Application extends javafx.application.Application {
+
     @Override
     public void start(Stage stage) throws IOException {
 
-        IUserDAO userDAO = new UserDAO();
-        ITicketTypeDAO ticketTypeDAO = new TicketTypeDAO();
-        ITicketDAO ticketDAO = new TicketDAO();
-        ICustomerDAO customerDAO = new CustomerDAO();
+        ApplicationServices services = new ApplicationServices();
 
-        AuthenticationLogic authenticationLogic = new AuthenticationLogic(userDAO);
-        UserManager userManager = new UserManager(userDAO);
-        EventLogic eventLogic = new EventLogic();
-        EventCoordinatorLogic eventCoordinatorLogic = new EventCoordinatorLogic();
-        TicketTypeManager ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
-        TicketManager ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO);
-        VoucherLogic voucherLogic = new VoucherLogic();
-        CustomerLogic customerLogic = new CustomerLogic();
+        ViewFactory viewFactory = new ViewFactory(services);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/Login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        LoginController loginController = fxmlLoader.getController();
-        loginController.setAuthenticationLogic(authenticationLogic);
-        loginController.setUserManager(userManager);
-        loginController.setEventLogic(eventLogic);
-        loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
-        loginController.setTicketTypeManager(ticketTypeManager);
-        loginController.setTicketManager(ticketManager);
-        loginController.setCustomerLogic(customerLogic);
+        FXMLLoader loader = viewFactory.createLoader("gui/Login.fxml");
+        Scene scene = new Scene(loader.load());
 
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 

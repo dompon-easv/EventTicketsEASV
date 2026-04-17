@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
@@ -11,13 +13,20 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class CoordinatorEventOverviewController {
+public class CoordinatorEventOverviewController implements ApplicationServicesAware {
 
     @FXML private Label lblNotes;
     @FXML private Label lblLocationDescription;
     @FXML private VBox coordinatorContainer;
 
     private Event currentEvent;
+
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
@@ -47,10 +56,8 @@ public class CoordinatorEventOverviewController {
                 return;
             }
 
-            EventCoordinatorLogic ecLogic = new EventCoordinatorLogic();
-
             List<User> coordinators =
-                    ecLogic.getCoordinatorsForEvent(currentEvent.getId());
+                    services.getEventCoordinatorLogic().getCoordinatorsForEvent(currentEvent.getId());
 
             System.out.println("Event ID: " + currentEvent.getId());
             System.out.println("Coordinators: " + coordinators);

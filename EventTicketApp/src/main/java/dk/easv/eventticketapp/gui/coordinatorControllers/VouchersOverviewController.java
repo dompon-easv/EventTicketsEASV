@@ -1,5 +1,8 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.Voucher;
@@ -9,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -23,13 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class VouchersOverviewController {
+public class VouchersOverviewController implements ApplicationServicesAware {
 
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private SessionManager sessionManager;
-    private EventLogic eventLogic;
-    private TicketTypeManager ticketTypeManager;
-    private UserManager userManager;
     private CoordinatorMainController coordinatorMainController;
     private final VoucherLogic voucherLogic = new VoucherLogic();
 
@@ -43,12 +42,14 @@ public class VouchersOverviewController {
 
     private Map<Integer, String> eventNameMap;
 
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
-    public void setEventLogic(EventLogic eventLogic) {this.eventLogic = eventLogic;}
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
-    public void setUserManager(UserManager userManager) {this.userManager = userManager;}
-    public void setSessionManager(SessionManager sessionManager) {this.sessionManager = sessionManager;}
+
     public void setMainCoordinatorController(CoordinatorMainController coordinatorMainController) {this.coordinatorMainController = coordinatorMainController;}
+private ApplicationServices services;
+
+@Override
+public void setApplicationServices(ApplicationServices services) {
+    this.services = services;
+}
 
     public void initData() {
         loadEvents();
@@ -104,7 +105,10 @@ public class VouchersOverviewController {
     private void loadEvents() {
         try {
             User currentUser = SessionManager.getCurrentUser();
-            List<Event> events = eventCoordinatorLogic.getEventsForUser(currentUser.getId());
+
+            List<Event> events = services.getEventCoordinatorLogic().getEventsForUser(currentUser.getId());
+
+
             eventNameMap = events.stream()
                     .collect(Collectors.toMap(Event::getId, Event::getName));
         } catch (Exception e) {
@@ -169,9 +173,7 @@ public class VouchersOverviewController {
 
     private void openVoucherWindow(Voucher voucher) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/dk/easv/eventticketapp/gui/coordinatorViews/AddVoucher.fxml")
-        );
+        FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/AddVoucher.fxml");
 
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(
@@ -182,9 +184,9 @@ public class VouchersOverviewController {
         User user = SessionManager.getCurrentUser();
 
         if (voucher == null) {
-            controller.init(user, eventCoordinatorLogic);
+            controller.init(user);
         } else {
-            controller.initEdit(user, eventCoordinatorLogic, voucher);
+            controller.initEdit(user, voucher);
         }
 
         Stage stage = new Stage();

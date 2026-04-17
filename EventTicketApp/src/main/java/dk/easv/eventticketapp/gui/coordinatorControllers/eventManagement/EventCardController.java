@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.bll.EventLogic;
@@ -7,6 +9,7 @@ import dk.easv.eventticketapp.bll.TicketManager;
 import dk.easv.eventticketapp.bll.TicketTypeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
@@ -14,7 +17,7 @@ import javafx.scene.layout.VBox;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
-public class EventCardController {
+public class EventCardController implements ApplicationServicesAware {
 
     @FXML private Label titleLabel;
     @FXML private Label dateLabel;
@@ -25,11 +28,15 @@ public class EventCardController {
     @FXML private ProgressBar ticketsProgressBar;
 
     private Event event;
-    private EventLogic eventLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private TicketTypeManager ticketTypeManager;
+   ;
     private Runnable onDeleteSuccess;
-    private TicketManager ticketManager;
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
+
 
     private Consumer<Event> onCardClick;
 
@@ -42,8 +49,8 @@ public class EventCardController {
         dateLabel.setText("📅 " + EventDateTimeFormatter.formatEventRange(event));
 
         try {
-            if (eventCoordinatorLogic != null) {
-                int count = eventCoordinatorLogic
+            if (services.getEventCoordinatorLogic() != null) {
+                int count = services.getEventCoordinatorLogic()
                         .getCoordinatorIdsForEvent(event.getId())
                         .size();
 
@@ -53,13 +60,14 @@ public class EventCardController {
             }
         } catch (Exception e) {
             coordinatorLabel.setText("👤 error");
+            e.printStackTrace();
         }
 
         try {
-            if (ticketManager != null) {
+            if (services.getTicketManager() != null) {
 
-                int sold = ticketManager.getTotalTicketsSoldForEvent(event.getId());
-                int max = ticketManager.getTotalMaxTicketsForEvent(event.getId());
+                int sold = services.getTicketManager().getTotalTicketsSoldForEvent(event.getId());
+                int max = services.getTicketManager().getTotalMaxTicketsForEvent(event.getId());
 
                 if (max > 0) {
                     double progress = (double) sold / max;
@@ -99,20 +107,6 @@ public class EventCardController {
         this.onCardClick = onCardClick;
     }
 
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
-
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
-        this.ticketTypeManager = ticketTypeManager;
-    }
-    public void setTicketManager(TicketManager ticketManager) {
-        this.ticketManager = ticketManager;
-    }
 
     public void setOnDeleteSuccess(Runnable onDeleteSuccess) {
         this.onDeleteSuccess = onDeleteSuccess;
@@ -126,8 +120,8 @@ public class EventCardController {
         }
 
         try {
-            ticketTypeManager.deleteEvent(event.getId());
-            eventCoordinatorLogic.deleteEvent(event);
+            services.getTicketTypeManager().deleteEvent(event.getId());
+            services.getEventCoordinatorLogic().deleteEvent(event);
 
             if (onDeleteSuccess != null) {
                 onDeleteSuccess.run();

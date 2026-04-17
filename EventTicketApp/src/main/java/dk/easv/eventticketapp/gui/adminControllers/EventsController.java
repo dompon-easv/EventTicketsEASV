@@ -1,5 +1,8 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
@@ -11,6 +14,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -21,7 +25,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
-public class EventsController {
+public class EventsController implements ApplicationServicesAware{
     @FXML
     TextField txtFilter;
     @FXML
@@ -32,45 +36,29 @@ public class EventsController {
     @FXML VBox eventContainer;
     @FXML Label lblOwner;
 
-    private UserManager userManager;
-    private EventLogic eventLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
 
     private ObservableList<Event> events;
-    private SessionManager sessionManager;
     private Consumer<Event> onCardClick;
 
+    private ApplicationServices services;
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-        lblCoordinatorsNumber.setText(String.valueOf(userManager.getCoordinatorCount()));
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
-
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-        lblEventNumber.setText(String.valueOf(eventLogic.getEventCount()));
-        //loadEvents();
-    }
-
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-    }
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {
-        this.ticketTypeManager = ticketTypeManager;
-
-    }
-    public void setTicketManager(TicketManager ticketManager) {
-        this.ticketManager = ticketManager;
-    }
-
 
     public void loadEvents() {
+        events = FXCollections.observableArrayList(services.getEventLogic().getAllEvents());
+        filteredEvents = new FilteredList<>(events, event -> true);
 
-        events = FXCollections.observableArrayList(eventLogic.getAllEvents());
-        filteredEvents = new FilteredList<>(events, event -> true);;
+        lblEventNumber.setText(String.valueOf(events.size()));
+
+        int coordinatorCount = services.getUserManager().getAllUsers().stream()
+                .filter(user -> user.getRole() == dk.easv.eventticketapp.be.enums.UserRole.COORDINATOR)
+                .toArray().length;
+
+        lblCoordinatorsNumber.setText(String.valueOf(coordinatorCount));
+
         renderEventCards(filteredEvents);
     }
 
@@ -80,20 +68,13 @@ public class EventsController {
 
         for (Event event : filteredEvents) {
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventCard.fxml"
-                    )
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/EventCard.fxml");
+
 
            try{
                VBox card = loader.load();
 
                EventCardController controller = loader.getController();
-               controller.setEventLogic(eventLogic);
-               controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-               controller.setTicketTypeManager(ticketTypeManager);
-               controller.setTicketManager(ticketManager);
                controller.setEvent(event);
                if (onCardClick != null) {
                    controller.setOnCardClick(onCardClick);
@@ -116,22 +97,14 @@ public class EventsController {
         filtering();
         setOnCardClick(event -> {
             try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/EventHeader.fxml"
-                        )
+                FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/EventHeader.fxml"
+
                 );
 
                 Node node = loader.load();
 
                 EventHeaderController controller = loader.getController();
                 controller.setEvent(event);
-                controller.setEventCoordinatorLogic(eventCoordinatorLogic);
-                controller.setEventLogic(eventLogic);
-                controller.setUserManager(userManager);
-                controller.setSessionManager(sessionManager);
-                controller.setTicketTypeManager(ticketTypeManager);
-                controller.setTicketManager(ticketManager);
                 controller.init();
 
                 AdminMainController.staticContentArea.getChildren().setAll(node);
@@ -168,9 +141,6 @@ public class EventsController {
         loadEvents();
     }
 
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
 
     public void setOnCardClick(Consumer<Event> onCardClick) {
         this.onCardClick = onCardClick;

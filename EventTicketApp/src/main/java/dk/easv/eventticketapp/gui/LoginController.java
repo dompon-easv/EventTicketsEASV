@@ -1,9 +1,11 @@
 package dk.easv.eventticketapp.gui;
 
-import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.enums.UserRole;
-import dk.easv.eventticketapp.bll.*;
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
+import dk.easv.eventticketapp.bll.SessionManager;
 import dk.easv.eventticketapp.gui.adminControllers.AdminMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.event.ActionEvent;
@@ -16,93 +18,65 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController implements ApplicationServicesAware {
 
-    @FXML private TextField txtUsername;
-    @FXML private TextField txtPassword;
+    @FXML
+    private TextField txtUsername;
 
-    private AuthenticationLogic authenticationLogic;
-    private SessionManager sessionManager;
-    private UserManager userManager;
-    private EventLogic eventLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
+    @FXML
+    private TextField txtPassword;
 
-    public void setAuthenticationLogic (AuthenticationLogic authenticationLogic) {this.authenticationLogic = authenticationLogic;}
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) {this.ticketTypeManager = ticketTypeManager;}
-    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
-    public void setCustomerLogic(CustomerLogic customerLogic) {this.customerLogic = customerLogic;}
 
-    @FXML private  void onLoginAction(ActionEvent actionEvent) throws IOException {
-
+    @FXML
+    private void onLoginAction(ActionEvent actionEvent) throws IOException {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
+        try {
+            User user = services.getAuthenticationLogic().login(username, password);
 
-        try{
-            User user = authenticationLogic.login(username,password);
-            System.out.println(user);
+            if (user == null) {
+                System.out.println("Wrong username or password");
+                return;
+            }
+
             SessionManager.setCurrentUser(user);
+            loadMainView(actionEvent, user.getRole());
 
-            if(user!=null){
-                //System.out.println("wrong username or password");
-                //return;
-
-            loadMainView(actionEvent, user.getRole()); }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-    private void loadMainView(ActionEvent actionEvent,UserRole role) throws IOException {
 
-        String fxmlPath = switch (role){
-            case ADMIN -> "/dk/easv/eventticketapp/gui/adminViews/AdminMain.fxml";
-            case COORDINATOR -> "/dk/easv/eventticketapp/gui/coordinatorViews/CoordinatorMain.fxml";
-    };
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource(fxmlPath));
-        Scene scene = new Scene(fxmlLoader.load());
+    private void loadMainView(ActionEvent actionEvent, UserRole role) throws IOException {
+        String fxmlPath = switch (role) {
+            case ADMIN -> "gui/adminViews/AdminMain.fxml";
+            case COORDINATOR -> "gui/coordinatorViews/CoordinatorMain.fxml";
+        };
 
-        if(role == UserRole.ADMIN){
-            AdminMainController adminMainController = fxmlLoader.getController();
-            adminMainController.setAuthenticationLogic(authenticationLogic);
-            adminMainController.setUserManager(userManager);
-            adminMainController.setEventLogic(eventLogic);
-            adminMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
-            adminMainController.setTicketTypeManager(ticketTypeManager);
-            adminMainController.setTicketManager(ticketManager);
+        ViewFactory viewFactory = new ViewFactory(services);
+        FXMLLoader loader = viewFactory.createLoader(fxmlPath);
+        Scene scene = new Scene(loader.load());
+
+        Object controller = loader.getController();
+        if (controller instanceof AdminMainController adminMainController) {
             adminMainController.init();
         }
-        if(role == UserRole.COORDINATOR){
-            CoordinatorMainController coordinatorMainController = fxmlLoader.getController();
-            coordinatorMainController.setAuthenticationLogic(authenticationLogic);
-            coordinatorMainController.setUserManager(userManager);
-            coordinatorMainController.setEventLogic(eventLogic);
-            coordinatorMainController.setEventCoordinatorLogic(eventCoordinatorLogic);
-            coordinatorMainController.setTicketTypeManager(ticketTypeManager);
-            coordinatorMainController.setTicketManager(ticketManager);
-            coordinatorMainController.setCustomerLogic(customerLogic);
+        if (controller instanceof CoordinatorMainController coordinatorMainController) {
             coordinatorMainController.init();
         }
+
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
-
-}
-
-
-
+    }
 }

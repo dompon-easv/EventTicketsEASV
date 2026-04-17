@@ -1,11 +1,15 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
 import dk.easv.eventticketapp.Application;
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,7 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class AdminMainController {
+public class AdminMainController implements ApplicationServicesAware {
 
     @FXML Label lblUser;
     @FXML Label lblRole;
@@ -26,34 +30,12 @@ public class AdminMainController {
     public static StackPane staticContentArea;
 
 
-    private SessionManager sessionManager;
-    private AuthenticationLogic authenticationLogic;
-    private UserManager userManager;
-    private EventLogic eventLogic;
-    private EventCoordinatorLogic eventCoordinatorLogic;
-    private TicketTypeManager ticketTypeManager;
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
+    private ApplicationServices services;
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
-
-    public void setAuthenticationLogic(AuthenticationLogic authenticationLogic) {
-        this.authenticationLogic = authenticationLogic;
-    }
-
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {this.eventCoordinatorLogic = eventCoordinatorLogic;}
-    public void setTicketTypeManager(TicketTypeManager ticketTypeManager) { this.ticketTypeManager = ticketTypeManager;}
-    public void setTicketManager(TicketManager ticketManager) {this.ticketManager = ticketManager;}
-    public void setCustomerLogic(CustomerLogic customerLogic) {this.customerLogic = customerLogic;}
 
     public void init()
     {
@@ -79,9 +61,7 @@ public class AdminMainController {
     private void handleLogout(ActionEvent actionEvent) {
         SessionManager.clearSession();
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    Application.class.getResource("gui/Login.fxml")
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/Login.fxml");
 
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(
@@ -99,13 +79,6 @@ public class AdminMainController {
             stage.centerOnScreen();
 
             LoginController loginController = loader.getController();
-            loginController.setAuthenticationLogic(authenticationLogic);
-            loginController.setUserManager(userManager);
-            loginController.setEventLogic(eventLogic);
-            loginController.setEventCoordinatorLogic(eventCoordinatorLogic);
-            loginController.setTicketTypeManager(ticketTypeManager);
-            loginController.setTicketManager(ticketManager);
-            loginController.setCustomerLogic(customerLogic);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,28 +87,19 @@ public class AdminMainController {
 
     private void loadView(String fxml) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(
-                            getClass().getResource(
-                                    "/dk/easv/eventticketapp/gui/adminViews/" + fxml
-                            )
-                    )
-            );
+            FXMLLoader loader = new ViewFactory(services).createLoader("gui/adminViews/" + fxml);
 
             Node node = loader.load();
             Object controller = loader.getController();
+
             if (controller instanceof UserManagementController userManagementController) {
-                userManagementController.setUserManager(userManager);
-                userManagementController.setEventCoordinatorLogic(eventCoordinatorLogic);
+                userManagementController.loadUsers();
             }
+
             if (controller instanceof EventsController eventsController) {
-                eventsController.setUserManager(userManager);
-                eventsController.setEventLogic(eventLogic);
-                eventsController.setEventCoordinatorLogic(eventCoordinatorLogic);
-                eventsController.setTicketTypeManager(ticketTypeManager);
-                eventsController.setTicketManager(ticketManager);
                 eventsController.init();
             }
+
             contentArea.getChildren().setAll(node);
 
         } catch (IOException e) {

@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.enums.UserRole;
 import dk.easv.eventticketapp.bll.UserManager;
@@ -11,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AddEditUserController {
+public class AddEditUserController implements ApplicationServicesAware {
     @FXML Label lblAddEditInfo;
     @FXML Label lblAddEdit;
 
@@ -33,6 +35,13 @@ public class AddEditUserController {
 
     public void init (UserManager userManager)
     {this.userManager = userManager;}
+
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
 
     public void initialize() { roleComboBox.getItems().addAll(UserRole.values());
     }

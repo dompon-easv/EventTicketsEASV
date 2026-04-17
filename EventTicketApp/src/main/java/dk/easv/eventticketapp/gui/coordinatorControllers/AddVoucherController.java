@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.Voucher;
 import dk.easv.eventticketapp.be.VoucherType;
@@ -15,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class AddVoucherController {
+public class AddVoucherController implements ApplicationServicesAware {
 
     @FXML private TextField txtName;
     @FXML private TextArea txtDescription;
@@ -25,23 +27,21 @@ public class AddVoucherController {
     @FXML private ComboBox<Event> comboEvents;
     @FXML private Button btnCreate;
 
-    private EventLogic eventLogic;
+
     private VoucherLogic voucherLogic = new VoucherLogic();
-    private EventCoordinatorLogic eventCoordinatorLogic;
     private User currentUser;
     private Voucher voucherToEdit;
     private boolean isEditMode = false;
 
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
+    }
+
     public void setEvents(List<Event> events) {
         comboEvents.getItems().setAll(events);
-    }
-
-    public void setEventLogic(EventLogic eventLogic) {
-        this.eventLogic = eventLogic;
-    }
-
-    public void setEventCoordinatorLogic(EventCoordinatorLogic eventCoordinatorLogic) {
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
     }
 
     @FXML
@@ -55,16 +55,13 @@ public class AddVoucherController {
         });
     }
 
-    public void init(User user, EventCoordinatorLogic eventCoordinatorLogic) {
+    public void init(User user) {
         this.currentUser = user;
-        this.eventCoordinatorLogic = eventCoordinatorLogic;
-        
         loadEvents();
     }
 
-    public void initEdit(User user, EventCoordinatorLogic logic, Voucher voucher) {
+    public void initEdit(User user, Voucher voucher) {
         this.currentUser = user;
-        this.eventCoordinatorLogic = logic;
         this.voucherToEdit = voucher;
         this.isEditMode = true;
 
@@ -77,7 +74,7 @@ public class AddVoucherController {
     private void loadEvents() {
         try {
             List<Event> events =
-                    eventCoordinatorLogic.getEventsForUser(currentUser.getId());
+                    services.getEventCoordinatorLogic().getEventsForUser(currentUser.getId());
 
             comboEvents.getItems().setAll(events);
 

@@ -4,6 +4,8 @@ import dk.easv.eventticketapp.be.Voucher;
 import dk.easv.eventticketapp.be.VoucherType;
 import dk.easv.eventticketapp.be.enums.DiscountType;
 import dk.easv.eventticketapp.dao.EventCoordinatorDAO;
+import dk.easv.eventticketapp.dao.IEventCoordinatorDAO;
+import dk.easv.eventticketapp.dao.IVoucherDAO;
 import dk.easv.eventticketapp.dao.VoucherDAO;
 
 import java.util.ArrayList;
@@ -15,6 +17,11 @@ public class VoucherLogic {
     private final EventCoordinatorDAO eventCoordinatorDAO;
 
     public VoucherLogic() {
+        this.voucherDAO = new VoucherDAO();
+        this.eventCoordinatorDAO = new EventCoordinatorDAO();
+    }
+
+    public VoucherLogic(IVoucherDAO voucherDAO, IEventCoordinatorDAO eventCoordinatorDAO) {
         this.voucherDAO = new VoucherDAO();
         this.eventCoordinatorDAO = new EventCoordinatorDAO();
     }

@@ -1,5 +1,7 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 
+import dk.easv.eventticketapp.app.ApplicationServices;
+import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Customer;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
@@ -11,24 +13,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
-public class IssueTicketsController {
+public class IssueTicketsController implements ApplicationServicesAware {
 
     @FXML private TextField customerName;
     @FXML private TextField customerEmail;
     @FXML private ComboBox<TicketType> ticketTypeSelection;
     @FXML private TextField ticketQuantity;
 
-    private TicketManager ticketManager;
-    private CustomerLogic customerLogic;
-    private TicketTypeManager ticketTypeManager;
     private Event currentEvent;
 
-    public void setManagers(TicketManager ticketManager,
-                            CustomerLogic customerLogic,
-                            TicketTypeManager ticketTypeManager) {
-        this.ticketManager = ticketManager;
-        this.customerLogic = customerLogic;
-        this.ticketTypeManager = ticketTypeManager;
+    private ApplicationServices services;
+
+    @Override
+    public void setApplicationServices(ApplicationServices services) {
+        this.services = services;
     }
 
     public void setEvent(Event event) {
@@ -38,10 +36,10 @@ public class IssueTicketsController {
 
     private void loadTicketTypes() {
         try {
-            if (currentEvent == null || ticketTypeManager == null) return;
+            if (currentEvent == null || services.getTicketTypeManager() == null) return;
 
             ticketTypeSelection.setItems(
-                    ticketTypeManager.getTicketTypesForEvent(currentEvent.getId())
+                    services.getTicketTypeManager().getTicketTypesForEvent(currentEvent.getId())
             );
 
             ticketTypeSelection.setConverter(new StringConverter<>() {
@@ -78,9 +76,9 @@ public class IssueTicketsController {
                 throw new IllegalArgumentException("Please select a ticket type.");
             }
 
-            Customer customer = customerLogic.createCustomer(name, email);
+            Customer customer = services.getCustomerLogic().createCustomer(name, email);
 
-            ticketManager.issueTicket(
+            services.getTicketManager().issueTicket(
                     quantity,
                     currentEvent.getId(),
                     selectedType.getId(),
