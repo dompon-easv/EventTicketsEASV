@@ -2,6 +2,7 @@ package dk.easv.eventticketapp.gui.coordinatorControllers;
 
 import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
+import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
@@ -145,10 +146,7 @@ public void setApplicationServices(ApplicationServices services) {
         try {
             if (parentController != null && parentController.getContentArea() != null) {
 
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/dk/easv/eventticketapp/gui/coordinatorViews/eventManagement/TicketTypes.fxml"
-                        )
+                FXMLLoader loader = new ViewFactory(services).createLoader("gui/coordinatorViews/eventManagement/TicketTypes.fxml"
                 );
 
                 Node view = loader.load();
