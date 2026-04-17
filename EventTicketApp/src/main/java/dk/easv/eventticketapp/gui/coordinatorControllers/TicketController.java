@@ -168,35 +168,40 @@ public class TicketController {
 
         try {
             String email = currentTicket.getEmail();
-
             String subject = "Your Event Ticket - " + lblEvent.getText();
 
-            String body =
-                    "Hello " + currentTicket.getCustomerName() + ",\n\n" +
+            String body = String.format(
+                    "Hello %s,\n\n" +
                             "Here is your ticket:\n\n" +
-                            "Event: " + lblEvent.getText() + "\n" +
-                            "Type: " + lblTicketType.getText() + "\n" +
-                            "Date: " + lblDate.getText() + "\n" +
-                            "Time: " + lblTime.getText() + "\n" +
-                            "Quantity: " + lblQuantity.getText() + "\n" +
-                            "Price: " + lblPrice.getText() + "\n\n" +
-                            "Thank you for your purchase!";
+                            "Event: %s\n" +
+                            "Type of ticket: %s\n" +
+                            "Date: %s\n" +
+                            "Time: %s\n" +
+                            "Quantity: %s\n" +
+                            "Price: %s\n\n" +
+                            "Thank you for your purchase!",
+                    currentTicket.getCustomerName(),
+                    lblEvent.getText(),
+                    lblTicketType.getText(),
+                    lblDate.getText(),
+                    lblTime.getText(),
+                    lblQuantity.getText(),
+                    lblPrice.getText()
+            );
 
-            String mailto = "mailto:" + email +
-                    "?subject=" + URLEncoder.encode(subject, StandardCharsets.UTF_8) +
-                    "&body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
+            String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8).replace("+", "%20");
+            String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8).replace("+", "%20");
 
-            URI uri = new URI(mailto);
+            String mailto = "mailto:" + email + "?subject=" + encodedSubject + "&body=" + encodedBody;
 
             if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().mail(uri);
+                Desktop.getDesktop().mail(new URI(mailto));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Could not open email client.");
-        }
-    }
+        }}
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
