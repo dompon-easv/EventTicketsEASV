@@ -56,8 +56,6 @@
 
         <Button onAction="#onPrintTicket" style="-fx-font-size: 14px;" text="Print" />
 
-        <Button onAction="#onSendViaEmail" style="-fx-font-size: 14px;" text="Send via Email" />
-
     </HBox>
 
 </VBox>
