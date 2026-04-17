@@ -1,9 +1,11 @@
 package dk.easv.eventticketapp.bll;
 
+import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.be.Ticket;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.dao.ICustomerDAO;
+import dk.easv.eventticketapp.dao.IEventDAO;
 import dk.easv.eventticketapp.dao.ITicketDAO;
 import dk.easv.eventticketapp.dao.ITicketTypeDAO;
 
@@ -16,13 +18,15 @@ public class TicketManager {
     private final ITicketDAO ticketDAO;
     private final ITicketTypeDAO ticketTypeDAO;
     private final ICustomerDAO customerDAO;
+    private final IEventDAO eventDAO;
 
     private static final int MAX_TICKETS_PER_CUSTOMER = 5;
 
-    public TicketManager(ITicketDAO ticketDAO, ITicketTypeDAO ticketTypeDAO, ICustomerDAO customerDAO) {
+    public TicketManager(ITicketDAO ticketDAO, ITicketTypeDAO ticketTypeDAO, ICustomerDAO customerDAO, IEventDAO eventDAO) {
         this.ticketDAO = ticketDAO;
         this.ticketTypeDAO = ticketTypeDAO;
         this.customerDAO = customerDAO;
+        this.eventDAO = eventDAO;
     }
 
     public void issueTicket(int quantity, int eventId, int ticketTypeId, int customerId) throws Exception {
@@ -109,15 +113,15 @@ public class TicketManager {
     }
 
     public int getTotalMaxTicketsForEvent(int eventId) throws Exception {
+// 1. Fetch the list of ALL events from the DAO (or cache)
+        List<Event> allEvents = eventDAO.getAllEvents();
 
-        int total = 0;
-
-        List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
-
-        for (TicketType type : ticketTypes) {
-            total += type.getMaxQuantity();
+        // 2. Look for the event with the matching ID
+        for (Event e : allEvents) {
+            if (e.getId() == eventId) {
+                return e.getMaxTickets(); // Found it!
+            }
         }
 
-        return total;
-    }
-}
+        return 0; // Not found
+    }}

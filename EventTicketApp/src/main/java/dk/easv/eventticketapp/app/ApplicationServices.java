@@ -14,6 +14,7 @@ public class ApplicationServices {
     private final CustomerLogic customerLogic;
     private final VoucherLogic voucherLogic;
 
+
     public ApplicationServices() {
         IUserDAO userDAO = new UserDAO();
         ITicketTypeDAO ticketTypeDAO = new TicketTypeDAO();
@@ -21,13 +22,14 @@ public class ApplicationServices {
         IVoucherDAO voucherDAO = new VoucherDAO();
         ICustomerDAO customerDAO = new CustomerDAO();
         IEventCoordinatorDAO eventCoordinatorDAO = new EventCoordinatorDAO();
+        IEventDAO eventDAO = new EventDAO();
 
         this.authenticationLogic = new AuthenticationLogic(userDAO);
         this.userManager = new UserManager(userDAO);
         this.eventLogic = new EventLogic();
         this.eventCoordinatorLogic = new EventCoordinatorLogic();
         this.ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
-        this.ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO);
+        this.ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO, eventDAO);
         this.customerLogic = new CustomerLogic();
         this.voucherLogic = new VoucherLogic(voucherDAO, eventCoordinatorDAO);
     }
