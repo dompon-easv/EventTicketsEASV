@@ -72,7 +72,7 @@ public void setApplicationServices(ApplicationServices services) {
         discountValueColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
                         cellData.getValue().getVoucherType() != null
-                                ? String.format(java.util.Locale.US, "%.2f",
+                                ? String.format(java.util.Locale.US, "%.1f",
                                 cellData.getValue().getVoucherType().getDiscountValue())
                                 : ""
                 )
