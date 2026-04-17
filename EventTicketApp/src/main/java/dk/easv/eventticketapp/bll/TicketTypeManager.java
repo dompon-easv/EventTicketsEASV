@@ -207,12 +207,8 @@ public class TicketTypeManager {
         return name.replaceAll("\\s+", "").toLowerCase();
     }
 
-    public void deleteEvent(int eventId) {
-        try {
+    public void deleteEvent(int eventId) throws Exception {
             ticketTypeDAO.deleteEvent(eventId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isTotalCapacityValid(int eventId) throws Exception {

@@ -10,6 +10,7 @@ import dk.easv.eventticketapp.bll.TicketTypeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
@@ -113,7 +114,6 @@ public class EventCardController implements ApplicationServicesAware {
     }
 
     public void handleDelete(ActionEvent actionEvent) {
-
         if (event == null) {
             System.out.println("no event");
             return;
@@ -129,6 +129,24 @@ public class EventCardController implements ApplicationServicesAware {
 
         } catch (Exception e) {
             e.printStackTrace();
+
+            String message = e.getMessage() != null ? e.getMessage() : "";
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cannot Delete Event");
+
+            if (message.contains("FK_Tickets_TicketTypes")) {
+                alert.setHeaderText("This event cannot be deleted");
+                alert.setContentText(
+                        "You cannot delete this event because tickets have already been sold.\n\n" +
+                                "Please cancel the tickets and inform the customers first."
+                );
+            } else {
+                alert.setHeaderText("Delete failed");
+                alert.setContentText("The event could not be deleted.");
+            }
+
+            alert.showAndWait();
         }
     }
 }

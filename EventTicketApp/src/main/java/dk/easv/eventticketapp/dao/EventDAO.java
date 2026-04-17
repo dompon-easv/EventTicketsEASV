@@ -169,6 +169,14 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void deleteEvent(int id) throws SQLException {
+
+        String sql1 = "DELETE FROM Vouchers WHERE eventId = ?";
+        try (Connection conn1 = connectionManager.getConnection();
+             PreparedStatement stmt1 = conn1.prepareStatement(sql1)) {
+            stmt1.setInt(1, id);
+            stmt1.executeUpdate();
+        }
+        
         String sql = "DELETE FROM Events WHERE id = ?";
 
         try (Connection conn = connectionManager.getConnection();
@@ -176,5 +184,9 @@ public class EventDAO implements IEventDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
+
+
+
+
     }
 }
