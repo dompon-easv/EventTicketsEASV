@@ -41,7 +41,7 @@ public class CoordinatorHomeController implements ApplicationServicesAware {
         this.services = services;
     }
 
-    // ✅ IMPORTANT: reusable click behavior
+    // IMPORTANT: reusable click behavior
     private Consumer<Event> onCardClick;
 
 

@@ -60,20 +60,6 @@ public class EventDAO implements IEventDAO {
     }
 
     @Override
-    public int getEventCount() throws SQLException {
-        int eventCount;
-        String sql = "SELECT COUNT(*) FROM Events";
-        try (Connection conn = connectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return eventCount = rs.getInt(1);
-                }
-            }
-
-        } return 0;
-    }
-    @Override
     public List<Event> getAllEvents() throws SQLException {
         List<Event> events = new ArrayList<>();
         String sql = "SELECT * FROM dbo.Events";

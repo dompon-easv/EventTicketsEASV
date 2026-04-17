@@ -187,7 +187,6 @@ public class AddEditEventController implements ApplicationServicesAware {
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
         services.getEventCoordinatorLogic().assignCoordinators(createdEvent.getId(), selectedUsers);
 
-        // Set the current event in the injected TicketTypeManager
         if (services.getTicketTypeManager() != null) {
             services.getTicketTypeManager().setCurrentEvent(createdEvent);
         }
@@ -198,7 +197,6 @@ public class AddEditEventController implements ApplicationServicesAware {
         List<Integer> selectedUsers = getSelectedCoordinatorIds();
         services.getEventCoordinatorLogic().updateCoordinators(event.getId(), selectedUsers);
 
-        // Update the current event in TicketTypeManager
         if (services.getTicketTypeManager() != null) {
             services.getTicketTypeManager().setCurrentEvent(event);
         }
@@ -218,7 +216,7 @@ public class AddEditEventController implements ApplicationServicesAware {
         }
 
         if (value <= 0) {
-            throw new Exception("Max tickets must be greater than 0"); // friendly message
+            throw new Exception("Max tickets must be greater than 0");
         }
 
         return value;

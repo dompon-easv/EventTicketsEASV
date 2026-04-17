@@ -90,18 +90,10 @@ public class TicketManager {
         return "T-" + eventId + "-" + UUID.randomUUID();
     }
 
-    public int getAvailableTickets(int ticketTypeId) throws Exception {
-        TicketType tt = ticketTypeDAO.getById(ticketTypeId);
-
-        int sold = ticketDAO.getTotalSoldForTicketType(ticketTypeId);
-
-        return tt.getMaxQuantity() - sold;
-    }
     public int getTotalTicketsSoldForEvent(int eventId) throws Exception {
 
         int total = 0;
 
-        // 🔥 use YOUR existing method name
         List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
 
         for (TicketType type : ticketTypes) {

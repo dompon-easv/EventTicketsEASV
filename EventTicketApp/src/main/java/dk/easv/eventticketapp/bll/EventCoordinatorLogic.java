@@ -20,9 +20,6 @@ public class EventCoordinatorLogic {
         this.eventDAO = new EventDAO();
     }
 
-    // =============================
-    // CREATE / UPDATE
-    // =============================
 
     public void assignCoordinators(int eventId, List<Integer> userIds) throws Exception {
         for (int userId : userIds) {
@@ -38,18 +35,11 @@ public class EventCoordinatorLogic {
         }
     }
 
-    // =============================
-    // READ (EVENT → USERS)
-    // =============================
-
     public List<Integer> getCoordinatorIdsForEvent(int eventId) {
        try{ return dao.getUserIdsByEventId(eventId); }
         catch(Exception e){return new ArrayList<>();}
     }
 
-    // =============================
-    // READ (USER → EVENTS) ✅ NEW
-    // =============================
 
     public List<Event> getEventsForUser(int userId) throws Exception {
         List<Integer> eventIds = dao.getEventIdsByUser(userId);
@@ -59,20 +49,6 @@ public class EventCoordinatorLogic {
         }
 
         return eventDAO.getEventsByIds(eventIds);
-    }
-
-    // =============================
-    // ADMIN FEATURES ✅ NEW
-    // =============================
-
-    // All event IDs for a user (raw access)
-    public List<Integer> getEventIdsForUser(int userId) throws Exception {
-        return dao.getEventIdsByUser(userId);
-    }
-
-    // Optional: full mapping (future-proof for admin dashboards)
-    public List<Event> getAllEvents() throws Exception {
-        return eventDAO.getAllEvents();
     }
 
     public void deleteEvent(Event event) throws Exception {

@@ -34,7 +34,6 @@ public class Voucher {
         return voucherType != null ? voucherType.getName() : "Unknown";
     }
     public void setId(int id) {this.id = id;}
-    public void setStatus(VoucherStatus status) {this.status = status;}
     public String getEventName() {
         return eventName;
     }

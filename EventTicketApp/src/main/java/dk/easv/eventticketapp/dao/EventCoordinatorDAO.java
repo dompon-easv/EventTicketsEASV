@@ -24,7 +24,6 @@ public class EventCoordinatorDAO implements IEventCoordinatorDAO {
         }
     }
 
-    // 🔥 GET coordinators
     @Override
     public List<Integer> getUserIdsByEventId(int eventId) throws Exception {
         List<Integer> userIds = new ArrayList<>();
@@ -46,7 +45,6 @@ public class EventCoordinatorDAO implements IEventCoordinatorDAO {
         return userIds;
     }
 
-    // 🔥 DELETE coordinators (for update)
     @Override
     public void deleteCoordinatorsByEventId(int eventId) throws Exception {
         String sql = "DELETE FROM EventCoordinators WHERE eventId = ?";

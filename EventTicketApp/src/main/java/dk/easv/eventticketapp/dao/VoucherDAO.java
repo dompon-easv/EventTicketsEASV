@@ -21,7 +21,7 @@ public class VoucherDAO implements IVoucherDAO {
         );
 
         if (existing != null) {
-            return existing; // 🔥 reuse instead of insert
+            return existing;
         }
 
         String sql = "INSERT INTO VoucherTypes (name, discountValue, description, discountType) VALUES (?, ?, ?, ?)";
@@ -347,21 +347,5 @@ public class VoucherDAO implements IVoucherDAO {
         return null;
     }
 
-    private boolean voucherTypeIsUsed(int voucherTypeId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM Vouchers WHERE voucherTypeId = ?";
-
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, voucherTypeId);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        }
-        return false;
-    }
 
 }

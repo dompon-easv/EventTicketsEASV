@@ -5,8 +5,6 @@ import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.enums.UserRole;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.UserManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +26,6 @@ public class UserManagementController implements ApplicationServicesAware {
     @FXML private TableColumn<User, String> emailColumn;
     @FXML private TableColumn<User, String> usernameColumn;
     @FXML private TableColumn<User, UserRole> roleColumn;
-  //  @FXML private TableColumn<User, String> passwordColumn;
 
     private ApplicationServices services;
 

@@ -4,7 +4,6 @@ import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.User;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
 import dk.easv.eventticketapp.gui.adminControllers.UserCardController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,7 +35,6 @@ public class CoordinatorEventOverviewController implements ApplicationServicesAw
             return;
         }
 
-        //  Set description
         lblNotes.setText(
                 event.getDescription() != null ? event.getDescription() : "No notes"
         );
@@ -45,7 +43,6 @@ public class CoordinatorEventOverviewController implements ApplicationServicesAw
                 event.getLocationDescription() != null ? event.getLocationDescription() : "No guidance"
         );
 
-        //  Load coordinators
         loadCoordinators();
     }
 

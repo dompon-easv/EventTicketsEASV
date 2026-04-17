@@ -17,5 +17,4 @@ public interface IUserDAO {
 
     void editUser(User user) throws SQLException;
 
-    int getCoordinatorCount() throws SQLException;
 }

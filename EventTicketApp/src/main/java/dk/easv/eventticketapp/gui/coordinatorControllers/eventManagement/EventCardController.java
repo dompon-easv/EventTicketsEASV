@@ -3,19 +3,12 @@ package dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement;
 import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.Event;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
-import dk.easv.eventticketapp.bll.TicketManager;
-import dk.easv.eventticketapp.bll.TicketTypeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
-
-import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 public class EventCardController implements ApplicationServicesAware {

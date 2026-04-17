@@ -1,12 +1,9 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
-import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.bll.*;
-import dk.easv.eventticketapp.gui.LoginController;
-import dk.easv.eventticketapp.gui.adminControllers.EventsController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

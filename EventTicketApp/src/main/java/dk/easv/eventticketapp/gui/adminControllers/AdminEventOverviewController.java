@@ -17,7 +17,6 @@ import javafx.scene.control.ListView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class AdminEventOverviewController implements ApplicationServicesAware {
     public ListView lstCoordinators;
@@ -30,7 +29,6 @@ public class AdminEventOverviewController implements ApplicationServicesAware {
     Label lblCoordinators;
     @FXML Label lblName;
 
-    private ObservableList<User> coordinatorList = FXCollections.observableArrayList();
 
     private ApplicationServices services;
 

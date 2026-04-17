@@ -7,7 +7,6 @@ import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.be.TicketType;
 import dk.easv.eventticketapp.bll.*;
 import dk.easv.eventticketapp.gui.coordinatorControllers.AddEditTicketTypeController;
-import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -122,11 +121,6 @@ public class TicketTypesController implements ApplicationServicesAware {
         btnDeleteTicketType.setDisable(true);
     }
 
-    //------------Setters------------
-
-    public void setTicketTypeManager(TicketTypeManager manager) {
-        tryLoadData();
-    }
 
     public void setEvent(Event event) {
         this.currentEvent = event;
@@ -147,7 +141,6 @@ public class TicketTypesController implements ApplicationServicesAware {
     }
 
 
-    //-------------Data Loading-----------
 
     private void tryLoadData() {
         if (services.getTicketTypeManager() != null && currentEvent != null) {
@@ -174,7 +167,6 @@ public class TicketTypesController implements ApplicationServicesAware {
         }
     }
 
-    //-----------Actions-----------
 
     public void onAddTicketType(ActionEvent actionEvent) {
         try {
@@ -272,11 +264,7 @@ public class TicketTypesController implements ApplicationServicesAware {
         });
     }
 
-    //--------Helpers--------
 
-    public void onClearSelection(ActionEvent actionEvent) {
-        tableView.getSelectionModel().clearSelection();
-    }
 
     public void refreshTicketTypes() {
         loadTicketTypes();
@@ -300,7 +288,7 @@ public class TicketTypesController implements ApplicationServicesAware {
         }
     }
 
-    //------------Alerts-----------
+
 
     private void showWarning(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

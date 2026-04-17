@@ -35,7 +35,6 @@ public class UserDAO implements IUserDAO {
 
                     UserRole role = UserRole.valueOf(roleStr.toUpperCase());
 
-                    // ✅ FIX: return WITH ID
                     return new User(id, email, role, name, surname, userPassword, userName);
                 }
             }
@@ -60,8 +59,6 @@ public class UserDAO implements IUserDAO {
 
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getRole().name().toLowerCase());
-
-            // ✅ FIXED ORDER
             stmt.setString(3, user.getName());
             stmt.setString(4, user.getSurname());
             stmt.setString(5, user.getPassword());
@@ -132,21 +129,4 @@ public class UserDAO implements IUserDAO {
         }
     }
 
-    @Override
-    public int getCoordinatorCount() throws SQLException
-    {
-        int coordinatorCount;
-        String sql1 = "SELECT COUNT(*) FROM dbo.Users WHERE role = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql1)) {
-            stmt.setString(1, UserRole.COORDINATOR.name().toLowerCase());
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return coordinatorCount = rs.getInt(1);
-                }
-            }
-
-    } return 0;
-
-
-} }
+}

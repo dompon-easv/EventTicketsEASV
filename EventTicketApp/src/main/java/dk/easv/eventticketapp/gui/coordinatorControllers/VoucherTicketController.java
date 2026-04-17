@@ -150,7 +150,6 @@ public class VoucherTicketController {
                     eventName
             );
 
-            // Encode and replace '+' with '%20' for proper mailto formatting
             String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8).replace("+", "%20");
             String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8).replace("+", "%20");
 
