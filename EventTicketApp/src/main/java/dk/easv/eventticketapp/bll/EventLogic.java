@@ -39,15 +39,6 @@ public class EventLogic {
         return eventDAO.createEvent(event);
     }
 
-    public int getEventCount() {
-        try{
-           return eventDAO.getEventCount();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
-    }
 
     public List<Event> getAllEvents() {
         try {
@@ -60,7 +51,4 @@ public class EventLogic {
         eventDAO.updateEvent(event);
     }
 
-    public void deleteEvent(Event event) throws Exception {
-        eventDAO.deleteEvent(event.getId());
-    }
 }

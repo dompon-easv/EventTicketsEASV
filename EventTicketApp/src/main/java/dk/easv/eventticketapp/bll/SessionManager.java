@@ -18,8 +18,4 @@ public class SessionManager {
         currentUser=null;
     }
 
-    public boolean isLoggedIn()
-    {
-        return currentUser!=null;
-    }
 }

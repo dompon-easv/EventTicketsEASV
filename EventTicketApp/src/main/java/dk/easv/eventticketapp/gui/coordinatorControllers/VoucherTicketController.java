@@ -132,6 +132,36 @@ public class VoucherTicketController {
         });
     }
 
+    @FXML
+    public void onSendViaEmail(ActionEvent event) {
+        if (currentVoucher == null) {
+            showAlert("No voucher selected");
+            return;
+        }
+
+        try {
+            String subject = "Your Voucher - " + currentVoucher.getVoucherName();
+            String eventName = currentVoucher.getEventName() != null ? currentVoucher.getEventName() : "All";
+            String body = String.format(
+                    "Voucher: %s\nType: %s\nDiscount: %s\nEvent: %s",
+                    currentVoucher.getVoucherName(),
+                    (currentVoucher.getVoucherType() != null ? currentVoucher.getVoucherType().getDiscountType() : "N/A"),
+                    (currentVoucher.getVoucherType() != null ? currentVoucher.getVoucherType().getDiscountValue() + "%" : "N/A"),
+                    eventName
+            );
+
+            String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8).replace("+", "%20");
+            String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8).replace("+", "%20");
+
+            String mailto = "mailto:?subject=" + encodedSubject + "&body=" + encodedBody;
+
+            Desktop.getDesktop().mail(new URI(mailto));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Could not open email client.");
+        }
+    }
 
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

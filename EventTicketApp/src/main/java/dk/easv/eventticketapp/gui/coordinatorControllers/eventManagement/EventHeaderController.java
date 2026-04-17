@@ -17,9 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 
 public class EventHeaderController implements ApplicationServicesAware {
 
@@ -131,11 +129,6 @@ public class EventHeaderController implements ApplicationServicesAware {
             controller.setCoordinatorMainController(coordinatorMainController);
             controller.init();
 
-           /* var controller = loader.getController();
-            controller.getClass()
-                    .getMethod("populateEvent", Event.class)
-                    .invoke(controller, currentEvent);*/
-
             if (SessionManager.getCurrentUser().getRole() == UserRole.ADMIN) {
                 AdminMainController.staticContentArea.getChildren().setAll(node);
             } else {
@@ -225,16 +218,6 @@ public class EventHeaderController implements ApplicationServicesAware {
         }
     }
 
-    private void loadView(String path) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Node view = loader.load();
-            contentArea.getChildren().setAll(view);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void resetTabStyles() {
         btnOverview.getStyleClass().remove("active");

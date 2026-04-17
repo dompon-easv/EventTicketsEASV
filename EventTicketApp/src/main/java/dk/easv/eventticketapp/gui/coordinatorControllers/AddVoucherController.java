@@ -4,9 +4,6 @@ import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.User;
 import dk.easv.eventticketapp.be.Voucher;
-import dk.easv.eventticketapp.be.VoucherType;
-import dk.easv.eventticketapp.bll.EventCoordinatorLogic;
-import dk.easv.eventticketapp.bll.EventLogic;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import dk.easv.eventticketapp.be.Event;
@@ -190,7 +187,4 @@ public class AddVoucherController implements ApplicationServicesAware {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
     }
 
-    public void onCloseWindow(ActionEvent actionEvent) {
-        closeWindow();
-    }
 }

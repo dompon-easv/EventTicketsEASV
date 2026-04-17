@@ -5,24 +5,18 @@ import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.app.ViewFactory;
 import dk.easv.eventticketapp.be.Event;
 import dk.easv.eventticketapp.bll.*;
-import dk.easv.eventticketapp.gui.coordinatorControllers.CoordinatorMainController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventCardController;
 import dk.easv.eventticketapp.gui.coordinatorControllers.eventManagement.EventHeaderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 public class EventsController implements ApplicationServicesAware{

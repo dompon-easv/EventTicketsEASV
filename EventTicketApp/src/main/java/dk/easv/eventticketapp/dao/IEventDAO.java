@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface IEventDAO {
     Event createEvent(Event event) throws Exception;
-    int getEventCount() throws Exception;
 
     List<Event> getAllEvents() throws Exception;
     void updateEvent(Event event) throws Exception;

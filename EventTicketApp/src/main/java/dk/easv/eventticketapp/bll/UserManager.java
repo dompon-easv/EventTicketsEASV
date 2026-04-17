@@ -48,13 +48,4 @@ public class UserManager {
         }
     }
 
-    public int getCoordinatorCount()
-    {
-        try {
-            return userDAO.getCoordinatorCount();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 }

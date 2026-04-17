@@ -23,9 +23,6 @@ public class TicketTypeManager {
         this.currentEvent = event;
     }
 
-    public Event getCurrentEvent() {
-        return currentEvent;
-    }
 
     public int getTotalTicketQuantityForEvent(int eventId) throws Exception {
         List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesForEvent(eventId);
@@ -199,9 +196,6 @@ public class TicketTypeManager {
         return FXCollections.observableArrayList(ticketTypes);
     }
 
-    public TicketType getTicketTypeById(int id) throws Exception {
-        return ticketTypeDAO.getById(id);
-    }
 
     private String normalizeName(String name) {
         return name.replaceAll("\\s+", "").toLowerCase();

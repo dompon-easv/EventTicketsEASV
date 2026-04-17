@@ -1,6 +1,5 @@
 package dk.easv.eventticketapp.gui.adminControllers;
 
-import dk.easv.eventticketapp.Application;
 import dk.easv.eventticketapp.app.ApplicationServices;
 import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.app.ViewFactory;
@@ -9,12 +8,10 @@ import dk.easv.eventticketapp.gui.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;

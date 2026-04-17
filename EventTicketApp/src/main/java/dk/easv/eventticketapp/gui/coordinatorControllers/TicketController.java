@@ -1,6 +1,5 @@
 package dk.easv.eventticketapp.gui.coordinatorControllers;
 
-import dk.easv.eventticketapp.app.ApplicationServicesAware;
 import dk.easv.eventticketapp.be.IssuedTicket;
 import dk.easv.eventticketapp.be.Event;
 import javafx.application.Platform;
