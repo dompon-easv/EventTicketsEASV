@@ -14,9 +14,9 @@ public class TicketTypeManager {
     private Event currentEvent;
     private final EventLogic eventLogic;
 
-    public TicketTypeManager(ITicketTypeDAO ticketTypeDAO) {
+    public TicketTypeManager(ITicketTypeDAO ticketTypeDAO, EventLogic eventLogic) {
         this.ticketTypeDAO = ticketTypeDAO;
-        this.eventLogic = new EventLogic();
+        this.eventLogic = eventLogic;
     }
 
     public void setCurrentEvent(Event event) {

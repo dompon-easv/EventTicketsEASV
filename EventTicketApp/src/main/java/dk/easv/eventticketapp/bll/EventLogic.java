@@ -13,13 +13,10 @@ public class EventLogic {
 
     private final IEventDAO eventDAO;
 
-    public EventLogic() {
-        eventDAO = new EventDAO();
-    }
-
     public EventLogic(IEventDAO eventDAO) {
         this.eventDAO = eventDAO;
     }
+    
 
     public Event createEvent(Event event) throws Exception {
 

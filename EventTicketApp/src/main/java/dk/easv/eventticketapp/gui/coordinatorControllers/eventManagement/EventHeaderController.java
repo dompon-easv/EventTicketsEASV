@@ -59,7 +59,7 @@ public class EventHeaderController implements ApplicationServicesAware {
         locationLabel.setText("📍 " + event.getLocation());
 
         try {
-            EventCoordinatorLogic logic = new EventCoordinatorLogic();
+            EventCoordinatorLogic logic = services.getEventCoordinatorLogic();
             int count = logic.getCoordinatorIdsForEvent(event.getId()).size();
             coordinatorLabel.setText("👥 " + count + " coordinators");
         } catch (Exception e) {

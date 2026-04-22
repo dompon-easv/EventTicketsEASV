@@ -26,11 +26,11 @@ public class ApplicationServices {
 
         this.authenticationLogic = new AuthenticationLogic(userDAO);
         this.userManager = new UserManager(userDAO);
-        this.eventLogic = new EventLogic();
-        this.eventCoordinatorLogic = new EventCoordinatorLogic();
-        this.ticketTypeManager = new TicketTypeManager(ticketTypeDAO);
+        this.eventLogic = new EventLogic(eventDAO);
+        this.eventCoordinatorLogic = new EventCoordinatorLogic(eventCoordinatorDAO, eventDAO);
+        this.ticketTypeManager = new TicketTypeManager(ticketTypeDAO, eventLogic);
         this.ticketManager = new TicketManager(ticketDAO, ticketTypeDAO, customerDAO, eventDAO);
-        this.customerLogic = new CustomerLogic();
+        this.customerLogic = new CustomerLogic(customerDAO);
         this.voucherLogic = new VoucherLogic(voucherDAO, eventCoordinatorDAO);
     }
 

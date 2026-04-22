@@ -8,8 +8,8 @@ public class CustomerLogic {
 
     private final ICustomerDAO customerDAO;
 
-    public CustomerLogic() {
-        this.customerDAO = new CustomerDAO();
+    public CustomerLogic(ICustomerDAO customerDAO) {
+        this.customerDAO = customerDAO;
     }
 
     public Customer createCustomer(String name, String email) throws Exception {

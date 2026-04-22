@@ -15,9 +15,9 @@ public class EventCoordinatorLogic {
     private final IEventCoordinatorDAO dao;
     private final IEventDAO eventDAO;
 
-    public EventCoordinatorLogic() {
-        this.dao = new EventCoordinatorDAO();
-        this.eventDAO = new EventDAO();
+    public EventCoordinatorLogic(IEventCoordinatorDAO dao, IEventDAO eventDAO) {
+        this.dao = dao;
+        this.eventDAO = eventDAO;
     }
 
 
