@@ -187,4 +187,7 @@ public class AddVoucherController implements ApplicationServicesAware {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
     }
 
+    public void onCloseWindow(ActionEvent actionEvent) {
+        closeWindow();
+    }
 }
